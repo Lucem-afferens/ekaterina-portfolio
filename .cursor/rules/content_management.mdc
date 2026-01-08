@@ -1,0 +1,422 @@
+---
+rule_type: always
+description: Rules for content management through WordPress CMS for portfolio theme
+---
+
+# Content Management Rules
+
+## Принцип разделения контента и кода
+
+**Золотое правило:** Если данные могут измениться, они должны управляться через WordPress Admin Panel, а не быть захардкожены в коде.
+
+---
+
+## Что должно управляться через CMS
+
+### 1. Текстовый контент ✅
+- Заголовки секций
+- Описания (О себе, Философия работы, Процесс работы)
+- Тексты услуг
+- Описания портфолио
+- SEO мета-теги
+- **Реализация:** SCF WYSIWYG, Textarea, Text Fields
+
+### 2. Фотографии и изображения ✅
+- Все изображения на сайте
+- Фотографии портфолио (галерея работ)
+- Фоновые изображения секций
+- Фотографии для секций "О себе", "Введение"
+- **Реализация:** SCF Image Field, Gallery Field, Media Library
+
+### 3. Портфолио работ ✅
+- Галерея мероприятий (Repeater: изображение, название, описание, категория)
+- Категории мероприятий (свадьбы, корпоративы, частные приёмы и т.д.)
+- **Реализация:** SCF Repeater или Custom Post Type "portfolio_items"
+
+### 4. Услуги ✅
+- Список услуг (Repeater: название, описание, список пунктов)
+- Описания услуг
+- Детали каждой услуги
+- **Реализация:** SCF Repeater
+
+### 5. Отзывы клиентов ✅
+- Отзывы (Repeater: текст отзыва, имя клиента, должность, компания)
+- Или Custom Post Type "testimonials" для более детальной структуры
+- **Реализация:** SCF Repeater или Custom Post Type "testimonials"
+
+### 6. Статистика ✅
+- Количество проведённых мероприятий
+- Лет опыта
+- Процент повторных клиентов
+- Время ответа
+- **Реализация:** SCF Number Fields
+
+### 7. Контактная информация ✅
+- Телефон(ы)
+- Email
+- Адрес/локация
+- Социальные сети (ссылки, иконки)
+- Время работы
+- **Реализация:** SCF Options Page
+
+### 8. Профессиональный путь (Timeline) ✅
+- События карьеры (Repeater: год, заголовок, описание)
+- **Реализация:** SCF Repeater
+
+### 9. Партнёры и сотрудничество ✅
+- Список партнёров (Repeater: название, описание)
+- **Реализация:** SCF Repeater
+
+---
+
+## Структура управления контентом
+
+### Главная страница (Hero секция)
+
+**SCF Fields:**
+```
+homepage/
+├── hero_section/
+│   ├── name (имя ведущей)
+│   ├── subtitle (подзаголовок)
+│   ├── background_image
+│   └── cta_button_text
+```
+
+### Секция "О себе" (Introduction)
+
+**SCF Fields:**
+```
+introduction_section/
+├── title
+├── description (основной текст)
+├── additional_text (дополнительные абзацы)
+└── image
+```
+
+### Секция статистики (Stats Banner)
+
+**SCF Fields:**
+```
+stats_section/
+├── stats (Repeater)
+│   ├── number
+│   └── label
+```
+
+### Секция "Философия работы"
+
+**SCF Fields:**
+```
+philosophy_section/
+├── title
+├── quote (цитата)
+└── principles (Repeater)
+    ├── title
+    └── description
+```
+
+### Секция "Профессиональный путь" (About/Timeline)
+
+**SCF Fields:**
+```
+about_section/
+├── title
+├── timeline_items (Repeater)
+│   ├── year
+│   ├── title
+│   └── description
+└── image
+```
+
+### Секция "Портфолио"
+
+**SCF Fields:**
+```
+portfolio_section/
+├── title
+├── description
+└── portfolio_items (Repeater)
+    ├── image
+    ├── title
+    └── category
+```
+
+### Секция "Экспертиза"
+
+**SCF Fields:**
+```
+expertise_section/
+├── title
+└── expertise_items (Repeater)
+    ├── title
+    └── description
+```
+
+### Секция "Услуги"
+
+**SCF Fields:**
+```
+services_section/
+├── title
+├── description
+└── services (Repeater)
+    ├── title
+    ├── description
+    ├── service_points (Repeater для списка пунктов)
+    │   └── point_text
+    └── divider_color (опционально)
+```
+
+### Секция "Процесс работы"
+
+**SCF Fields:**
+```
+process_section/
+├── title
+├── description
+└── process_steps (Repeater)
+    ├── step_number
+    ├── title
+    └── description
+```
+
+### Секция "Отзывы"
+
+**SCF Fields:**
+```
+testimonials_section/
+├── title
+├── description
+└── testimonials (Repeater)
+    ├── quote
+    ├── author_name
+    └── author_title
+```
+
+Или Custom Post Type "testimonials":
+```
+testimonials/
+├── Standard WP fields
+├── quote (WYSIWYG)
+├── author_name
+└── author_title
+```
+
+### Секция "Признание"
+
+**SCF Fields:**
+```
+recognition_section/
+├── title
+├── stats (Repeater)
+│   ├── number
+│   └── label
+└── partners (Repeater)
+    └── partner_name
+```
+
+### Секция "Контакты"
+
+**SCF Options Page:**
+```
+theme_options/
+├── contact_info/
+│   ├── phone
+│   ├── email
+│   ├── location
+│   └── working_hours (Repeater)
+│       ├── day_period
+│       └── time
+├── social_networks/
+│   └── social_links (Repeater)
+│       ├── platform_name
+│       ├── url
+│       └── icon_class
+```
+
+---
+
+## Правила работы с SCF
+
+### 1. Именование полей
+
+- Использовать snake_case: `hero_title`, `portfolio_image`
+- Префиксы для группировки: `hero_`, `contact_`, `portfolio_`
+- Понятные названия: `phone_main` вместо `phone1`
+
+### 2. Типы полей
+
+- **Text** - для коротких текстов
+- **Textarea** - для длинных текстов
+- **WYSIWYG** - для форматированного контента
+- **Number** - для чисел (статистика, годы)
+- **Image** - для одиночных изображений
+- **Gallery** - для нескольких изображений
+- **Repeater** - для повторяющихся блоков
+- **Group** - для группировки полей
+- **Select/Radio** - для выбора из вариантов
+- **Date Picker** - для дат
+- **True/False** - для булевых значений
+
+### 3. Валидация
+
+- Указывать обязательные поля в SCF
+- Проверять наличие данных в PHP коде
+- Использовать значения по умолчанию где возможно
+
+### 4. Организация
+
+- Группировать связанные поля в Groups
+- Использовать Tabs для разделения больших форм
+- Логические названия групп полей
+
+---
+
+## Примеры реализации
+
+### Вывод статистики в шаблоне
+
+```php
+<?php 
+$stats = SCF::get('stats_section_stats');
+if( $stats && is_array($stats) ): ?>
+    <div class="stats-grid">
+        <?php foreach( $stats as $stat ): ?>
+            <div class="stat-item">
+                <div class="stat-number">
+                    <?php echo esc_html( $stat['number'] ); ?>
+                </div>
+                <p class="stat-label">
+                    <?php echo esc_html( $stat['label'] ); ?>
+                </p>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+```
+
+### Вывод портфолио
+
+```php
+<?php 
+$portfolio_items = SCF::get('portfolio_section_portfolio_items');
+if( $portfolio_items && is_array($portfolio_items) ): 
+    foreach( $portfolio_items as $item ): ?>
+        <div class="portfolio-item">
+            <?php if( $item['image'] ): ?>
+                <img src="<?php echo esc_url( $item['image'] ); ?>" 
+                     alt="<?php echo esc_attr( $item['title'] ); ?>">
+            <?php endif; ?>
+            <h3><?php echo esc_html( $item['title'] ); ?></h3>
+            <?php if( $item['category'] ): ?>
+                <p class="category"><?php echo esc_html( $item['category'] ); ?></p>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; 
+endif; ?>
+```
+
+### Вывод отзывов
+
+```php
+<?php 
+$testimonials = SCF::get('testimonials_section_testimonials');
+if( $testimonials && is_array($testimonials) ): ?>
+    <div class="testimonials-grid">
+        <?php foreach( $testimonials as $testimonial ): ?>
+            <div class="testimonial-card">
+                <p class="testimonial-quote">
+                    <?php echo esc_html( $testimonial['quote'] ); ?>
+                </p>
+                <div class="testimonial-author">
+                    <p class="author-name">
+                        <?php echo esc_html( $testimonial['author_name'] ); ?>
+                    </p>
+                    <p class="author-title">
+                        <?php echo esc_html( $testimonial['author_title'] ); ?>
+                    </p>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+```
+
+### Вывод контактов из Options
+
+```php
+<?php 
+$phone = SCF::get_option_meta('theme_options', 'contact_info_phone');
+$email = SCF::get_option_meta('theme_options', 'contact_info_email');
+?>
+<a href="tel:<?php echo esc_attr( $phone ); ?>">
+    <?php echo esc_html( $phone ); ?>
+</a>
+<a href="mailto:<?php echo esc_attr( $email ); ?>">
+    <?php echo esc_html( $email ); ?>
+</a>
+```
+
+---
+
+## Миграция существующего контента
+
+### Процесс:
+
+1. **Анализ:** Определить весь статический контент из index.html
+2. **Создание SCF полей:** Настроить структуру полей под портфолио
+3. **Заполнение данных:** Вручную перенести контент из HTML в SCF поля
+4. **Обновление шаблонов:** Заменить статический контент на динамический через SCF
+5. **Тестирование:** Проверить отображение и возможность редактирования
+
+---
+
+## Документирование для администратора
+
+### Обязательно создать:
+
+1. **Инструкцию по управлению портфолио**
+   - Где находятся поля для добавления работ
+   - Как загружать изображения
+   - Формат данных
+
+2. **Инструкцию по добавлению отзывов**
+   - Процесс создания отзыва
+   - Какие поля обязательны
+   - Форматирование текста
+
+3. **Инструкцию по обновлению контента**
+   - Где изменять тексты секций
+   - Как обновить статистику
+   - Как изменить контакты
+
+4. **Скриншоты и примеры**
+   - Визуальные инструкции
+   - Примеры правильного заполнения
+
+---
+
+## Контрольный список
+
+При создании любого раздела проверить:
+
+- [ ] Все изменяемые данные вынесены в SCF
+- [ ] Администратор может изменить данные без редактирования кода
+- [ ] Проверка существования данных перед выводом
+- [ ] Правильное экранирование всех данных
+- [ ] Значения по умолчанию для опциональных полей
+- [ ] Логичная группировка полей
+- [ ] Понятные названия полей
+- [ ] Инструкция по использованию создана
+
+---
+
+## Важные напоминания
+
+- **Никогда не хардкодить:** Тексты, контакты, описания должны быть в админке
+- **Всегда проверять:** Использовать `if( SCF::get() )` перед выводом
+- **Безопасность:** Экранировать все данные перед выводом
+- **Удобство:** Делать админ панель понятной для не-разработчиков
+- **Гибкость:** Предусматривать возможность расширения
+- **SCF синтаксис:** Использовать `SCF::get()`, `SCF::get_option_meta()` вместо `get_field()`
