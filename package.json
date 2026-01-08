@@ -16,7 +16,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "vite": "^5.4.0"
+    "html-minifier-terser": "^7.2.0",
+    "terser": "^5.44.1",
+    "vite": "^5.4.0",
+    "vite-plugin-html": "^3.2.2"
   }
 }
-

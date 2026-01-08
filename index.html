@@ -1,17 +1,67 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Основные мета-теги -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
-    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO мета-теги -->
+    <title>Екатерина Шулятникова - Ведущая премиальных мероприятий | Пермский край</title>
+    <meta name="description" content="Профессиональная ведущая премиальных мероприятий. Более 12 лет опыта, 300+ успешных событий. Свадьбы, корпоративы, частные приёмы. Пермский край и вся Россия.">
+    <meta name="keywords" content="ведущая мероприятий, ведущая свадеб, корпоративные мероприятия, ведущая Пермь, премиум ведущая, модератор мероприятий, event host, ведущая торжеств">
+    <meta name="author" content="Екатерина Шулятникова">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Russian">
+    <meta name="geo.region" content="RU-PER">
+    <meta name="geo.placename" content="Пермский край">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ekaterina-shulyatnikova.ru/">
+    
+    <!-- Open Graph мета-теги для социальных сетей -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Екатерина Шулятникова - Ведущая премиальных мероприятий">
+    <meta property="og:description" content="Профессиональная ведущая премиальных мероприятий. Более 12 лет опыта, 300+ успешных событий. Свадьбы, корпоративы, частные приёмы.">
+    <meta property="og:image" content="https://ekaterina-shulyatnikova.ru/public/main.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Екатерина Шулятникова - Ведущая премиальных мероприятий">
+    <meta property="og:url" content="https://ekaterina-shulyatnikova.ru/">
+    <meta property="og:site_name" content="Екатерина Шулятникова">
+    <meta property="og:locale" content="ru_RU">
+    
+    <!-- Twitter Card мета-теги -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Екатерина Шулятникова - Ведущая премиальных мероприятий">
+    <meta name="twitter:description" content="Профессиональная ведущая премиальных мероприятий. Более 12 лет опыта, 300+ успешных событий.">
+    <meta name="twitter:image" content="https://ekaterina-shulyatnikova.ru/public/main.png">
+
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Ekaterina Shulyatnikova" />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    
+    <!-- Предзагрузка критических ресурсов -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://storage.googleapis.com">
+    
+    <!-- Предзагрузка критических изображений (hero и portrait) -->
+    <link rel="preload" as="image" href="/public/main.png" fetchpriority="high">
+    <link rel="preload" as="image" href="/public/portrait.png" fetchpriority="high">
+    
+    <!-- Внешние стили и скрипты -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
+    
+    <!-- FontAwesome конфигурация -->
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 </head>
 <body>
 
@@ -20,7 +70,12 @@
         <div>
             <h1 class="header-logo">Екатерина Шулятникова</h1>
         </div>
-        <nav class="header-nav">
+        <button class="mobile-menu-toggle" aria-label="Открыть меню" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav class="header-nav" id="header-nav">
             <a href="#about">О себе</a>
             <a href="#portfolio">Портфолио</a>
             <a href="#services">Услуги</a>
@@ -32,7 +87,7 @@
 
 <section id="hero">
     <div class="hero-image">
-        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/45f3b9156d-8084e58cbc6ea720c471.png" alt="elegant female event host on stage at luxury gala event, sophisticated lighting, professional photography, cinematic quality" />
+        <img src="/public/main.png" alt="elegant female event host on stage at luxury gala event, sophisticated lighting, professional photography, cinematic quality" fetchpriority="high" decoding="async" />
     </div>
     <div class="hero-content">
         <h2>Екатерина<br/>Шулятникова</h2>
@@ -48,7 +103,7 @@
 <section id="introduction">
     <div class="intro-grid">
         <div class="intro-image">
-            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/76da5c7f3b-e1eb79b90ec94c010904.png" alt="elegant professional female event host portrait, sophisticated attire, studio lighting, transparent background" />
+            <img src="/public/portrait.png" alt="elegant professional female event host portrait, sophisticated attire, studio lighting, transparent background" fetchpriority="high" decoding="async" />
         </div>
         <div class="intro-content">
             <div class="section-divider"></div>
@@ -130,7 +185,7 @@
             </div>
         </div>
         <div class="about-image">
-            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/edaf877cda-353b24cfeb2a01e97360.png" alt="elegant event host speaking at luxury corporate gala, professional stage setup, sophisticated audience" />
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/edaf877cda-353b24cfeb2a01e97360.png" alt="elegant event host speaking at luxury corporate gala, professional stage setup, sophisticated audience" loading="lazy" decoding="async" />
         </div>
     </div>
 </section>
@@ -145,13 +200,13 @@
         
         <div class="portfolio-grid-1">
             <div class="portfolio-item">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/446a270a53-b7886bbbf4fd886f2a84.png" alt="luxury wedding ceremony, elegant event host with microphone, sophisticated venue decoration, professional event photography" />
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/446a270a53-b7886bbbf4fd886f2a84.png" alt="luxury wedding ceremony, elegant event host with microphone, sophisticated venue decoration, professional event photography" loading="lazy" decoding="async" />
                 <div class="portfolio-overlay">
                     <p>Свадебная церемония</p>
                 </div>
             </div>
             <div class="portfolio-item">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/6e4732e24a-f416b298ad754c6cd865.png" alt="corporate gala evening, elegant female host on stage, business audience, premium venue lighting" />
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/6e4732e24a-f416b298ad754c6cd865.png" alt="corporate gala evening, elegant female host on stage, business audience, premium venue lighting" loading="lazy" decoding="async" />
                 <div class="portfolio-overlay">
                     <p>Корпоративный вечер</p>
                 </div>
@@ -160,13 +215,13 @@
         
         <div class="portfolio-grid-2">
             <div class="portfolio-item">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/53f2f50cb8-c2f3cce98d0c4ae1377f.png" alt="elegant private reception, sophisticated event host interacting with guests, luxury interior" />
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/53f2f50cb8-c2f3cce98d0c4ae1377f.png" alt="elegant private reception, sophisticated event host interacting with guests, luxury interior" loading="lazy" decoding="async" />
                 <div class="portfolio-overlay">
                     <p>Частный приём</p>
                 </div>
             </div>
             <div class="portfolio-item">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/d1b84b2217-787e9adaa63475ed28e8.png" alt="high-end charity gala, professional female MC on stage, elegant evening gowns, sophisticated lighting" />
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/d1b84b2217-787e9adaa63475ed28e8.png" alt="high-end charity gala, professional female MC on stage, elegant evening gowns, sophisticated lighting" loading="lazy" decoding="async" />
                 <div class="portfolio-overlay">
                     <p>Благотворительный вечер</p>
                 </div>
@@ -175,13 +230,13 @@
         
         <div class="portfolio-grid-3">
             <div class="portfolio-item">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/7f28705f47-b1ce761440c8ecebdcb1.png" alt="luxury outdoor wedding ceremony, elegant host with bride and groom, beautiful natural setting" />
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/7f28705f47-b1ce761440c8ecebdcb1.png" alt="luxury outdoor wedding ceremony, elegant host with bride and groom, beautiful natural setting" loading="lazy" decoding="async" />
                 <div class="portfolio-overlay">
                     <p>Выездная церемония</p>
                 </div>
             </div>
             <div class="portfolio-item">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/12419bfded-50fe5d16140812f29b50.png" alt="corporate awards ceremony, sophisticated female presenter on stage, business formal event" />
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/12419bfded-50fe5d16140812f29b50.png" alt="corporate awards ceremony, sophisticated female presenter on stage, business formal event" loading="lazy" decoding="async" />
                 <div class="portfolio-overlay">
                     <p>Церемония награждения</p>
                 </div>
@@ -190,13 +245,13 @@
         
         <div class="portfolio-grid-4">
             <div class="portfolio-item">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/acf9f71f42-e51e8ba3a3d44e4dfec0.png" alt="intimate wedding reception, elegant event host speaking, romantic candlelit atmosphere" />
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/acf9f71f42-e51e8ba3a3d44e4dfec0.png" alt="intimate wedding reception, elegant event host speaking, romantic candlelit atmosphere" loading="lazy" decoding="async" />
                 <div class="portfolio-overlay">
                     <p>Камерная свадьба</p>
                 </div>
             </div>
             <div class="portfolio-item">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/9df8aa07ce-303af6163ba7ae928b9a.png" alt="grand ballroom corporate event, professional female MC with wireless microphone, elegant stage design" />
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/9df8aa07ce-303af6163ba7ae928b9a.png" alt="grand ballroom corporate event, professional female MC with wireless microphone, elegant stage design" loading="lazy" decoding="async" />
                 <div class="portfolio-overlay">
                     <p>Бизнес-форум</p>
                 </div>
@@ -469,7 +524,7 @@
         </div>
         
         <div class="testimonials-cta-container">
-            <a href="#contact" class="testimonials-cta">ОСТАВИТЬ ОТЗЫВ</a>
+            <button class="testimonials-cta" id="open-testimonial-modal">ОСТАВИТЬ ОТЗЫВ</button>
         </div>
     </div>
 </section>
@@ -557,17 +612,43 @@
                 </div>
             </div>
             
-            <a href="mailto:ekaterina@shulyatnikova.ru" class="contact-cta">ОТПРАВИТЬ ЗАПРОС</a>
+            <div class="contact-cta-buttons">
+                <button class="contact-cta" id="open-request-modal">ОСТАВИТЬ ЗАЯВКУ</button>
+                <a href="https://vk.com/your-page" target="_blank" class="contact-cta contact-cta-secondary">НАПИСАТЬ</a>
+            </div>
             
             <div class="contact-socials">
-                <a href="https://instagram.com" target="_blank">
-                    <i class="fa-brands fa-instagram"></i>
+                <a href="https://vk.com/your-page" target="_blank">
+                    <i class="fa-brands fa-vk"></i>
                 </a>
                 <a href="https://wa.me/79123456789" target="_blank">
                     <i class="fa-brands fa-whatsapp"></i>
                 </a>
                 <a href="https://t.me/username" target="_blank">
                     <i class="fa-brands fa-telegram"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Секция с каналами связи -->
+<section id="contact-channels" class="contact-channels-section">
+    <div class="contact-channels-container">
+        <div class="contact-channels-content">
+            <p class="contact-channels-label">Свяжитесь со мной:</p>
+            <div class="contact-channels-links">
+                <a href="https://vk.com/your-page" target="_blank" class="contact-channel-item" aria-label="ВКонтакте">
+                    <i class="fa-brands fa-vk"></i>
+                    <span>ВКонтакте</span>
+                </a>
+                <a href="https://t.me/username" target="_blank" class="contact-channel-item" aria-label="Telegram">
+                    <i class="fa-brands fa-telegram"></i>
+                    <span>Telegram</span>
+                </a>
+                <a href="tel:+79123456789" class="contact-channel-item" aria-label="Телефон">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>+7 (912) 345-67-89</span>
                 </a>
             </div>
         </div>
@@ -581,9 +662,6 @@
                 <h4>Екатерина Шулятникова</h4>
                 <p>Ведущая премиальных мероприятий</p>
             </div>
-            <div class="footer-social">
-                <a href="https://instagram.com" target="_blank">Instagram</a>
-            </div>
         </div>
         
         <div class="footer-bottom">
@@ -592,6 +670,113 @@
         </div>
     </div>
 </footer>
+
+<!-- Модальное окно для формы заявки -->
+<div id="request-modal" class="modal" aria-hidden="true" role="dialog">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <button class="modal-close" aria-label="Закрыть окно">
+            <i class="fa-solid fa-times"></i>
+        </button>
+        
+        <form id="request-form" class="modal-form">
+            <div class="form-group">
+                <label for="request-name">Ваше имя *</label>
+                <input type="text" id="request-name" name="name" required placeholder="Введите ваше имя">
+            </div>
+            
+            <div class="form-group">
+                <label for="request-phone">Телефон *</label>
+                <input type="tel" id="request-phone" name="phone" required placeholder="+7 (___) ___-__-__">
+            </div>
+            
+            <div class="form-group">
+                <label for="request-email">Email</label>
+                <input type="email" id="request-email" name="email" placeholder="your@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="request-event-type">Тип мероприятия</label>
+                <select id="request-event-type" name="event-type">
+                    <option value="">Выберите тип мероприятия</option>
+                    <option value="wedding">Свадьба</option>
+                    <option value="corporate">Корпоративное мероприятие</option>
+                    <option value="private">Частный приём</option>
+                    <option value="charity">Благотворительное мероприятие</option>
+                    <option value="conference">Конференция</option>
+                    <option value="other">Другое</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="request-date">Предполагаемая дата</label>
+                <input type="date" id="request-date" name="date">
+            </div>
+            
+            <div class="form-group">
+                <label for="request-message">Сообщение</label>
+                <textarea id="request-message" name="message" rows="4" placeholder="Расскажите о вашем мероприятии..."></textarea>
+            </div>
+            
+            <button type="submit" class="modal-submit-btn">ОТПРАВИТЬ ЗАЯВКУ</button>
+        </form>
+        
+        <div id="request-success" class="modal-success" style="display: none;">
+            <div class="success-icon">
+                <i class="fa-solid fa-check-circle"></i>
+            </div>
+            <h4>Заявка отправлена!</h4>
+            <p>Спасибо за вашу заявку. Я свяжусь с вами в ближайшее время.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для формы отзыва -->
+<div id="testimonial-modal" class="modal" aria-hidden="true" role="dialog">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+        <button class="modal-close" aria-label="Закрыть окно">
+            <i class="fa-solid fa-times"></i>
+        </button>
+        
+        <form id="testimonial-form" class="modal-form">
+            <div class="form-group">
+                <label for="testimonial-name">Ваше имя *</label>
+                <input type="text" id="testimonial-name" name="name" required placeholder="Введите ваше имя">
+            </div>
+            
+            <div class="form-group">
+                <label for="testimonial-title">Ваша должность / Компания</label>
+                <input type="text" id="testimonial-title" name="title" placeholder="Например: Генеральный директор, ПАО 'Компания'">
+            </div>
+            
+            <div class="form-group">
+                <label for="testimonial-email">Email *</label>
+                <input type="email" id="testimonial-email" name="email" required placeholder="your@email.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="testimonial-event">Тип мероприятия</label>
+                <input type="text" id="testimonial-event" name="event" placeholder="Например: Корпоративный юбилей">
+            </div>
+            
+            <div class="form-group">
+                <label for="testimonial-message">Ваш отзыв *</label>
+                <textarea id="testimonial-message" name="message" rows="6" required placeholder="Поделитесь вашими впечатлениями..."></textarea>
+            </div>
+            
+            <button type="submit" class="modal-submit-btn">ОТПРАВИТЬ НА МОДЕРАЦИЮ</button>
+        </form>
+        
+        <div id="testimonial-success" class="modal-success" style="display: none;">
+            <div class="success-icon">
+                <i class="fa-solid fa-check-circle"></i>
+            </div>
+            <h4>Отзыв отправлен на модерацию!</h4>
+            <p>Спасибо за ваш отзыв. После проверки он будет опубликован на сайте.</p>
+        </div>
+    </div>
+</div>
 
 <script>
     // Header scroll effect with glassmorphism enhancement
@@ -684,6 +869,47 @@
         observer.observe(item);
     });
 
+    // Touch devices: автоматический показ overlay при полной видимости изображения
+    // Проверяем, является ли устройство touch-устройством (более надежный способ)
+    const isTouchDevice = 'ontouchstart' in window || 
+                          navigator.maxTouchPoints > 0 || 
+                          (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+    
+    if (isTouchDevice) {
+        // Intersection Observer для отслеживания полной видимости (100%) изображений
+        // Используем несколько threshold значений для более точного определения
+        const portfolioObserverOptions = {
+            threshold: [0, 0.95, 1.0], // Отслеживаем 0%, 95% и 100% видимости
+            rootMargin: '0px'
+        };
+
+        const portfolioObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const portfolioItem = entry.target;
+                
+                // Изображение полностью видно (100% или очень близко к 100%)
+                if (entry.isIntersecting && entry.intersectionRatio >= 0.95) {
+                    portfolioItem.classList.add('fully-visible');
+                } else {
+                    // Изображение не полностью видно - скрываем overlay
+                    portfolioItem.classList.remove('fully-visible');
+                }
+            });
+        }, portfolioObserverOptions);
+
+        // Наблюдаем за всеми элементами портфолио после загрузки страницы
+        window.addEventListener('load', function() {
+            document.querySelectorAll('.portfolio-item').forEach(item => {
+                portfolioObserver.observe(item);
+            });
+        });
+        
+        // Также наблюдаем сразу, если элементы уже загружены
+        document.querySelectorAll('.portfolio-item').forEach(item => {
+            portfolioObserver.observe(item);
+        });
+    }
+
     // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -710,6 +936,274 @@
             heroImage.style.transform = `translateY(${scrolled * 0.5}px)`;
         }
     });
+
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const headerNav = document.getElementById('header-nav');
+    
+    if (mobileMenuToggle && headerNav) {
+        mobileMenuToggle.addEventListener('click', function() {
+            const isExpanded = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+            mobileMenuToggle.setAttribute('aria-expanded', !isExpanded);
+            headerNav.classList.toggle('active');
+            document.body.style.overflow = !isExpanded ? 'hidden' : '';
+        });
+        
+        // Close menu when clicking on a link
+        const navLinks = headerNav.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                headerNav.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideNav = headerNav.contains(event.target);
+            const isClickOnToggle = mobileMenuToggle.contains(event.target);
+            
+            if (!isClickInsideNav && !isClickOnToggle && headerNav.classList.contains('active')) {
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                headerNav.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Close menu on window resize if it becomes desktop view
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && headerNav.classList.contains('active')) {
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                headerNav.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
+    // ========================================
+    // Modal Windows Management
+    // ========================================
+    
+    // Функция для открытия модального окна
+    function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            
+            // Фокус на первом поле формы
+            const firstInput = modal.querySelector('input, textarea, select');
+            if (firstInput) {
+                setTimeout(() => firstInput.focus(), 100);
+            }
+        }
+    }
+    
+    // Функция для закрытия модального окна
+    function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            
+            // Сброс формы и скрытие сообщения об успехе
+            const form = modal.querySelector('form');
+            const success = modal.querySelector('.modal-success');
+            if (form) {
+                form.reset();
+                form.style.display = 'block';
+            }
+            if (success) {
+                success.style.display = 'none';
+            }
+        }
+    }
+    
+    // Открытие модального окна заявки
+    const openRequestModalBtn = document.getElementById('open-request-modal');
+    if (openRequestModalBtn) {
+        openRequestModalBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal('request-modal');
+        });
+    }
+    
+    // Открытие модального окна отзыва
+    const openTestimonialModalBtn = document.getElementById('open-testimonial-modal');
+    if (openTestimonialModalBtn) {
+        openTestimonialModalBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal('testimonial-modal');
+        });
+    }
+    
+    // Закрытие модальных окон по кнопке закрытия
+    document.querySelectorAll('.modal-close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            if (modal) {
+                closeModal(modal.id);
+            }
+        });
+    });
+    
+    // Закрытие модальных окон по клику на overlay
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function() {
+            const modal = this.closest('.modal');
+            if (modal) {
+                closeModal(modal.id);
+            }
+        });
+    });
+    
+    // Закрытие модальных окон по клавише Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.active').forEach(modal => {
+                closeModal(modal.id);
+            });
+        }
+    });
+    
+    // ========================================
+    // Form Handling
+    // ========================================
+    
+    // Обработка формы заявки
+    const requestForm = document.getElementById('request-form');
+    if (requestForm) {
+        requestForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Получаем данные формы
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Валидация обязательных полей
+            const name = document.getElementById('request-name').value.trim();
+            const phone = document.getElementById('request-phone').value.trim();
+            
+            if (!name || !phone) {
+                alert('Пожалуйста, заполните все обязательные поля');
+                return;
+            }
+            
+            // Здесь можно добавить отправку на сервер
+            // Например: fetch('/api/request', { method: 'POST', body: JSON.stringify(data) })
+            
+            // Имитация отправки (в реальном проекте заменить на реальную отправку)
+            setTimeout(() => {
+                // Скрываем форму и показываем сообщение об успехе
+                this.style.display = 'none';
+                const successMessage = document.getElementById('request-success');
+                if (successMessage) {
+                    successMessage.style.display = 'block';
+                }
+                
+                // Автоматически закрываем модальное окно через 6 секунд
+                setTimeout(() => {
+                    closeModal('request-modal');
+                }, 6000);
+            }, 500);
+        });
+    }
+    
+    // Обработка формы отзыва
+    const testimonialForm = document.getElementById('testimonial-form');
+    if (testimonialForm) {
+        testimonialForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Получаем данные формы
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Валидация обязательных полей
+            const name = document.getElementById('testimonial-name').value.trim();
+            const email = document.getElementById('testimonial-email').value.trim();
+            const message = document.getElementById('testimonial-message').value.trim();
+            
+            if (!name || !email || !message) {
+                alert('Пожалуйста, заполните все обязательные поля');
+                return;
+            }
+            
+            // Валидация email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Пожалуйста, введите корректный email адрес');
+                return;
+            }
+            
+            // Здесь можно добавить отправку на сервер
+            // Например: fetch('/api/testimonial', { method: 'POST', body: JSON.stringify(data) })
+            
+            // Имитация отправки (в реальном проекте заменить на реальную отправку)
+            setTimeout(() => {
+                // Скрываем форму и показываем сообщение об успехе
+                this.style.display = 'none';
+                const successMessage = document.getElementById('testimonial-success');
+                if (successMessage) {
+                    successMessage.style.display = 'block';
+                }
+                
+                // Автоматически закрываем модальное окно через 6 секунд
+                setTimeout(() => {
+                    closeModal('testimonial-modal');
+                }, 6000);
+            }, 500);
+        });
+    }
+    
+    // Маска для телефона
+    const phoneInput = document.getElementById('request-phone');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            // Если начинается с 8, заменяем на 7
+            if (value.startsWith('8')) {
+                value = '7' + value.slice(1);
+            }
+            
+            // Форматируем только если начинается с 7
+            if (value.startsWith('7') && value.length > 1) {
+                let formatted = '+7';
+                if (value.length > 1) {
+                    formatted += ' (' + value.slice(1, 4);
+                }
+                if (value.length >= 4) {
+                    formatted += ') ' + value.slice(4, 7);
+                }
+                if (value.length >= 7) {
+                    formatted += '-' + value.slice(7, 9);
+                }
+                if (value.length >= 9) {
+                    formatted += '-' + value.slice(9, 11);
+                }
+                e.target.value = formatted;
+            } else if (value.length === 0) {
+                e.target.value = '';
+            }
+        });
+        
+        // Обработка вставки текста
+        phoneInput.addEventListener('paste', function(e) {
+            e.preventDefault();
+            const pasted = (e.clipboardData || window.clipboardData).getData('text');
+            const numbers = pasted.replace(/\D/g, '');
+            if (numbers.length > 0) {
+                phoneInput.value = '';
+                phoneInput.dispatchEvent(new Event('input', { bubbles: true }));
+                phoneInput.value = numbers;
+                phoneInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        });
+    }
 </script>
 
 </body>
