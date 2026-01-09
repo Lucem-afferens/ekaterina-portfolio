@@ -12,6 +12,15 @@
             text-decoration: none;
         }
         
+        /* Глобальный сброс стилей заголовков (предотвращает переопределение WordPress) */
+        h1, h2, h3, h4, h5, h6 {
+            margin: 0;
+            padding: 0;
+            font-weight: inherit;
+            font-size: inherit;
+            line-height: inherit;
+        }
+        
         body { 
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
@@ -132,13 +141,13 @@
         }
         
         .hero-content h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 96px;
-            font-weight: 300;
-            color: #f8f6f3;
-            margin-bottom: 32px;
-            letter-spacing: 0.05em;
-            line-height: 1.2;
+            font-family: 'Cormorant Garamond', serif !important;
+            font-size: 96px !important;
+            font-weight: 300 !important;
+            color: #f8f6f3 !important;
+            margin-bottom: 32px !important;
+            letter-spacing: 0.05em !important;
+            line-height: 1.2 !important;
             opacity: 0;
             transform: translateY(32px);
             transition: all 0.8s ease;
