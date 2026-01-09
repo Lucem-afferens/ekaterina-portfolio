@@ -1649,9 +1649,15 @@
 
         /* ========================================
            Responsive Design - Mobile First
+           Все медиа-запросы организованы по принципу Mobile First:
+           - Базовые стили для 320px+
+           - Медиа-запросы добавляют стили для больших экранов
            ======================================== */
 
-        /* Extra Small Devices (320px - 479px) */
+        /* ========================================
+           Breakpoint 1: Extra Small Devices (320px - 479px)
+           Мобильные телефоны (iPhone SE, старые Android)
+           ======================================== */
         @media screen and (max-width: 479px) {
             /* Header */
             .header-container {
@@ -1659,12 +1665,14 @@
             }
             
             .header-logo {
-                font-size: 18px;
+                font-size: 16px;
                 letter-spacing: 0.05em;
             }
             
             .mobile-menu-toggle {
                 display: flex;
+                width: 28px;
+                height: 28px;
             }
             
             .header-nav {
@@ -1678,7 +1686,7 @@
                 backdrop-filter: blur(24px);
                 flex-direction: column;
                 align-items: flex-start;
-                padding: 80px 32px 32px;
+                padding: 80px 24px 32px;
                 gap: 24px;
                 transition: right 0.3s ease;
                 z-index: 99;
@@ -1690,24 +1698,29 @@
             }
             
             .header-nav a {
-                font-size: 18px;
+                font-size: 16px;
                 width: 100%;
-                padding: 12px 0;
+                padding: 14px 0;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
                 border-bottom: 1px solid rgba(248, 246, 243, 0.1);
             }
             
             .header-cta {
-                margin-top: 16px;
+                margin-top: 20px;
                 width: 100%;
                 text-align: center;
                 padding: 14px 24px;
+                min-height: 44px;
+                font-size: 11px;
             }
             
             /* Hero Section */
             #hero {
                 height: 100vh;
                 min-height: 600px;
-                margin-top: 60px;
+                margin-top: 0;
             }
             
             .hero-content {
@@ -1715,14 +1728,14 @@
             }
             
             .hero-content h2 {
-                font-size: 48px;
+                font-size: clamp(32px, 8vw, 40px);
                 margin-bottom: 24px;
                 line-height: 1.1;
             }
             
             .hero-content .hero-subtitle,
             .hero-subtitle {
-                font-size: 16px;
+                font-size: clamp(14px, 3.5vw, 16px);
                 margin-bottom: 32px;
                 line-height: 1.5;
                 color: #f8f6f3;
@@ -1735,10 +1748,11 @@
                 margin: 0 auto 24px;
             }
             
-            
             .hero-cta {
-                padding: 14px 32px;
-                font-size: 12px;
+                padding: 14px 28px;
+                font-size: 11px;
+                min-height: 44px;
+                letter-spacing: 0.15em;
             }
             
             .hero-scroll {
@@ -1747,7 +1761,7 @@
             
             /* Introduction Section */
             #introduction {
-                padding: 64px 20px;
+                padding: 48px 20px;
             }
             
             .intro-grid {
@@ -1756,7 +1770,7 @@
             }
             
             .intro-image {
-                height: 400px;
+                height: 300px;
                 order: 1;
             }
             
@@ -1766,13 +1780,14 @@
             }
             
             .intro-content h3 {
-                font-size: 32px;
+                font-size: clamp(28px, 7vw, 32px);
                 margin-bottom: 24px;
             }
             
             .intro-content > p,
             .intro-content p:not(.philosophy-quote) {
-                font-size: 16px;
+                font-size: 14px;
+                line-height: 1.6;
                 margin-bottom: 20px;
             }
             
@@ -1786,12 +1801,12 @@
             }
             
             .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: 1fr;
                 gap: 24px;
             }
             
             .stat-number {
-                font-size: 36px;
+                font-size: clamp(28px, 7vw, 32px);
             }
             
             .stat-label {
@@ -1808,14 +1823,15 @@
             }
             
             .philosophy-content h3 {
-                font-size: 32px;
+                font-size: clamp(28px, 7vw, 32px);
                 margin-bottom: 32px;
             }
             
             .philosophy-quote {
-                font-size: 18px;
+                font-size: clamp(16px, 4vw, 18px);
                 margin-bottom: 40px;
                 padding: 0 16px;
+                line-height: 1.6;
             }
             
             .philosophy-grid {
@@ -1824,8 +1840,12 @@
                 margin-top: 48px;
             }
             
+            .philosophy-item {
+                padding: 24px 20px;
+            }
+            
             .philosophy-item h4 {
-                font-size: 24px;
+                font-size: clamp(20px, 5vw, 24px);
                 margin-bottom: 16px;
             }
             
@@ -1840,12 +1860,12 @@
             }
             
             .about-timeline h3 {
-                font-size: 32px;
+                font-size: clamp(28px, 7vw, 32px);
                 margin-bottom: 32px;
             }
             
             .about-image {
-                height: 400px;
+                height: 300px;
                 order: 1;
             }
             
@@ -1867,14 +1887,15 @@
             }
             
             .portfolio-header h3 {
-                font-size: 32px;
+                font-size: clamp(28px, 7vw, 32px);
                 margin-bottom: 16px;
             }
             
             .portfolio-header .portfolio-description,
             .portfolio-description {
-                font-size: 16px;
+                font-size: 14px;
                 margin-top: 12px;
+                line-height: 1.6;
             }
             
             .portfolio-grid-1,
@@ -1882,21 +1903,23 @@
             .portfolio-grid-3,
             .portfolio-grid-4 {
                 grid-template-columns: 1fr;
-                gap: 24px;
+                gap: 16px;
                 margin-bottom: 24px;
             }
             
             .portfolio-item {
-                height: 300px;
+                height: 280px;
+                min-height: 280px;
             }
             
             .portfolio-overlay p {
-                font-size: 18px;
+                font-size: clamp(16px, 4vw, 18px);
             }
             
             .portfolio-cta {
-                padding: 16px 32px;
-                font-size: 12px;
+                padding: 14px 28px;
+                font-size: 11px;
+                min-height: 44px;
             }
             
             /* Expertise Section */
@@ -1905,7 +1928,7 @@
             }
             
             .expertise-header h3 {
-                font-size: 32px;
+                font-size: clamp(28px, 7vw, 32px);
                 margin-bottom: 24px;
             }
             
@@ -1914,8 +1937,18 @@
                 gap: 32px;
             }
             
+            .expertise-item {
+                padding: 24px 20px;
+            }
+            
+            .expertise-item i {
+                font-size: 32px;
+                margin-bottom: 16px;
+            }
+            
             .expertise-item h4 {
-                font-size: 20px;
+                font-size: clamp(18px, 4.5vw, 20px);
+                margin-bottom: 12px;
             }
             
             /* Services Section */
@@ -1928,7 +1961,7 @@
             }
             
             .services-header h3 {
-                font-size: 32px;
+                font-size: clamp(28px, 7vw, 32px);
                 margin-bottom: 24px;
             }
             
@@ -1936,7 +1969,8 @@
             .services-header p,
             .services-header .services-description,
             .services-description {
-                font-size: 16px;
+                font-size: 14px;
+                line-height: 1.6;
             }
             
             .services-grid-1,
@@ -1946,11 +1980,12 @@
             }
             
             .service-card {
-                padding: 32px 24px;
+                padding: 24px 20px;
             }
             
             .service-card h4 {
-                font-size: 24px;
+                font-size: clamp(20px, 5vw, 24px);
+                margin-bottom: 16px;
             }
             
             /* Recognition Section */
@@ -1959,7 +1994,7 @@
             }
             
             .recognition-header h3 {
-                font-size: 28px;
+                font-size: clamp(28px, 7vw, 32px);
                 margin-bottom: 24px;
             }
             
@@ -1969,18 +2004,19 @@
             }
             
             .recognition-stat-number {
-                font-size: 32px;
+                font-size: clamp(28px, 7vw, 32px);
             }
             
             .partners-grid {
                 grid-template-columns: 1fr;
                 gap: 24px;
+                margin-top: 48px;
             }
             
             .partner-logo {
-                max-width: 160px;
-                height: 90px;
-                min-height: 90px;
+                max-width: 140px;
+                height: 80px;
+                min-height: 80px;
                 padding: 10px;
                 margin: 0 auto;
             }
@@ -1991,7 +2027,7 @@
             }
             
             .process-header h3 {
-                font-size: 32px;
+                font-size: clamp(28px, 7vw, 32px);
                 margin-bottom: 24px;
             }
             
@@ -1999,12 +2035,14 @@
             .process-header p,
             .process-header .process-description,
             .process-description {
-                font-size: 16px;
+                font-size: 14px;
+                line-height: 1.6;
             }
             
             .process-step {
                 flex-direction: column;
                 margin-bottom: 40px;
+                padding: 24px 20px;
             }
             
             .process-number {
@@ -2013,7 +2051,7 @@
             }
             
             .process-number span {
-                font-size: 48px;
+                font-size: clamp(36px, 9vw, 40px);
             }
             
             .process-content {
@@ -2021,7 +2059,8 @@
             }
             
             .process-content h4 {
-                font-size: 20px;
+                font-size: clamp(18px, 4.5vw, 20px);
+                margin-bottom: 12px;
             }
             
             /* Testimonials Section */
@@ -2034,14 +2073,15 @@
             }
             
             .testimonials-header h3 {
-                font-size: 32px;
+                font-size: clamp(28px, 7vw, 32px);
                 margin-bottom: 24px;
             }
             
             .testimonials-header .testimonials-description,
             .testimonials-description {
-                font-size: 16px;
+                font-size: 14px;
                 margin-top: 12px;
+                line-height: 1.6;
             }
             
             .testimonials-grid {
@@ -2051,12 +2091,13 @@
             }
             
             .testimonial-card {
-                padding: 32px 24px;
+                padding: 28px 24px;
             }
             
             .testimonial-quote {
-                font-size: 18px;
+                font-size: clamp(16px, 4vw, 18px);
                 margin-bottom: 24px;
+                line-height: 1.6;
             }
             
             .testimonials-cta-container {
@@ -2069,40 +2110,11 @@
             }
             
             .testimonials-cta {
-                padding: 16px 32px;
-                font-size: 12px;
+                padding: 14px 28px;
+                font-size: 11px;
                 text-align: center;
-            }
-            
-            /* Recognition Section */
-            #recognition {
-                padding: 64px 20px;
-            }
-            
-            .recognition-header h3 {
-                font-size: 32px;
-                margin-bottom: 24px;
-            }
-            
-            .recognition-stats {
-                grid-template-columns: 1fr;
-                gap: 32px;
-            }
-            
-            .recognition-stat-number {
-                font-size: 36px;
-            }
-            
-            .partners-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 24px;
-            }
-            
-            .partner-logo {
-                max-width: 180px;
-                height: 100px;
-                min-height: 100px;
-                padding: 12px;
+                min-height: 44px;
+                letter-spacing: 0.15em;
             }
             
             /* Contact Section */
@@ -2115,13 +2127,14 @@
             }
             
             .contact-content h3 {
-                font-size: 32px;
+                font-size: clamp(28px, 7vw, 32px);
                 margin-bottom: 32px;
             }
             
             .contact-description {
-                font-size: 16px;
+                font-size: 14px;
                 margin-bottom: 48px;
+                line-height: 1.6;
             }
             
             .contact-cards {
@@ -2131,24 +2144,26 @@
             }
             
             .contact-card {
-                padding: 32px 24px;
+                padding: 28px 20px;
             }
             
             .contact-card h4 {
-                font-size: 20px;
+                font-size: clamp(18px, 4.5vw, 20px);
+                margin-bottom: 16px;
+            }
+            
+            .contact-cta-buttons {
+                flex-direction: column;
+                gap: 16px;
+                margin-top: 32px;
             }
             
             .contact-cta {
-                padding: 16px 32px;
-                font-size: 12px;
-            }
-            
-            .contact-socials {
-                gap: 24px;
-            }
-            
-            .contact-socials i {
-                font-size: 32px;
+                padding: 14px 28px;
+                font-size: 11px;
+                min-height: 44px;
+                width: 100%;
+                text-align: center;
             }
             
             /* Contact Channels Section */
@@ -2163,7 +2178,8 @@
             }
             
             .contact-channels-label {
-                font-size: 12px;
+                font-size: 11px;
+                letter-spacing: 0.2em;
             }
             
             .contact-channels-links {
@@ -2175,7 +2191,13 @@
             .contact-channel-item {
                 width: 100%;
                 justify-content: center;
-                padding: 12px 20px;
+                padding: 12px 16px;
+                font-size: 14px;
+                min-height: 44px;
+            }
+            
+            .contact-channel-item i {
+                font-size: 20px;
             }
             
             /* Footer */
@@ -2185,29 +2207,47 @@
             
             .footer-top {
                 flex-direction: column;
-                gap: 32px;
+                gap: 24px;
                 margin-bottom: 32px;
+            }
+            
+            .footer-top h4 {
+                font-size: clamp(16px, 4vw, 18px);
+                margin-bottom: 16px;
+            }
+            
+            .footer-top p,
+            .footer-top a {
+                font-size: 12px;
+                line-height: 1.6;
             }
             
             .footer-bottom {
                 flex-direction: column;
                 gap: 16px;
                 text-align: center;
+                font-size: 12px;
             }
         }
 
-        /* Small Devices (480px - 767px) */
+        /* ========================================
+           Breakpoint 2: Small Devices (480px - 767px)
+           Большие телефоны, маленькие планшеты (iPhone 12/13/14, Galaxy S21)
+           ======================================== */
         @media screen and (min-width: 480px) and (max-width: 767px) {
+            /* Header */
             .header-container {
                 padding: 24px 24px;
             }
             
             .header-logo {
-                font-size: 20px;
+                font-size: clamp(18px, 4.5vw, 20px);
             }
             
             .mobile-menu-toggle {
                 display: flex;
+                width: 32px;
+                height: 32px;
             }
             
             .header-nav {
@@ -2236,18 +2276,25 @@
                 font-size: 18px;
                 width: 100%;
                 padding: 14px 0;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
             }
             
             .header-cta {
                 margin-top: 20px;
                 width: 100%;
                 text-align: center;
+                padding: 14px 28px;
+                min-height: 44px;
+                font-size: 12px;
             }
             
+            /* Hero Section */
             #hero {
                 height: 100vh;
                 min-height: 700px;
-                margin-top: 72px;
+                margin-top: 0;
             }
             
             .hero-content {
@@ -2255,21 +2302,23 @@
             }
             
             .hero-content h2 {
-                font-size: 64px;
+                font-size: clamp(48px, 12vw, 56px);
+                margin-bottom: 32px;
             }
             
             .hero-content .hero-subtitle,
             .hero-subtitle {
-                font-size: 18px;
+                font-size: clamp(16px, 4vw, 18px);
                 color: #f8f6f3;
                 font-weight: 300;
                 letter-spacing: 0.05em;
-                margin-bottom: 64px;
+                margin-bottom: 48px;
                 line-height: 1.6;
             }
             
+            /* Introduction Section */
             #introduction {
-                padding: 80px 32px;
+                padding: 64px 24px;
             }
             
             .intro-grid {
@@ -2278,11 +2327,34 @@
             }
             
             .intro-image {
-                height: 450px;
+                height: 400px;
+                order: 1;
+            }
+            
+            .intro-content {
+                padding-left: 0;
+                order: 2;
             }
             
             .intro-content h3 {
-                font-size: 40px;
+                font-size: clamp(36px, 9vw, 40px);
+                margin-bottom: 24px;
+            }
+            
+            .intro-content > p,
+            .intro-content p:not(.philosophy-quote) {
+                font-size: 15px;
+                line-height: 1.6;
+                margin-bottom: 20px;
+            }
+            
+            /* Stats Banner */
+            #stats-banner {
+                padding: 56px 0;
+            }
+            
+            .stats-container {
+                padding: 0 24px;
             }
             
             .stats-grid {
@@ -2290,9 +2362,53 @@
                 gap: 32px;
             }
             
+            .stat-number {
+                font-size: clamp(32px, 8vw, 36px);
+            }
+            
+            .stat-label {
+                font-size: 13px;
+            }
+            
+            /* Philosophy Section */
+            #philosophy {
+                padding: 80px 0;
+            }
+            
+            .philosophy-container {
+                padding: 0 24px;
+            }
+            
+            .philosophy-content h3 {
+                font-size: clamp(36px, 9vw, 40px);
+                margin-bottom: 32px;
+            }
+            
+            .philosophy-quote {
+                font-size: clamp(18px, 4.5vw, 20px);
+                margin-bottom: 40px;
+                padding: 0 20px;
+                line-height: 1.6;
+            }
+            
             .philosophy-grid {
                 grid-template-columns: 1fr;
                 gap: 40px;
+                margin-top: 48px;
+            }
+            
+            .philosophy-item {
+                padding: 28px 24px;
+            }
+            
+            .philosophy-item h4 {
+                font-size: clamp(22px, 5.5vw, 24px);
+                margin-bottom: 16px;
+            }
+            
+            /* About Section */
+            #about {
+                padding: 80px 24px;
             }
             
             .about-grid {
@@ -2300,40 +2416,346 @@
                 gap: 56px;
             }
             
+            .about-timeline h3 {
+                font-size: clamp(36px, 9vw, 40px);
+                margin-bottom: 32px;
+            }
+            
+            .about-image {
+                height: 400px;
+                order: 1;
+            }
+            
+            .about-timeline {
+                order: 2;
+            }
+            
+            /* Portfolio Section */
+            #portfolio {
+                padding: 80px 0;
+            }
+            
+            .portfolio-container {
+                padding: 0 24px;
+            }
+            
+            .portfolio-header h3 {
+                font-size: clamp(36px, 9vw, 40px);
+                margin-bottom: 16px;
+            }
+            
+            .portfolio-header .portfolio-description,
+            .portfolio-description {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            
             .portfolio-grid-1,
             .portfolio-grid-2,
             .portfolio-grid-3,
             .portfolio-grid-4 {
                 grid-template-columns: 1fr;
+                gap: 20px;
+                margin-bottom: 24px;
+            }
+            
+            .portfolio-item {
+                height: 320px;
+                min-height: 320px;
+            }
+            
+            .portfolio-overlay p {
+                font-size: clamp(18px, 4.5vw, 20px);
+            }
+            
+            .portfolio-cta {
+                padding: 16px 32px;
+                font-size: 12px;
+                min-height: 44px;
+            }
+            
+            /* Expertise Section */
+            #expertise {
+                padding: 80px 24px;
+            }
+            
+            .expertise-header h3 {
+                font-size: clamp(36px, 9vw, 40px);
+                margin-bottom: 24px;
             }
             
             .expertise-grid {
                 grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            .expertise-item {
+                padding: 28px 24px;
+            }
+            
+            .expertise-item i {
+                font-size: 36px;
+                margin-bottom: 16px;
+            }
+            
+            .expertise-item h4 {
+                font-size: clamp(20px, 5vw, 22px);
+                margin-bottom: 12px;
+            }
+            
+            /* Services Section */
+            #services {
+                padding: 80px 0;
+            }
+            
+            .services-container {
+                padding: 0 24px;
+            }
+            
+            .services-header h3 {
+                font-size: clamp(36px, 9vw, 40px);
+                margin-bottom: 24px;
+            }
+            
+            .services-header > p,
+            .services-header p,
+            .services-header .services-description,
+            .services-description {
+                font-size: 15px;
+                line-height: 1.6;
             }
             
             .services-grid-1,
             .services-grid-2 {
                 grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .service-card {
+                padding: 28px 24px;
+            }
+            
+            .service-card h4 {
+                font-size: clamp(22px, 5.5vw, 24px);
+                margin-bottom: 16px;
+            }
+            
+            /* Process Section */
+            #process {
+                padding: 80px 24px;
+            }
+            
+            .process-header h3 {
+                font-size: clamp(36px, 9vw, 40px);
+                margin-bottom: 24px;
+            }
+            
+            .process-header > p,
+            .process-header p,
+            .process-header .process-description,
+            .process-description {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            
+            .process-step {
+                flex-direction: column;
+                margin-bottom: 40px;
+                padding: 28px 24px;
+            }
+            
+            .process-number span {
+                font-size: clamp(40px, 10vw, 44px);
+            }
+            
+            .process-content h4 {
+                font-size: clamp(20px, 5vw, 22px);
+                margin-bottom: 12px;
+            }
+            
+            /* Testimonials Section */
+            #testimonials {
+                padding: 80px 0;
+            }
+            
+            .testimonials-container {
+                padding: 0 24px;
+            }
+            
+            .testimonials-header h3 {
+                font-size: clamp(36px, 9vw, 40px);
+                margin-bottom: 24px;
+            }
+            
+            .testimonials-header .testimonials-description,
+            .testimonials-description {
+                font-size: 15px;
+                line-height: 1.6;
             }
             
             .testimonials-grid {
                 grid-template-columns: 1fr;
+                gap: 32px;
+                margin-bottom: 32px;
+            }
+            
+            .testimonial-card {
+                padding: 32px 24px;
+            }
+            
+            .testimonial-quote {
+                font-size: clamp(18px, 4.5vw, 20px);
+                margin-bottom: 24px;
+                line-height: 1.6;
+            }
+            
+            .testimonials-cta-container {
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                margin-top: 48px;
+            }
+            
+            .testimonials-cta {
+                padding: 16px 32px;
+                font-size: 12px;
+                text-align: center;
+                min-height: 44px;
+            }
+            
+            /* Recognition Section */
+            #recognition {
+                padding: 80px 24px;
+            }
+            
+            .recognition-header h3 {
+                font-size: clamp(36px, 9vw, 40px);
+                margin-bottom: 24px;
             }
             
             .recognition-stats {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+            
+            .recognition-stat-number {
+                font-size: clamp(36px, 9vw, 40px);
             }
             
             .partners-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+                margin-top: 48px;
+            }
+            
+            .partner-logo {
+                max-width: 160px;
+                height: 90px;
+                min-height: 90px;
+                padding: 12px;
+            }
+            
+            /* Contact Section */
+            #contact {
+                padding: 80px 0;
+            }
+            
+            .contact-container {
+                padding: 0 24px;
+            }
+            
+            .contact-content h3 {
+                font-size: clamp(36px, 9vw, 40px);
+                margin-bottom: 32px;
+            }
+            
+            .contact-description {
+                font-size: 15px;
+                margin-bottom: 48px;
+                line-height: 1.6;
             }
             
             .contact-cards {
                 grid-template-columns: 1fr;
+                gap: 24px;
+                margin-bottom: 48px;
+            }
+            
+            .contact-card {
+                padding: 32px 24px;
+            }
+            
+            .contact-card h4 {
+                font-size: clamp(20px, 5vw, 22px);
+                margin-bottom: 16px;
+            }
+            
+            .contact-cta-buttons {
+                flex-direction: column;
+                gap: 16px;
+                margin-top: 32px;
+            }
+            
+            .contact-cta {
+                padding: 16px 32px;
+                font-size: 12px;
+                min-height: 44px;
+                width: 100%;
+                text-align: center;
+            }
+            
+            /* Contact Channels Section */
+            .contact-channels-section {
+                padding: 40px 24px;
+            }
+            
+            .contact-channels-label {
+                font-size: 12px;
+            }
+            
+            .contact-channels-links {
+                gap: 16px;
+            }
+            
+            .contact-channel-item {
+                padding: 14px 20px;
+                font-size: 15px;
+                min-height: 44px;
+            }
+            
+            .contact-channel-item i {
+                font-size: 22px;
+            }
+            
+            /* Footer */
+            #footer {
+                padding: 56px 24px;
+            }
+            
+            .footer-top {
+                gap: 28px;
+            }
+            
+            .footer-top h4 {
+                font-size: clamp(16px, 4vw, 18px);
+            }
+            
+            .footer-top p,
+            .footer-top a {
+                font-size: 13px;
+            }
+            
+            .footer-bottom {
+                font-size: 13px;
             }
         }
 
-        /* Все экраны менее 900px - Burger menu */
+        /* ========================================
+           Общий медиа-запрос для всех экранов менее 900px - Burger menu
+           Применяется ко всем устройствам с шириной менее 900px
+           ======================================== */
         @media screen and (max-width: 899px) {
             .mobile-menu-toggle {
                 display: flex !important;
@@ -2369,10 +2791,18 @@
             }
         }
         
-        /* Small Desktop (900px - 1023px) - Desktop menu */
+        /* ========================================
+           Breakpoint 3: Small Desktop (900px - 1023px)
+           Планшеты в альбоме, маленькие ноутбуки - Desktop menu
+           ======================================== */
         @media screen and (min-width: 900px) and (max-width: 1023px) {
+            /* Header */
             .header-container {
                 padding: 28px 40px;
+            }
+            
+            .header-logo {
+                font-size: clamp(22px, 2.75vw, 24px);
             }
             
             .mobile-menu-toggle {
@@ -2395,15 +2825,283 @@
                 font-size: 13px;
                 padding: 0;
                 border: none;
+                min-height: auto;
+            }
+            
+            .header-cta {
+                padding: 12px 28px;
+                font-size: 12px;
+            }
+            
+            /* Hero Section */
+            #hero {
+                height: 850px;
+                margin-top: 0;
+            }
+            
+            .hero-content {
+                padding: 0 48px;
+            }
+            
+            .hero-content h2 {
+                font-size: clamp(80px, 10vw, 88px);
+                margin-bottom: 32px;
+            }
+            
+            .hero-content .hero-subtitle,
+            .hero-subtitle {
+                font-size: clamp(18px, 2.25vw, 20px);
+                margin-bottom: 64px;
+            }
+            
+            /* Introduction Section */
+            #introduction {
+                padding: 96px 40px;
+            }
+            
+            .intro-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+            
+            .intro-content h3 {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            /* Stats Banner */
+            #stats-banner {
+                padding: 64px 0;
+            }
+            
+            .stats-container {
+                padding: 0 40px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+            
+            /* Philosophy Section */
+            #philosophy {
+                padding: 112px 0;
+            }
+            
+            .philosophy-container {
+                padding: 0 40px;
+            }
+            
+            .philosophy-content h3 {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            .philosophy-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+            
+            /* About Section */
+            #about {
+                padding: 112px 40px;
+            }
+            
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 64px;
+            }
+            
+            .about-timeline h3 {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            /* Portfolio Section */
+            #portfolio {
+                padding: 112px 0;
+            }
+            
+            .portfolio-container {
+                padding: 0 40px;
+            }
+            
+            .portfolio-header h3 {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            .portfolio-grid-1,
+            .portfolio-grid-2,
+            .portfolio-grid-3,
+            .portfolio-grid-4 {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            
+            /* Expertise Section */
+            #expertise {
+                padding: 112px 40px;
+            }
+            
+            .expertise-header h3 {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            .expertise-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            /* Services Section */
+            #services {
+                padding: 112px 0;
+            }
+            
+            .services-container {
+                padding: 0 40px;
+            }
+            
+            .services-header h3 {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            .services-grid-1 {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+            
+            .services-grid-2 {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            /* Process Section */
+            #process {
+                padding: 112px 40px;
+            }
+            
+            .process-header h3 {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            .process-step {
+                padding: 32px;
+            }
+            
+            /* Testimonials Section */
+            #testimonials {
+                padding: 112px 0;
+            }
+            
+            .testimonials-container {
+                padding: 0 40px;
+            }
+            
+            .testimonials-header h3 {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            /* Recognition Section */
+            #recognition {
+                padding: 112px 40px;
+            }
+            
+            .recognition-header h3 {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            .recognition-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+            
+            .partners-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+            
+            /* Contact Section */
+            #contact {
+                padding: 112px 0;
+            }
+            
+            .contact-container {
+                padding: 0 40px;
+            }
+            
+            .contact-content h3 {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            .contact-cards {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            /* Contact Channels Section */
+            .contact-channels-section {
+                padding: 56px 40px;
+            }
+            
+            .contact-channels-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .contact-channels-label {
+                font-size: 13px;
+            }
+            
+            .contact-channels-links {
+                flex-direction: row;
+                gap: 20px;
+                width: auto;
+            }
+            
+            .contact-channel-item {
+                width: auto;
+                padding: 16px 24px;
+            }
+            
+            /* Footer */
+            #footer {
+                padding: 80px 48px;
+            }
+            
+            .footer-top {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 40px;
+            }
+            
+            .footer-top h4 {
+                font-size: 18px;
+            }
+            
+            .footer-top p,
+            .footer-top a {
+                font-size: 14px;
             }
         }
         
-        /* Tablets (768px - 899px) - Дополнительные стили для контента */
+        /* ========================================
+           Breakpoint 2.5: Medium Small Devices (768px - 899px)
+           Планшеты в портрете (iPad Mini) - Дополнительные стили для контента
+           ======================================== */
         @media screen and (min-width: 768px) and (max-width: 899px) {
+            /* Header */
             .header-container {
                 padding: 24px 32px;
             }
             
+            .header-logo {
+                font-size: clamp(20px, 2.5vw, 22px);
+            }
+            
+            /* Hero Section */
             #hero {
                 height: 800px;
                 margin-top: 0;
@@ -2414,7 +3112,8 @@
             }
             
             .hero-content h2 {
-                font-size: 72px;
+                font-size: clamp(64px, 8vw, 72px);
+                margin-bottom: 32px;
             }
             
             .hero-content .hero-subtitle,
@@ -2427,8 +3126,15 @@
                 line-height: 1.6;
             }
             
+            .hero-cta {
+                padding: 16px 40px;
+                font-size: 12px;
+                min-height: 44px;
+            }
+            
+            /* Introduction Section */
             #introduction {
-                padding: 96px 40px;
+                padding: 80px 32px;
             }
             
             .intro-grid {
@@ -2436,8 +3142,32 @@
                 gap: 48px;
             }
             
+            .intro-image {
+                height: 450px;
+            }
+            
             .intro-content {
                 padding-left: 0;
+            }
+            
+            .intro-content h3 {
+                font-size: clamp(40px, 5vw, 44px);
+                margin-bottom: 24px;
+            }
+            
+            .intro-content > p,
+            .intro-content p:not(.philosophy-quote) {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+            
+            /* Stats Banner */
+            #stats-banner {
+                padding: 64px 0;
+            }
+            
+            .stats-container {
+                padding: 0 32px;
             }
             
             .stats-grid {
@@ -2445,9 +3175,45 @@
                 gap: 32px;
             }
             
+            .stat-number {
+                font-size: clamp(36px, 4.5vw, 40px);
+            }
+            
+            /* Philosophy Section */
+            #philosophy {
+                padding: 96px 0;
+            }
+            
+            .philosophy-container {
+                padding: 0 32px;
+            }
+            
+            .philosophy-content h3 {
+                font-size: clamp(40px, 5vw, 44px);
+                margin-bottom: 32px;
+            }
+            
+            .philosophy-quote {
+                font-size: clamp(20px, 2.5vw, 22px);
+                line-height: 1.6;
+            }
+            
             .philosophy-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 40px;
+            }
+            
+            .philosophy-item {
+                padding: 32px 28px;
+            }
+            
+            .philosophy-item h4 {
+                font-size: clamp(22px, 2.75vw, 24px);
+            }
+            
+            /* About Section */
+            #about {
+                padding: 96px 32px;
             }
             
             .about-grid {
@@ -2455,77 +3221,253 @@
                 gap: 64px;
             }
             
+            .about-timeline h3 {
+                font-size: clamp(40px, 5vw, 44px);
+            }
+            
+            .about-image {
+                height: 450px;
+            }
+            
+            /* Portfolio Section */
+            #portfolio {
+                padding: 96px 0;
+            }
+            
+            .portfolio-container {
+                padding: 0 32px;
+            }
+            
+            .portfolio-header h3 {
+                font-size: clamp(40px, 5vw, 44px);
+            }
+            
             .portfolio-grid-1,
             .portfolio-grid-2,
             .portfolio-grid-3,
             .portfolio-grid-4 {
                 grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .portfolio-item {
+                height: 360px;
+                min-height: 360px;
+            }
+            
+            /* Expertise Section */
+            #expertise {
+                padding: 96px 32px;
+            }
+            
+            .expertise-header h3 {
+                font-size: clamp(40px, 5vw, 44px);
             }
             
             .expertise-grid {
                 grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            .expertise-item {
+                padding: 32px 28px;
+            }
+            
+            .expertise-item i {
+                font-size: 40px;
+            }
+            
+            /* Services Section */
+            #services {
+                padding: 96px 0;
+            }
+            
+            .services-container {
+                padding: 0 32px;
+            }
+            
+            .services-header h3 {
+                font-size: clamp(40px, 5vw, 44px);
             }
             
             .services-grid-1 {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
             }
             
             .services-grid-2 {
                 grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            .service-card {
+                padding: 32px 28px;
+            }
+            
+            /* Process Section */
+            #process {
+                padding: 96px 32px;
+            }
+            
+            .process-header h3 {
+                font-size: clamp(40px, 5vw, 44px);
+            }
+            
+            .process-step {
+                padding: 32px 28px;
+            }
+            
+            .process-number span {
+                font-size: clamp(44px, 5.5vw, 48px);
+            }
+            
+            /* Testimonials Section */
+            #testimonials {
+                padding: 96px 0;
+            }
+            
+            .testimonials-container {
+                padding: 0 32px;
+            }
+            
+            .testimonials-header h3 {
+                font-size: clamp(40px, 5vw, 44px);
             }
             
             .testimonials-grid {
                 grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            .testimonial-quote {
+                font-size: clamp(20px, 2.5vw, 22px);
+            }
+            
+            /* Recognition Section */
+            #recognition {
+                padding: 96px 32px;
+            }
+            
+            .recognition-header h3 {
+                font-size: clamp(40px, 5vw, 44px);
             }
             
             .recognition-stats {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+            
+            .recognition-stat-number {
+                font-size: clamp(40px, 5vw, 44px);
             }
             
             .partners-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+                margin-top: 48px;
             }
             
             .partner-logo {
-                max-width: 200px;
-                height: 110px;
-                min-height: 110px;
+                max-width: 180px;
+                height: 100px;
+                min-height: 100px;
                 padding: 14px;
+            }
+            
+            /* Contact Section */
+            #contact {
+                padding: 96px 0;
+            }
+            
+            .contact-container {
+                padding: 0 32px;
+            }
+            
+            .contact-content h3 {
+                font-size: clamp(40px, 5vw, 44px);
             }
             
             .contact-cards {
                 grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            
+            /* Contact Channels Section */
+            .contact-channels-section {
+                padding: 48px 32px;
+            }
+            
+            .contact-channel-item {
+                padding: 16px 24px;
+                font-size: 15px;
+            }
+            
+            /* Footer */
+            #footer {
+                padding: 64px 32px;
+            }
+            
+            .footer-top h4 {
+                font-size: clamp(16px, 2vw, 18px);
+            }
+            
+            .footer-top p,
+            .footer-top a {
+                font-size: 14px;
+            }
+            
+            .footer-bottom {
+                font-size: 14px;
             }
         }
 
-        /* Large Devices (1024px - 1439px) */
+        /* ========================================
+           Breakpoint 4: Large Devices (1024px - 1439px)
+           Ноутбуки, десктопы (iPad Pro, стандартные мониторы)
+           ======================================== */
         @media screen and (min-width: 1024px) and (max-width: 1439px) {
+            /* Header */
             .header-container {
                 padding: 30px 48px;
+            }
+            
+            .header-logo {
+                font-size: 24px;
             }
             
             .mobile-menu-toggle {
                 display: none;
             }
             
+            .header-nav {
+                gap: 40px;
+            }
+            
+            .header-nav a {
+                font-size: 14px;
+            }
+            
+            /* Hero Section */
             #hero {
-                height: 850px;
+                height: 900px;
+            }
+            
+            .hero-content {
+                padding: 0 64px;
             }
             
             .hero-content h2 {
-                font-size: 88px;
+                font-size: clamp(64px, 8vw, 88px);
+                margin-bottom: 32px;
             }
             
             .hero-content .hero-subtitle,
             .hero-subtitle {
-                font-size: 20px;
-                color: #f8f6f3;
-                font-weight: 300;
-                letter-spacing: 0.05em;
+                font-size: clamp(18px, 2.25vw, 20px);
                 margin-bottom: 64px;
-                line-height: 1.6;
             }
             
+            /* Introduction Section */
             #introduction {
                 padding: 112px 48px;
             }
@@ -2535,12 +3477,49 @@
                 gap: 56px;
             }
             
+            .intro-content h3 {
+                font-size: clamp(48px, 6vw, 52px);
+            }
+            
+            /* Stats Banner */
+            #stats-banner {
+                padding: 64px 0;
+            }
+            
+            .stats-container {
+                padding: 0 48px;
+            }
+            
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
+                gap: 40px;
+            }
+            
+            .stat-number {
+                font-size: clamp(40px, 5vw, 48px);
+            }
+            
+            /* Philosophy Section */
+            #philosophy {
+                padding: 112px 0;
+            }
+            
+            .philosophy-container {
+                padding: 0 48px;
+            }
+            
+            .philosophy-content h3 {
+                font-size: clamp(52px, 6.5vw, 56px);
             }
             
             .philosophy-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+            
+            /* About Section */
+            #about {
+                padding: 128px 48px;
             }
             
             .about-grid {
@@ -2548,114 +3527,558 @@
                 gap: 80px;
             }
             
+            .about-timeline h3 {
+                font-size: clamp(52px, 6.5vw, 56px);
+            }
+            
+            /* Portfolio Section */
+            #portfolio {
+                padding: 128px 0;
+            }
+            
+            .portfolio-container {
+                padding: 0 48px;
+            }
+            
+            .portfolio-header h3 {
+                font-size: clamp(52px, 6.5vw, 56px);
+            }
+            
             .portfolio-grid-1 {
                 grid-template-columns: 6fr 6fr;
+                gap: 32px;
             }
             
             .portfolio-grid-2 {
                 grid-template-columns: 5fr 7fr;
+                gap: 32px;
             }
             
             .portfolio-grid-3 {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
             }
             
             .portfolio-grid-4 {
                 grid-template-columns: 5fr 7fr;
+                gap: 32px;
+            }
+            
+            /* Expertise Section */
+            #expertise {
+                padding: 128px 48px;
+            }
+            
+            .expertise-header h3 {
+                font-size: clamp(52px, 6.5vw, 56px);
             }
             
             .expertise-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+            
+            .expertise-item i {
+                font-size: 48px;
+            }
+            
+            /* Services Section */
+            #services {
+                padding: 128px 0;
+            }
+            
+            .services-container {
+                padding: 0 48px;
+            }
+            
+            .services-header h3 {
+                font-size: clamp(52px, 6.5vw, 56px);
             }
             
             .services-grid-1 {
                 grid-template-columns: repeat(3, 1fr);
+                gap: 32px;
             }
             
             .services-grid-2 {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+            
+            /* Process Section */
+            #process {
+                padding: 128px 48px;
+            }
+            
+            .process-header h3 {
+                font-size: clamp(52px, 6.5vw, 56px);
+            }
+            
+            .process-step {
+                padding: 40px;
+            }
+            
+            .process-number span {
+                font-size: 48px;
+            }
+            
+            /* Testimonials Section */
+            #testimonials {
+                padding: 128px 0;
+            }
+            
+            .testimonials-container {
+                padding: 0 48px;
+            }
+            
+            .testimonials-header h3 {
+                font-size: clamp(52px, 6.5vw, 56px);
             }
             
             .testimonials-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 40px;
+            }
+            
+            .testimonial-quote {
+                font-size: clamp(20px, 2.5vw, 24px);
+            }
+            
+            /* Recognition Section */
+            #recognition {
+                padding: 128px 48px;
+            }
+            
+            .recognition-header h3 {
+                font-size: clamp(52px, 6.5vw, 56px);
             }
             
             .recognition-stats {
                 grid-template-columns: repeat(3, 1fr);
+                gap: 40px;
+            }
+            
+            .recognition-stat-number {
+                font-size: clamp(40px, 5vw, 44px);
+            }
+            
+            .partners-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 32px;
+                margin-top: 56px;
+            }
+            
+            .partner-logo {
+                max-width: 200px;
+                height: 110px;
+                min-height: 110px;
+                padding: 14px;
+            }
+            
+            /* Contact Section */
+            #contact {
+                padding: 128px 0;
+            }
+            
+            .contact-container {
+                padding: 0 48px;
+            }
+            
+            .contact-content h3 {
+                font-size: clamp(52px, 6.5vw, 56px);
+            }
+            
+            .contact-cards {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+            
+            .contact-cta-buttons {
+                flex-direction: row;
+                gap: 20px;
+            }
+            
+            /* Contact Channels Section */
+            .contact-channels-section {
+                padding: 64px 48px;
+            }
+            
+            .contact-channel-item i {
+                font-size: 24px;
+            }
+            
+            /* Footer */
+            #footer {
+                padding: 80px 48px;
+            }
+            
+            .footer-top {
+                gap: 48px;
+            }
+        }
+        
+        /* ========================================
+           Breakpoint 5: Extra Large Devices (1440px+)
+           Большие мониторы, широкие экраны
+           ======================================== */
+        @media screen and (min-width: 1440px) {
+            /* Header */
+            .header-container {
+                padding: 20px 64px;
+            }
+            
+            .header-logo {
+                font-size: 24px;
+            }
+            
+            .header-nav {
+                gap: 48px;
+            }
+            
+            .header-nav a {
+                font-size: 14px;
+            }
+            
+            /* Hero Section */
+            #hero {
+                height: 900px;
+            }
+            
+            .hero-content h2 {
+                font-size: 96px;
+            }
+            
+            .hero-content .hero-subtitle,
+            .hero-subtitle {
+                font-size: 20px;
+            }
+            
+            /* Introduction Section */
+            #introduction {
+                padding: 128px 64px;
+            }
+            
+            .intro-content h3 {
+                font-size: clamp(64px, 8vw, 72px);
+            }
+            
+            /* Stats Banner */
+            .stats-container {
+                padding: 0 64px;
+            }
+            
+            .stat-number {
+                font-size: 48px;
+            }
+            
+            /* Philosophy Section */
+            #philosophy {
+                padding: 128px 0;
+            }
+            
+            .philosophy-container {
+                padding: 0 64px;
+            }
+            
+            .philosophy-content h3 {
+                font-size: clamp(64px, 8vw, 72px);
+            }
+            
+            .philosophy-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 48px;
+            }
+            
+            /* About Section */
+            #about {
+                padding: 144px 64px;
+            }
+            
+            .about-timeline h3 {
+                font-size: clamp(64px, 8vw, 72px);
+            }
+            
+            /* Portfolio Section */
+            #portfolio {
+                padding: 144px 0;
+            }
+            
+            .portfolio-container {
+                padding: 0 64px;
+            }
+            
+            .portfolio-header h3 {
+                font-size: clamp(64px, 8vw, 72px);
+            }
+            
+            /* Expertise Section */
+            #expertise {
+                padding: 144px 64px;
+            }
+            
+            .expertise-header h3 {
+                font-size: clamp(64px, 8vw, 72px);
+            }
+            
+            /* Services Section */
+            #services {
+                padding: 144px 0;
+            }
+            
+            .services-container {
+                padding: 0 64px;
+            }
+            
+            .services-header h3 {
+                font-size: clamp(64px, 8vw, 72px);
+            }
+            
+            /* Process Section */
+            #process {
+                padding: 144px 64px;
+            }
+            
+            .process-header h3 {
+                font-size: clamp(64px, 8vw, 72px);
+            }
+            
+            /* Testimonials Section */
+            #testimonials {
+                padding: 144px 0;
+            }
+            
+            .testimonials-container {
+                padding: 0 64px;
+            }
+            
+            .testimonials-header h3 {
+                font-size: clamp(64px, 8vw, 72px);
+            }
+            
+            .testimonial-quote {
+                font-size: 24px;
+            }
+            
+            /* Recognition Section */
+            #recognition {
+                padding: 144px 64px;
+            }
+            
+            .recognition-header h3 {
+                font-size: clamp(64px, 8vw, 72px);
             }
             
             .partners-grid {
                 grid-template-columns: repeat(4, 1fr);
+                gap: 40px;
             }
             
             .partner-logo {
                 max-width: 240px;
                 height: 120px;
                 min-height: 120px;
-                padding: 16px;
             }
             
-            .contact-cards {
-                grid-template-columns: repeat(2, 1fr);
+            /* Contact Section */
+            #contact {
+                padding: 144px 0;
+            }
+            
+            .contact-container {
+                padding: 0 64px;
+            }
+            
+            .contact-content h3 {
+                font-size: clamp(64px, 8vw, 72px);
+            }
+            
+            /* Contact Channels Section */
+            .contact-channels-section {
+                padding: 64px 64px;
+            }
+            
+            /* Footer */
+            #footer {
+                padding: 80px 64px;
             }
         }
 
         /* Touch Device Optimizations */
         @media (hover: none) and (pointer: coarse) {
-            /* Увеличиваем размеры кликабельных элементов для touch устройств */
+            /* Увеличиваем размеры кликабельных элементов для touch устройств (минимум 44px согласно рекомендациям Apple и Google) */
             .header-nav a,
+            .header-cta,
+            .mobile-menu-toggle,
+            .hero-cta,
+            .portfolio-cta,
+            .testimonials-cta,
+            .contact-cta,
+            .contact-channel-item,
+            .modal-submit-btn,
+            .modal-close,
+            button,
+            a[role="button"],
+            input[type="submit"],
+            input[type="button"] {
+                min-height: 44px;
+                min-width: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 12px 16px;
+            }
+            
+            /* Увеличиваем отступы между интерактивными элементами для удобства нажатия */
             .hero-cta,
             .portfolio-cta,
             .testimonials-cta,
             .contact-cta {
+                margin-top: 8px;
+            }
+            
+            .contact-cta-buttons {
+                gap: 16px;
+            }
+            
+            /* Улучшаем отступы в формах для touch устройств */
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 14px 16px;
                 min-height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                font-size: 16px; /* Предотвращаем zoom на iOS при фокусе */
+            }
+            
+            /* Увеличиваем область нажатия для карточек и элементов списка */
+            .service-card,
+            .testimonial-card,
+            .contact-card,
+            .philosophy-item,
+            .expertise-item,
+            .process-step {
+                padding: 24px 20px;
+                min-height: 80px;
             }
             
             /* Hover эффекты для portfolio отключены - используется автоматический показ через Intersection Observer */
+            .portfolio-item:hover img {
+                transform: none;
+            }
+            
+            .portfolio-item:hover .portfolio-overlay {
+                background-color: rgba(58, 58, 58, 0);
+            }
+            
+            /* Улучшаем видимость ссылок на touch устройствах */
+            a {
+                -webkit-tap-highlight-color: rgba(157, 126, 95, 0.3);
+                tap-highlight-color: rgba(157, 126, 95, 0.3);
+            }
+            
+            /* Оптимизация скролла для touch устройств */
+            body {
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior-y: contain;
+            }
         }
 
         /* Landscape Mobile Optimization */
         @media screen and (max-width: 767px) and (orientation: landscape) {
+            /* Header - уменьшенная высота в landscape */
+            .header-container {
+                padding: 16px 20px;
+            }
+            
+            .header-logo {
+                font-size: clamp(16px, 4vw, 18px);
+            }
+            
+            /* Hero Section - оптимизация для landscape */
             #hero {
                 height: 100vh;
                 min-height: 500px;
+                max-height: 100vh;
+            }
+            
+            .hero-content {
+                padding: 0 24px;
             }
             
             .hero-content h2 {
-                font-size: 40px;
+                font-size: clamp(32px, 8vw, 40px);
+                margin-bottom: 20px;
             }
             
             .hero-content .hero-subtitle,
             .hero-subtitle {
-                font-size: 14px;
+                font-size: clamp(12px, 3vw, 14px);
                 color: #f8f6f3;
                 font-weight: 300;
                 letter-spacing: 0.05em;
-                margin-bottom: 32px;
+                margin-bottom: 24px;
                 line-height: 1.5;
             }
             
+            .hero-divider {
+                width: 64px;
+                margin: 16px auto;
+            }
+            
+            .hero-cta {
+                padding: 12px 24px;
+                font-size: 11px;
+                min-height: 40px;
+            }
+            
+            .hero-scroll {
+                bottom: 16px;
+                display: none; /* Скрываем scroll индикатор в landscape */
+            }
+            
+            /* Introduction Section - уменьшенная высота изображения */
             .intro-image {
-                height: 350px;
+                height: 300px;
+            }
+            
+            /* Уменьшаем padding секций для landscape */
+            #introduction,
+            #philosophy,
+            #about,
+            #expertise,
+            #services,
+            #process,
+            #testimonials,
+            #recognition,
+            #contact {
+                padding-top: 48px;
+                padding-bottom: 48px;
             }
         }
 
-        /* High DPI Displays */
+        /* High DPI Displays (Retina) - Оптимизация для 2x и 3x дисплеев */
         @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            /* Оптимизация для Retina и других высокоплотных дисплеев */
+            /* Улучшение качества изображений для Retina дисплеев */
             .hero-image img,
             .intro-image img,
             .about-image img,
-            .portfolio-item img {
+            .portfolio-item img,
+            .partner-logo img {
                 image-rendering: -webkit-optimize-contrast;
                 image-rendering: crisp-edges;
             }
+            
+            /* Улучшение качества шрифтов для Retina */
+            body,
+            .header-logo,
+            .hero-content h2,
+            h1, h2, h3, h4, h5, h6 {
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                text-rendering: optimizeLegibility;
+            }
         }
 
-        /* Accessibility: Reduced Motion */
+        /* Accessibility: Reduced Motion - Уважение к предпочтениям пользователя */
         @media (prefers-reduced-motion: reduce) {
             *,
             *::before,
@@ -2663,10 +4086,38 @@
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
             }
             
+            /* Отключаем анимации для hero секции */
+            .hero-content h2,
+            .hero-divider,
+            .hero-subtitle,
+            .hero-cta {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            
+            .hero-subtitle {
+                animation: none !important;
+            }
+            
+            /* Отключаем анимацию scroll индикатора */
             .hero-scroll {
-                animation: none;
+                animation: none !important;
+            }
+            
+            /* Отключаем parallax эффект для фоновых изображений */
+            .hero-image img {
+                transform: none !important;
+            }
+        }
+        
+        /* Smooth Scroll для всех устройств (если не reduced motion) */
+        @media (prefers-reduced-motion: no-preference) {
+            html {
+                scroll-behavior: smooth;
             }
         }
 
@@ -2676,14 +4127,28 @@
 
         /* Mobile devices - модальные окна */
         @media screen and (max-width: 767px) {
+            .modal-overlay {
+                padding: 20px;
+            }
+            
             .modal-content {
-                padding: 32px 24px;
+                width: 90%;
+                max-width: 320px;
+                padding: 24px 20px;
                 max-height: 95vh;
+                overflow-y: auto;
+            }
+            
+            .modal-close {
+                width: 32px;
+                height: 32px;
+                top: 16px;
+                right: 16px;
             }
             
             .modal-title {
-                font-size: 28px;
-                margin-bottom: 12px;
+                font-size: clamp(24px, 6vw, 28px);
+                margin-bottom: 16px;
             }
             
             .modal-description {
@@ -2691,15 +4156,76 @@
                 margin-bottom: 32px;
             }
             
-            .modal-close {
-                top: 16px;
-                right: 16px;
-                width: 36px;
-                height: 36px;
+            .modal-form {
+                gap: 20px;
             }
             
-            .form-group {
+            .form-group label {
+                font-size: 13px;
+                margin-bottom: 8px;
+            }
+            
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 12px 14px;
+                font-size: 14px;
+                min-height: 44px;
+            }
+            
+            .form-group textarea {
+                min-height: 100px;
+            }
+            
+            .modal-submit-btn {
+                padding: 14px 28px;
+                font-size: 12px;
+                min-height: 44px;
+                width: 100%;
+            }
+        }
+        
+        /* Extra Small devices - модальные окна (320-479px) */
+        @media screen and (max-width: 479px) {
+            .modal-overlay {
+                padding: 16px;
+            }
+            
+            .modal-content {
+                width: 90%;
+                max-width: 320px;
+                padding: 24px 20px;
+                max-height: 95vh;
+                overflow-y: auto;
+            }
+            
+            .modal-close {
+                top: 12px;
+                right: 12px;
+                width: 32px;
+                height: 32px;
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .modal-title {
+                font-size: clamp(24px, 6vw, 28px);
+                margin-bottom: 16px;
+            }
+            
+            .modal-description {
+                font-size: 14px;
+                margin-bottom: 32px;
+                line-height: 1.6;
+            }
+            
+            .modal-form {
                 gap: 20px;
+            }
+            
+            .form-group label {
+                font-size: 13px;
+                margin-bottom: 8px;
             }
             
             .form-group input,
@@ -2707,52 +4233,110 @@
             .form-group textarea {
                 padding: 12px 14px;
                 font-size: 16px; /* Предотвращаем zoom на iOS */
+                min-height: 44px;
+            }
+            
+            .form-group textarea {
+                min-height: 100px;
+            }
+            
+            .modal-submit-btn {
+                padding: 14px 28px;
+                font-size: 12px;
+                min-height: 44px;
+                width: 100%;
+            }
+            
+            .success-icon i {
+                font-size: clamp(40px, 10vw, 48px);
+            }
+            
+            .modal-success h4 {
+                font-size: clamp(20px, 5vw, 24px);
+            }
+        }
+
+        /* Small devices - модальные окна (480-767px) */
+        @media screen and (min-width: 480px) and (max-width: 767px) {
+            .modal-overlay {
+                padding: 20px;
+            }
+            
+            .modal-content {
+                width: 85%;
+                max-width: 480px;
+                padding: 32px 24px;
+            }
+            
+            .modal-title {
+                font-size: clamp(28px, 7vw, 32px);
+            }
+            
+            .modal-description {
+                font-size: 15px;
+            }
+            
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 14px 16px;
+                font-size: 15px;
+                min-height: 44px;
+            }
+            
+            .form-group textarea {
+                min-height: 120px;
             }
             
             .modal-submit-btn {
                 padding: 16px 32px;
                 font-size: 12px;
-            }
-            
-            .success-icon i {
-                font-size: 48px;
-            }
-            
-            .modal-success h4 {
-                font-size: 24px;
-            }
-            
-            .contact-cta-buttons {
-                flex-direction: column;
-                gap: 16px;
-            }
-            
-            .contact-cta {
-                width: 100%;
-                padding: 16px 32px;
-                font-size: 12px;
+                min-height: 44px;
             }
         }
 
-        /* Small devices */
-        @media screen and (min-width: 480px) and (max-width: 767px) {
+        /* Tablet devices - модальные окна (768-899px) */
+        @media screen and (min-width: 768px) and (max-width: 899px) {
             .modal-content {
+                width: 70%;
+                max-width: 600px;
                 padding: 40px 32px;
             }
             
-            .contact-cta-buttons {
-                flex-direction: row;
-                gap: 20px;
+            .modal-title {
+                font-size: clamp(30px, 3.75vw, 32px);
             }
             
-            .contact-cta {
-                flex: 1;
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 14px 16px;
+                font-size: 16px;
             }
         }
 
-        /* Tablet devices */
-        @media screen and (min-width: 768px) and (max-width: 1023px) {
+        /* Small Desktop - модальные окна (900-1023px) */
+        @media screen and (min-width: 900px) and (max-width: 1023px) {
             .modal-content {
-                padding: 40px;
+                width: 600px;
+                max-width: 600px;
+                padding: 48px 40px;
+            }
+            
+            .modal-title {
+                font-size: clamp(32px, 4vw, 36px);
+            }
+        }
+
+        /* Large Desktop - модальные окна (1024px+) */
+        @media screen and (min-width: 1024px) {
+            .modal-content {
+                width: 600px;
+                max-width: 600px;
+                padding: 48px 40px;
+            }
+            
+            .modal-title {
+                font-size: 36px;
             }
         }
