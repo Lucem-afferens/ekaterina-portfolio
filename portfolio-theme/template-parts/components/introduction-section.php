@@ -13,18 +13,24 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Получаем ID текущей страницы
-$current_page_id = ekaterina_get_current_page_id();
+// Получаем данные из SCF (используем get_field() напрямую, как в Tochka-Gg)
+$intro_title = function_exists( 'get_field' ) ? get_field( 'intro_title' ) : null;
+$intro_title = $intro_title ?: 'Создаю атмосферу<br/>незабываемых событий';
 
-// Получаем данные из SCF
-$intro_title = ekaterina_get_scf_field( 'intro_title', 'Создаю атмосферу<br/>незабываемых событий', 'html', $current_page_id );
-$intro_description = class_exists( 'SCF' ) && $current_page_id ? SCF::get( 'intro_description', $current_page_id ) : '';
-$intro_image = class_exists( 'SCF' ) && $current_page_id ? SCF::get( 'intro_image', $current_page_id ) : '';
+$intro_description = function_exists( 'get_field' ) ? get_field( 'intro_description' ) : '';
+$intro_image = function_exists( 'get_field' ) ? get_field( 'intro_image' ) : false;
 
 // Получаем URL изображения
+// get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
 $intro_image_url = '';
 if ( $intro_image ) {
-    $intro_image_url = wp_get_attachment_image_url( $intro_image, 'full' );
+    if ( is_array( $intro_image ) && ! empty( $intro_image['url'] ) ) {
+        // Если вернулся массив, используем URL из него
+        $intro_image_url = $intro_image['url'];
+    } elseif ( is_numeric( $intro_image ) ) {
+        // Если вернулся ID, получаем URL
+        $intro_image_url = wp_get_attachment_image_url( $intro_image, 'full' );
+    }
     // Принудительно используем HTTPS
     if ( $intro_image_url ) {
         $intro_image_url = set_url_scheme( $intro_image_url, 'https' );

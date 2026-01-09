@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Получаем данные из SCF
-$stats_items = ekaterina_get_scf_repeater( 'stats_items' );
+// Получаем данные из SCF (используем get_field() напрямую, как в Tochka-Gg)
+$stats_items = function_exists( 'get_field' ) ? get_field( 'stats_items' ) : false;
 
 // Если статистика не заполнена, используем дефолтные значения
 if ( empty( $stats_items ) ) {

@@ -13,13 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Получаем ID текущей страницы
-$current_page_id = ekaterina_get_current_page_id();
+// Получаем данные из SCF (используем get_field() напрямую, как в Tochka-Gg)
+$about_title = function_exists( 'get_field' ) ? get_field( 'about_title' ) : null;
+$about_title = $about_title ?: 'Профессиональный путь';
 
-// Получаем данные из SCF
-$about_title = ekaterina_get_scf_field( 'about_title', 'Профессиональный путь', 'html', $current_page_id );
-$about_timeline = ekaterina_get_scf_repeater( 'about_timeline', $current_page_id );
-$about_image = class_exists( 'SCF' ) && $current_page_id ? SCF::get( 'about_image', $current_page_id ) : '';
+$about_timeline = function_exists( 'get_field' ) ? get_field( 'about_timeline' ) : false;
+$about_image = function_exists( 'get_field' ) ? get_field( 'about_image' ) : false;
 
 // Если timeline не заполнен, используем дефолтные значения
 if ( empty( $about_timeline ) ) {
@@ -48,9 +47,16 @@ if ( empty( $about_timeline ) ) {
 }
 
 // Получаем URL изображения
+// get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
 $about_image_url = '';
 if ( $about_image ) {
-    $about_image_url = wp_get_attachment_image_url( $about_image, 'full' );
+    if ( is_array( $about_image ) && ! empty( $about_image['url'] ) ) {
+        // Если вернулся массив, используем URL из него
+        $about_image_url = $about_image['url'];
+    } elseif ( is_numeric( $about_image ) ) {
+        // Если вернулся ID, получаем URL
+        $about_image_url = wp_get_attachment_image_url( $about_image, 'full' );
+    }
     // Принудительно используем HTTPS
     if ( $about_image_url ) {
         $about_image_url = set_url_scheme( $about_image_url, 'https' );

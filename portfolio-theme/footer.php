@@ -15,12 +15,9 @@
             <div class="footer-brand">
                 <?php
                 // Получаем имя из SCF Options или используем название сайта
-                $host_name = '';
-                $host_title = '';
-                if ( class_exists( 'SCF' ) ) {
-                    $host_name = SCF::get_option_meta( 'theme_options', 'site_host_name' );
-                    $host_title = SCF::get_option_meta( 'theme_options', 'site_host_title' );
-                }
+                // SCF совместим с API ACF, используем get_field(..., 'option')
+                $host_name = function_exists( 'get_field' ) ? get_field( 'site_host_name', 'option' ) : null;
+                $host_title = function_exists( 'get_field' ) ? get_field( 'site_host_title', 'option' ) : null;
                 if ( empty( $host_name ) ) {
                     $host_name = get_bloginfo( 'name' );
                 }

@@ -15,6 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Вспомогательная функция для безопасного вывода SCF поля
+ * 
+ * SCF совместим с API ACF, поэтому используем get_field() вместо SCF::get()
  *
  * @param string $field_name Имя поля SCF
  * @param mixed  $default    Значение по умолчанию
@@ -23,7 +25,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string Экранированное значение
  */
 function ekaterina_get_scf_field( $field_name, $default = '', $context = 'html', $post_id = null ) {
-    if ( ! class_exists( 'SCF' ) ) {
+    // SCF предоставляет функцию get_field() для совместимости с ACF API
+    if ( ! function_exists( 'get_field' ) ) {
         return $default;
     }
 
@@ -32,8 +35,9 @@ function ekaterina_get_scf_field( $field_name, $default = '', $context = 'html',
         $post_id = ekaterina_get_current_page_id();
     }
 
-    // Получаем значение поля с указанием ID страницы
-    $value = SCF::get( $field_name, $post_id );
+    // Используем get_field() - стандартный API ACF/SCF
+    // Если post_id = 0 или false, get_field() автоматически использует текущую страницу
+    $value = get_field( $field_name, $post_id ? $post_id : false );
     
     // Проверяем, что значение не пустое (учитываем, что "0" - это валидное значение)
     if ( $value === null || $value === false || $value === '' ) {
@@ -53,21 +57,26 @@ function ekaterina_get_scf_field( $field_name, $default = '', $context = 'html',
 
 /**
  * Вспомогательная функция для безопасного вывода SCF поля из Options
+ * 
+ * SCF совместим с API ACF, поэтому используем get_field(..., 'option')
  *
  * @param string $field_name Имя поля SCF
- * @param string $group_name Имя группы полей
+ * @param string $group_name Имя группы полей (не используется, оставлено для совместимости)
  * @param mixed  $default    Значение по умолчанию
  * @param string $context    Контекст экранирования
  * @return string Экранированное значение
  */
 function ekaterina_get_scf_option( $field_name, $group_name = 'theme_options', $default = '', $context = 'html' ) {
-    if ( ! class_exists( 'SCF' ) ) {
+    // SCF предоставляет функцию get_field() для совместимости с ACF API
+    if ( ! function_exists( 'get_field' ) ) {
         return $default;
     }
 
-    $value = SCF::get_option_meta( $group_name, $field_name );
+    // Используем get_field() с параметром 'option' для Options Page
+    $value = get_field( $field_name, 'option' );
     
-    if ( empty( $value ) ) {
+    // Проверяем, что значение не пустое (учитываем, что "0" - это валидное значение)
+    if ( $value === null || $value === false || $value === '' ) {
         return $default;
     }
 
@@ -84,6 +93,9 @@ function ekaterina_get_scf_option( $field_name, $group_name = 'theme_options', $
 
 /**
  * Вспомогательная функция для безопасного вывода изображения SCF
+ * 
+ * SCF совместим с API ACF, поэтому используем get_field() вместо SCF::get()
+ * get_field() для Image field возвращает массив ['ID', 'url', 'alt', 'width', 'height'] или ID
  *
  * @param string $field_name Имя поля SCF (изображение)
  * @param string $size       Размер изображения
@@ -92,7 +104,8 @@ function ekaterina_get_scf_option( $field_name, $group_name = 'theme_options', $
  * @return string HTML код изображения
  */
 function ekaterina_get_scf_image( $field_name, $size = 'full', $attr = array(), $post_id = null ) {
-    if ( ! class_exists( 'SCF' ) ) {
+    // SCF предоставляет функцию get_field() для совместимости с ACF API
+    if ( ! function_exists( 'get_field' ) ) {
         return '';
     }
 
@@ -101,10 +114,22 @@ function ekaterina_get_scf_image( $field_name, $size = 'full', $attr = array(), 
         $post_id = ekaterina_get_current_page_id();
     }
 
-    // Получаем ID изображения с указанием ID страницы
-    $image_id = SCF::get( $field_name, $post_id );
+    // Используем get_field() - стандартный API ACF/SCF
+    $image_data = get_field( $field_name, $post_id ? $post_id : false );
     
-    if ( empty( $image_id ) ) {
+    if ( empty( $image_data ) ) {
+        return '';
+    }
+
+    // get_field() для Image field может вернуть массив или ID
+    $image_id = null;
+    if ( is_array( $image_data ) && isset( $image_data['ID'] ) ) {
+        // Если вернулся массив, берем ID из него
+        $image_id = $image_data['ID'];
+    } elseif ( is_numeric( $image_data ) ) {
+        // Если вернулся ID напрямую
+        $image_id = $image_data;
+    } else {
         return '';
     }
 

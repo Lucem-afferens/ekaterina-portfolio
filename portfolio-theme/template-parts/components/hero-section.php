@@ -13,20 +13,32 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Получаем ID текущей страницы
-$current_page_id = ekaterina_get_current_page_id();
+// Получаем данные из SCF (используем get_field() напрямую, как в Tochka-Gg)
+$hero_name = function_exists( 'get_field' ) ? get_field( 'hero_name' ) : null;
+$hero_name = $hero_name ?: 'Екатерина<br/>Шулятникова';
 
-// Получаем данные из SCF
-$hero_name = ekaterina_get_scf_field( 'hero_name', 'Екатерина<br/>Шулятникова', 'html', $current_page_id );
-$hero_subtitle = ekaterina_get_scf_field( 'hero_subtitle', 'Ведущая премиальных мероприятий<br/>Пермский край', 'html', $current_page_id );
-$hero_background_image = class_exists( 'SCF' ) && $current_page_id ? SCF::get( 'hero_background_image', $current_page_id ) : '';
-$hero_cta_text = ekaterina_get_scf_field( 'hero_cta_text', 'ЗАБРОНИРОВАТЬ ДАТУ', 'html', $current_page_id );
-$hero_cta_link = ekaterina_get_scf_field( 'hero_cta_link', '#contact', 'url', $current_page_id );
+$hero_subtitle = function_exists( 'get_field' ) ? get_field( 'hero_subtitle' ) : null;
+$hero_subtitle = $hero_subtitle ?: 'Ведущая премиальных мероприятий<br/>Пермский край';
+
+$hero_background_image = function_exists( 'get_field' ) ? get_field( 'hero_background_image' ) : false;
+
+$hero_cta_text = function_exists( 'get_field' ) ? get_field( 'hero_cta_text' ) : null;
+$hero_cta_text = $hero_cta_text ?: 'ЗАБРОНИРОВАТЬ ДАТУ';
+
+$hero_cta_link = function_exists( 'get_field' ) ? get_field( 'hero_cta_link' ) : null;
+$hero_cta_link = $hero_cta_link ?: '#contact';
 
 // Получаем URL изображения
+// get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
 $hero_image_url = '';
 if ( $hero_background_image ) {
-    $hero_image_url = wp_get_attachment_image_url( $hero_background_image, 'hero-image' );
+    if ( is_array( $hero_background_image ) && ! empty( $hero_background_image['url'] ) ) {
+        // Если вернулся массив, используем URL из него
+        $hero_image_url = $hero_background_image['url'];
+    } elseif ( is_numeric( $hero_background_image ) ) {
+        // Если вернулся ID, получаем URL
+        $hero_image_url = wp_get_attachment_image_url( $hero_background_image, 'hero-image' );
+    }
     // Принудительно используем HTTPS
     if ( $hero_image_url ) {
         $hero_image_url = set_url_scheme( $hero_image_url, 'https' );

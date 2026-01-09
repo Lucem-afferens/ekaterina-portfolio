@@ -27,10 +27,8 @@
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
                     <?php 
                     // Получаем имя из SCF Options или используем название сайта
-                    $host_name = '';
-                    if ( class_exists( 'SCF' ) ) {
-                        $host_name = SCF::get_option_meta( 'theme_options', 'site_host_name' );
-                    }
+                    // SCF совместим с API ACF, используем get_field(..., 'option')
+                    $host_name = function_exists( 'get_field' ) ? get_field( 'site_host_name', 'option' ) : null;
                     if ( empty( $host_name ) ) {
                         $host_name = get_bloginfo( 'name' );
                     }

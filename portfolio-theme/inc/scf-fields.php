@@ -205,13 +205,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Вспомогательная функция для получения Repeater поля
+ * 
+ * SCF совместим с API ACF, поэтому используем get_field() вместо SCF::get()
+ * Для Repeater полей лучше использовать have_rows() и get_sub_field(),
+ * но для обратной совместимости возвращаем массив
  *
  * @param string $field_name Имя Repeater поля
  * @param int    $post_id    ID страницы/поста (если не указан, используется текущий)
  * @return array Массив значений или пустой массив
  */
 function ekaterina_get_scf_repeater( $field_name, $post_id = null ) {
-    if ( ! class_exists( 'SCF' ) ) {
+    // SCF предоставляет функцию get_field() для совместимости с ACF API
+    if ( ! function_exists( 'get_field' ) ) {
         return array();
     }
 
@@ -220,8 +225,9 @@ function ekaterina_get_scf_repeater( $field_name, $post_id = null ) {
         $post_id = ekaterina_get_current_page_id();
     }
 
-    // Получаем значение Repeater поля с указанием ID страницы
-    $repeater = SCF::get( $field_name, $post_id );
+    // Используем get_field() - стандартный API ACF/SCF
+    // get_field() для Repeater возвращает массив массивов
+    $repeater = get_field( $field_name, $post_id ? $post_id : false );
     
     // Проверяем, что значение не пустое и является массивом
     if ( $repeater === null || $repeater === false || ! is_array( $repeater ) || empty( $repeater ) ) {
