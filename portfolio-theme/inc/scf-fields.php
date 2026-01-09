@@ -176,16 +176,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - contact_work_hours (Repeater) - Время работы
  *   - hours_label (Text) - Заголовок пункта (Консультации, Мероприятия и т.д.)
  *   - hours_value (Text) - Значение времени работы
- * - contact_social_networks (Repeater) - Социальные сети (новый способ)
- *   - social_network (Select) - Выбор социальной сети (vk, telegram, whatsapp, instagram, facebook, twitter, youtube, linkedin, ok, tiktok, phone, email, website)
- *   - social_link (URL/Text) - Ссылка на профиль/страницу
+ * - contact_cta_write_link (URL) - Ссылка для кнопки "Написать" (опционально)
  * 
  * ОБРАТНАЯ СОВМЕСТИМОСТЬ:
  * Старые поля contact_phone, contact_email, contact_location автоматически
  * преобразуются в repeater contact_info_items с дефолтными заголовками.
- * Старые поля contact_vk_link, contact_telegram_link, contact_whatsapp_link
- * автоматически преобразуются в repeater contact_social_networks.
+ * Если поле contact_cta_write_link не заполнено, используется первая VK ссылка
+ * из repeater channels_social_networks (секция "Свяжитесь со мной").
  * Если заголовок или значение не указаны, пункт не отображается.
+ * 
+ * ПРИМЕЧАНИЕ: Социальные сети отображаются только в секции "Свяжитесь со мной"
+ * (contact-channels-section), а не в секции "Обсудим ваше мероприятие".
  */
 
 /**
