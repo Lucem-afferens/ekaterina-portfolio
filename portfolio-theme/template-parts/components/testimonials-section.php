@@ -14,10 +14,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Получаем данные из SCF (используем get_field() напрямую, как в других секциях)
-$testimonials_title = function_exists( 'get_field' ) ? get_field( 'testimonials_title' ) : null;
+// Получаем ID текущей страницы для правильного контекста
+$current_page_id = ekaterina_get_current_page_id();
+
+$testimonials_title = function_exists( 'get_field' ) ? get_field( 'testimonials_title', $current_page_id ) : null;
 $testimonials_title = $testimonials_title ?: 'Отзывы';
 
-$testimonials_description = function_exists( 'get_field' ) ? get_field( 'testimonials_description' ) : null;
+// Пробуем разные варианты имен полей для совместимости
+$testimonials_description = function_exists( 'get_field' ) ? get_field( 'testimonials_description', $current_page_id ) : null;
+if ( empty( $testimonials_description ) ) {
+    // Пробуем альтернативное имя поля
+    $testimonials_description = function_exists( 'get_field' ) ? get_field( 'testimonials_subtitle', $current_page_id ) : null;
+}
 $testimonials_description = $testimonials_description ?: 'Мнения тех, с кем я работала';
 
 // Убираем автоматически созданные p теги из описания, если они есть
@@ -29,7 +37,15 @@ if ( ! empty( $testimonials_description ) ) {
     $testimonials_description = trim( $testimonials_description );
 }
 
-$testimonials_list = ekaterina_get_scf_repeater( 'testimonials_list' );
+// Пробуем разные варианты имен полей для совместимости
+$testimonials_list = function_exists( 'get_field' ) ? get_field( 'testimonials_list', $current_page_id ) : false;
+if ( empty( $testimonials_list ) || ! is_array( $testimonials_list ) ) {
+    // Пробуем альтернативное имя поля
+    $testimonials_list = function_exists( 'get_field' ) ? get_field( 'testimonials_items', $current_page_id ) : false;
+}
+if ( empty( $testimonials_list ) || ! is_array( $testimonials_list ) ) {
+    $testimonials_list = array();
+}
 ?>
 
 <section id="testimonials">
@@ -49,9 +65,19 @@ $testimonials_list = ekaterina_get_scf_repeater( 'testimonials_list' );
             <?php foreach ( $testimonials_chunks as $chunk ) : ?>
                 <div class="testimonials-grid">
                     <?php foreach ( $chunk as $testimonial ) : 
-                        $quote = ekaterina_get_repeater_field( $testimonial, 'testimonial_quote', '' );
-                        $author = ekaterina_get_repeater_field( $testimonial, 'testimonial_author', '' );
-                        $title = ekaterina_get_repeater_field( $testimonial, 'testimonial_title', '' );
+                        // Получаем данные из repeater элемента напрямую
+                        // Пробуем разные варианты имен полей для совместимости
+                        $quote = isset( $testimonial['testimonial_quote'] ) ? $testimonial['testimonial_quote'] : '';
+                        $author = isset( $testimonial['testimonial_author'] ) ? $testimonial['testimonial_author'] : '';
+                        // Также проверяем альтернативное имя поля (testimonial_author_name)
+                        if ( empty( $author ) && isset( $testimonial['testimonial_author_name'] ) ) {
+                            $author = $testimonial['testimonial_author_name'];
+                        }
+                        $title = isset( $testimonial['testimonial_title'] ) ? $testimonial['testimonial_title'] : '';
+                        // Также проверяем альтернативное имя поля (testimonial_author_title)
+                        if ( empty( $title ) && isset( $testimonial['testimonial_author_title'] ) ) {
+                            $title = $testimonial['testimonial_author_title'];
+                        }
                         
                         if ( empty( $quote ) || empty( $author ) ) {
                             continue;
