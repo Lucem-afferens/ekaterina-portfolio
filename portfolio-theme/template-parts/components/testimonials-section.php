@@ -13,9 +13,22 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Получаем данные из SCF
-$testimonials_title = ekaterina_get_scf_field( 'testimonials_title', 'Отзывы' );
-$testimonials_description = ekaterina_get_scf_field( 'testimonials_description', 'Мнения тех, с кем я работала' );
+// Получаем данные из SCF (используем get_field() напрямую, как в других секциях)
+$testimonials_title = function_exists( 'get_field' ) ? get_field( 'testimonials_title' ) : null;
+$testimonials_title = $testimonials_title ?: 'Отзывы';
+
+$testimonials_description = function_exists( 'get_field' ) ? get_field( 'testimonials_description' ) : null;
+$testimonials_description = $testimonials_description ?: 'Мнения тех, с кем я работала';
+
+// Убираем автоматически созданные p теги из описания, если они есть
+if ( ! empty( $testimonials_description ) ) {
+    // Удаляем открывающие и закрывающие p теги
+    $testimonials_description = preg_replace( '/<p[^>]*>/', '', $testimonials_description );
+    $testimonials_description = preg_replace( '/<\/p>/', '', $testimonials_description );
+    // Убираем лишние пробелы
+    $testimonials_description = trim( $testimonials_description );
+}
+
 $testimonials_list = ekaterina_get_scf_repeater( 'testimonials_list' );
 ?>
 
@@ -23,9 +36,9 @@ $testimonials_list = ekaterina_get_scf_repeater( 'testimonials_list' );
     <div class="testimonials-container">
         <div class="testimonials-header">
             <div class="philosophy-divider" style="margin: 0 auto 48px;"></div>
-            <h3><?php echo esc_html( $testimonials_title ); ?></h3>
+            <h3><?php echo wp_kses_post( $testimonials_title ); ?></h3>
             <?php if ( ! empty( $testimonials_description ) ) : ?>
-                <p><?php echo esc_html( $testimonials_description ); ?></p>
+                <div class="testimonials-description"><?php echo wp_kses_post( $testimonials_description ); ?></div>
             <?php endif; ?>
         </div>
         

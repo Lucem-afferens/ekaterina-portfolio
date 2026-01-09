@@ -873,12 +873,14 @@
             line-height: 1.2;
         }
         
-        /* Стили для параграфов в testimonials-header - используем более специфичный селектор */
-        .testimonials-header > p,
-        .testimonials-header p {
+        /* Стили для описания в testimonials-header - используем div вместо p */
+        .testimonials-header .testimonials-description,
+        .testimonials-description {
             font-size: 20px;
             color: #f8f6f3;
             font-weight: 300;
+            line-height: 1.6;
+            margin-top: 16px;
         }
         
         .testimonials-grid {
@@ -1899,9 +1901,10 @@
                 margin-bottom: 24px;
             }
             
-            .testimonials-header > p,
-            .testimonials-header p {
+            .testimonials-header .testimonials-description,
+            .testimonials-description {
                 font-size: 16px;
+                margin-top: 12px;
             }
             
             .testimonials-grid {
