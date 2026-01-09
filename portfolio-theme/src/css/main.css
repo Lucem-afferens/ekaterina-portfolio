@@ -262,7 +262,9 @@
             color: #f8f6f3;
         }
         
-        .intro-content p {
+        /* Стили для параграфов в intro-content - используем более специфичный селектор */
+        .intro-content > p,
+        .intro-content p:not(.philosophy-quote):not(.hero-subtitle) {
             font-size: 18px;
             line-height: 1.6;
             margin-bottom: 32px;
@@ -376,7 +378,9 @@
             color: #f8f6f3;
         }
         
-        .philosophy-item p {
+        /* Стили для параграфов в philosophy-item - используем более специфичный селектор */
+        .philosophy-item > p,
+        .philosophy-item p:not(.philosophy-quote) {
             font-size: 16px;
             line-height: 1.6;
             color: rgba(248, 246, 243, 0.7);
@@ -416,6 +420,8 @@
             color: #f8f6f3;
         }
         
+        /* Стили для параграфов в timeline-item - используем более специфичный селектор */
+        .timeline-item > p,
         .timeline-item p {
             font-size: 16px;
             line-height: 1.6;
@@ -459,6 +465,8 @@
             line-height: 1.2;
         }
         
+        /* Стили для параграфов в portfolio-header - используем более специфичный селектор */
+        .portfolio-header > p,
         .portfolio-header p {
             font-size: 20px;
             color: #f8f6f3;
@@ -645,6 +653,8 @@
             color: #f8f6f3;
         }
         
+        /* Стили для параграфов в expertise-item - используем более специфичный селектор */
+        .expertise-item > p,
         .expertise-item p {
             font-size: 16px;
             line-height: 1.6;
@@ -677,6 +687,8 @@
             color: #f8f6f3;
         }
         
+        /* Стили для параграфов в services-header - используем более специфичный селектор */
+        .services-header > p,
         .services-header p {
             font-size: 20px;
             color: rgba(248, 246, 243, 0.7);
@@ -780,6 +792,8 @@
             color: #f8f6f3;
         }
         
+        /* Стили для параграфов в process-header - используем более специфичный селектор */
+        .process-header > p,
         .process-header p {
             font-size: 20px;
             color: rgba(248, 246, 243, 0.7);
@@ -817,6 +831,8 @@
             color: #f8f6f3;
         }
         
+        /* Стили для параграфов в process-content - используем более специфичный селектор */
+        .process-content > p,
         .process-content p {
             font-size: 16px;
             line-height: 1.6;
@@ -849,6 +865,8 @@
             line-height: 1.2;
         }
         
+        /* Стили для параграфов в testimonials-header - используем более специфичный селектор */
+        .testimonials-header > p,
         .testimonials-header p {
             font-size: 20px;
             color: #f8f6f3;
@@ -1637,7 +1655,8 @@
                 margin-bottom: 24px;
             }
             
-            .intro-content p {
+            .intro-content > p,
+            .intro-content p:not(.philosophy-quote):not(.hero-subtitle) {
                 font-size: 16px;
                 margin-bottom: 20px;
             }
@@ -1737,6 +1756,7 @@
                 margin-bottom: 16px;
             }
             
+            .portfolio-header > p,
             .portfolio-header p {
                 font-size: 16px;
             }
@@ -1796,6 +1816,7 @@
                 margin-bottom: 24px;
             }
             
+            .services-header > p,
             .services-header p {
                 font-size: 16px;
             }
@@ -1824,6 +1845,7 @@
                 margin-bottom: 24px;
             }
             
+            .process-header > p,
             .process-header p {
                 font-size: 16px;
             }
@@ -1864,6 +1886,7 @@
                 margin-bottom: 24px;
             }
             
+            .testimonials-header > p,
             .testimonials-header p {
                 font-size: 16px;
             }
