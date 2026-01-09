@@ -179,6 +179,7 @@
             opacity: 0;
             transform: translateY(32px);
             transition: all 0.8s ease;
+            font-family: 'Inter', sans-serif; /* Используем тот же шрифт, что и body */
         }
         
         .hero-cta {
