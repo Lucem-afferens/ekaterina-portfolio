@@ -54,6 +54,7 @@ import '../css/main.css';
                 setTimeout(() => {
                     subtitle.style.opacity = '1';
                     subtitle.style.transform = 'translateY(0)';
+                    subtitle.classList.add('visible');
                 }, 600);
             }
             
