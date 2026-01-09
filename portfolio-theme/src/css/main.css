@@ -162,14 +162,9 @@
             transition: transform 0.8s ease;
         }
         
-        /* Убираем стили для обычного p, чтобы не конфликтовали с h2 */
-        .hero-content p {
-            margin: 0;
-            padding: 0;
-        }
-        
-        /* Отдельные стили для описания (подзаголовка) */
-        .hero-subtitle {
+        /* Отдельные стили для описания (подзаголовка) - используем более специфичный селектор */
+        .hero-content .hero-subtitle,
+        .hero-content p.hero-subtitle {
             color: #f8f6f3;
             font-size: 20px;
             font-weight: 300;
@@ -1591,7 +1586,8 @@
                 line-height: 1.1;
             }
             
-            .hero-subtitle {
+            .hero-content .hero-subtitle,
+            .hero-content p.hero-subtitle {
                 font-size: 16px;
                 margin-bottom: 32px;
                 line-height: 1.5;
@@ -2068,7 +2064,8 @@
                 font-size: 64px;
             }
             
-            .hero-subtitle {
+            .hero-content .hero-subtitle,
+            .hero-content p.hero-subtitle {
                 font-size: 18px;
                 color: #f8f6f3;
                 font-weight: 300;
@@ -2182,7 +2179,8 @@
                 font-size: 72px;
             }
             
-            .hero-subtitle {
+            .hero-content .hero-subtitle,
+            .hero-content p.hero-subtitle {
                 font-size: 18px;
                 color: #f8f6f3;
                 font-weight: 300;
@@ -2273,7 +2271,8 @@
                 font-size: 88px;
             }
             
-            .hero-subtitle {
+            .hero-content .hero-subtitle,
+            .hero-content p.hero-subtitle {
                 font-size: 20px;
                 color: #f8f6f3;
                 font-weight: 300;
@@ -2377,7 +2376,8 @@
                 font-size: 40px;
             }
             
-            .hero-subtitle {
+            .hero-content .hero-subtitle,
+            .hero-content p.hero-subtitle {
                 font-size: 14px;
                 color: #f8f6f3;
                 font-weight: 300;
