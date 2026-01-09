@@ -2393,50 +2393,10 @@
             }
         }
         
-        /* Tablets (768px - 899px) - Burger menu */
+        /* Tablets (768px - 899px) - Дополнительные стили для контента */
         @media screen and (min-width: 768px) and (max-width: 899px) {
             .header-container {
                 padding: 24px 32px;
-            }
-            
-            .mobile-menu-toggle {
-                display: flex;
-            }
-            
-            .header-nav {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 70%;
-                max-width: 400px;
-                height: 100vh;
-                background-color: rgba(58, 58, 58, 0.98);
-                backdrop-filter: blur(24px);
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 100px 40px 40px;
-                gap: 28px;
-                transition: right 0.3s ease;
-                z-index: 99;
-                box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
-            }
-            
-            .header-nav.active {
-                right: 0;
-            }
-            
-            .header-nav a {
-                font-size: 18px;
-                width: 100%;
-                padding: 12px 0;
-                border-bottom: 1px solid rgba(248, 246, 243, 0.1);
-            }
-            
-            .header-cta {
-                margin-top: 16px;
-                width: 100%;
-                text-align: center;
-                padding: 14px 24px;
             }
             
             #hero {
