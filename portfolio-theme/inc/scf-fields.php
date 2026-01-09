@@ -197,7 +197,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - channels_label (Text) - Текст перед ссылками
  * - channels_social_networks (Repeater) - Социальные сети и каналы связи (новый способ)
  *   - social_network (Select) - Выбор социальной сети (vk, telegram, whatsapp, instagram, facebook, twitter, youtube, linkedin, ok, tiktok, phone, email, website)
- *   - social_link (URL/Text) - Ссылка на профиль/страницу или номер телефона
+ *   - social_link (Text) - Ссылка на профиль/страницу, номер телефона (для phone) или email (для email). ВАЖНО: Используйте тип Text, а не URL! Система автоматически преобразует телефон в tel: ссылку, email в mailto: ссылку.
  * 
  * ОБРАТНАЯ СОВМЕСТИМОСТЬ:
  * Старые поля channels_vk, channels_telegram, channels_phone автоматически
