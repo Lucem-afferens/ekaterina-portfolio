@@ -48,7 +48,7 @@ if ( $hero_background_image ) {
         $hero_image_url = $hero_background_image['url'];
     } elseif ( is_numeric( $hero_background_image ) ) {
         // Если вернулся ID, получаем URL
-        $hero_image_url = wp_get_attachment_image_url( $hero_background_image, 'hero-image' );
+    $hero_image_url = wp_get_attachment_image_url( $hero_background_image, 'hero-image' );
     }
     // Принудительно используем HTTPS
     if ( $hero_image_url ) {

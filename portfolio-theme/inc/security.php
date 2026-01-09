@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Вспомогательная функция для безопасного вывода SCF поля
- * 
+ *
  * SCF совместим с API ACF, поэтому используем get_field() вместо SCF::get()
  *
  * @param string $field_name Имя поля SCF

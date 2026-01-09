@@ -13,67 +13,207 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Получаем данные из SCF
-$contact_title = ekaterina_get_scf_field( 'contact_title', 'Обсудим ваше мероприятие' );
-$contact_description = ekaterina_get_scf_field( 'contact_description', 'Свяжитесь со мной для обсуждения деталей вашего события.<br/>Отвечу на все вопросы и помогу определиться с форматом.' );
-$contact_phone = ekaterina_get_scf_field( 'contact_phone', '+7 (912) 345-67-89' );
-$contact_email = ekaterina_get_scf_field( 'contact_email', 'ekaterina@shulyatnikova.ru' );
-$contact_location = ekaterina_get_scf_field( 'contact_location', 'Пермский край, Россия' );
-$contact_work_hours = ekaterina_get_scf_repeater( 'contact_work_hours' );
-$contact_vk_link = ekaterina_get_scf_field( 'contact_vk_link', 'https://vk.com/your-page', 'url' );
-$contact_telegram_link = ekaterina_get_scf_field( 'contact_telegram_link', 'https://t.me/username', 'url' );
-$contact_whatsapp_link = ekaterina_get_scf_field( 'contact_whatsapp_link', 'https://wa.me/79123456789', 'url' );
+// Получаем данные из SCF (используем get_field() напрямую, как в других секциях)
+// Получаем ID текущей страницы для правильного контекста
+$current_page_id = ekaterina_get_current_page_id();
 
-// Если время работы не заполнено, используем дефолтные значения
-if ( empty( $contact_work_hours ) ) {
-    $contact_work_hours = array(
-        array( 'hours_label' => 'Консультации', 'hours_value' => 'Пн-Пт: 10:00 — 19:00' ),
-        array( 'hours_label' => 'Мероприятия', 'hours_value' => 'По согласованию' ),
-        array( 'hours_label' => 'Ответ на запрос', 'hours_value' => 'В течение 24 часов' ),
-    );
+$contact_title = function_exists( 'get_field' ) ? get_field( 'contact_title', $current_page_id ) : null;
+$contact_title = $contact_title ?: 'Обсудим ваше мероприятие';
+
+$contact_description = function_exists( 'get_field' ) ? get_field( 'contact_description', $current_page_id ) : null;
+$contact_description = $contact_description ?: 'Свяжитесь со мной для обсуждения деталей вашего события.<br/>Отвечу на все вопросы и помогу определиться с форматом.';
+
+// Убираем автоматически созданные p теги из описания, если они есть
+if ( ! empty( $contact_description ) ) {
+    // Удаляем открывающие и закрывающие p теги
+    $contact_description = preg_replace( '/<p[^>]*>/', '', $contact_description );
+    $contact_description = preg_replace( '/<\/p>/', '', $contact_description );
+    // Убираем лишние пробелы
+    $contact_description = trim( $contact_description );
 }
+
+// Заголовки блоков
+$contact_info_title = function_exists( 'get_field' ) ? get_field( 'contact_info_title', $current_page_id ) : null;
+$contact_info_title = $contact_info_title ?: 'Контактная информация';
+
+$contact_work_hours_title = function_exists( 'get_field' ) ? get_field( 'contact_work_hours_title', $current_page_id ) : null;
+$contact_work_hours_title = $contact_work_hours_title ?: 'Время работы';
+
+// Контактная информация (теперь repeater для гибкости)
+$contact_info_items = function_exists( 'get_field' ) ? get_field( 'contact_info_items', $current_page_id ) : false;
+if ( empty( $contact_info_items ) || ! is_array( $contact_info_items ) ) {
+    // Пробуем старые отдельные поля для обратной совместимости
+    $contact_phone = function_exists( 'get_field' ) ? get_field( 'contact_phone', $current_page_id ) : null;
+    $contact_email = function_exists( 'get_field' ) ? get_field( 'contact_email', $current_page_id ) : null;
+    $contact_location = function_exists( 'get_field' ) ? get_field( 'contact_location', $current_page_id ) : null;
+    
+    // Формируем массив из старых полей для совместимости
+    $contact_info_items = array();
+    if ( ! empty( $contact_phone ) ) {
+        $contact_info_items[] = array(
+            'contact_info_label' => 'Телефон',
+            'contact_info_value' => $contact_phone,
+            'contact_info_type' => 'phone'
+        );
+    }
+    if ( ! empty( $contact_email ) ) {
+        $contact_info_items[] = array(
+            'contact_info_label' => 'Электронная почта',
+            'contact_info_value' => $contact_email,
+            'contact_info_type' => 'email'
+        );
+    }
+    if ( ! empty( $contact_location ) ) {
+        $contact_info_items[] = array(
+            'contact_info_label' => 'Локация',
+            'contact_info_value' => $contact_location,
+            'contact_info_type' => 'text'
+        );
+    }
+}
+
+// Фильтруем массив, оставляя только элементы с заполненными заголовками и значениями
+if ( ! empty( $contact_info_items ) && is_array( $contact_info_items ) ) {
+    $contact_info_items = array_filter( $contact_info_items, function( $item ) {
+        $label = isset( $item['contact_info_label'] ) ? trim( $item['contact_info_label'] ) : '';
+        $value = isset( $item['contact_info_value'] ) ? trim( $item['contact_info_value'] ) : '';
+        return ! empty( $label ) && ! empty( $value );
+    } );
+}
+
+// Время работы (repeater)
+$contact_work_hours = function_exists( 'get_field' ) ? get_field( 'contact_work_hours', $current_page_id ) : false;
+if ( empty( $contact_work_hours ) || ! is_array( $contact_work_hours ) ) {
+    $contact_work_hours = array();
+}
+
+$contact_vk_link = function_exists( 'get_field' ) ? get_field( 'contact_vk_link', $current_page_id ) : null;
+$contact_vk_link = $contact_vk_link ?: 'https://vk.com/your-page';
+
+$contact_telegram_link = function_exists( 'get_field' ) ? get_field( 'contact_telegram_link', $current_page_id ) : null;
+$contact_telegram_link = $contact_telegram_link ?: 'https://t.me/username';
+
+$contact_whatsapp_link = function_exists( 'get_field' ) ? get_field( 'contact_whatsapp_link', $current_page_id ) : null;
+$contact_whatsapp_link = $contact_whatsapp_link ?: 'https://wa.me/79123456789';
 ?>
 
 <section id="contact">
     <div class="contact-container">
         <div class="contact-content">
             <div class="philosophy-divider" style="margin: 0 auto 48px;"></div>
-            <h3><?php echo esc_html( $contact_title ); ?></h3>
-            <p class="contact-description"><?php echo wp_kses_post( $contact_description ); ?></p>
+            <h3><?php echo wp_kses_post( $contact_title ); ?></h3>
+            <?php if ( ! empty( $contact_description ) ) : ?>
+                <div class="contact-description"><?php echo wp_kses_post( $contact_description ); ?></div>
+            <?php endif; ?>
             
             <div class="contact-cards">
-                <div class="contact-card">
-                    <h4>Контактная информация</h4>
-                    <div class="contact-info-item">
-                        <p class="contact-info-label">Телефон</p>
-                        <p class="contact-info-value"><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $contact_phone ) ); ?>"><?php echo esc_html( $contact_phone ); ?></a></p>
-                    </div>
-                    <div class="contact-info-item">
-                        <p class="contact-info-label">Электронная почта</p>
-                        <p class="contact-info-value"><a href="mailto:<?php echo esc_attr( $contact_email ); ?>"><?php echo esc_html( $contact_email ); ?></a></p>
-                    </div>
-                    <div class="contact-info-item">
-                        <p class="contact-info-label">Локация</p>
-                        <p class="contact-info-value"><?php echo esc_html( $contact_location ); ?></p>
-                    </div>
-                </div>
-                
-                <div class="contact-card">
-                    <h4>Время работы</h4>
-                    <?php foreach ( $contact_work_hours as $hours ) : 
-                        $label = ekaterina_get_repeater_field( $hours, 'hours_label', '' );
-                        $value = ekaterina_get_repeater_field( $hours, 'hours_value', '' );
+                <?php
+                // Собираем валидные элементы контактной информации
+                $valid_info_items = array();
+                if ( ! empty( $contact_info_items ) && is_array( $contact_info_items ) ) {
+                    foreach ( $contact_info_items as $item ) {
+                        $info_label = isset( $item['contact_info_label'] ) ? trim( $item['contact_info_label'] ) : '';
+                        $info_value = isset( $item['contact_info_value'] ) ? trim( $item['contact_info_value'] ) : '';
                         
-                        if ( empty( $label ) ) {
+                        // Если заголовок или значение не указаны, пропускаем этот пункт
+                        if ( empty( $info_label ) || empty( $info_value ) ) {
                             continue;
                         }
-                    ?>
-                        <div class="contact-info-item">
-                            <p class="contact-info-label"><?php echo esc_html( $label ); ?></p>
-                            <p class="contact-info-value"><?php echo esc_html( $value ); ?></p>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
+                        
+                        $valid_info_items[] = $item;
+                    }
+                }
+                ?>
+                
+                <?php if ( ! empty( $valid_info_items ) ) : ?>
+                    <div class="contact-card">
+                        <?php if ( ! empty( $contact_info_title ) ) : ?>
+                            <h4><?php echo esc_html( $contact_info_title ); ?></h4>
+                        <?php endif; ?>
+                        <?php foreach ( $valid_info_items as $item ) : 
+                            // Получаем данные из repeater элемента напрямую
+                            $info_label = isset( $item['contact_info_label'] ) ? trim( $item['contact_info_label'] ) : '';
+                            $info_value = isset( $item['contact_info_value'] ) ? trim( $item['contact_info_value'] ) : '';
+                            $info_type = isset( $item['contact_info_type'] ) ? $item['contact_info_type'] : 'text';
+                            
+                            // Автоматически определяем тип по содержимому, если не указан
+                            if ( $info_type === 'text' || empty( $info_type ) ) {
+                                if ( filter_var( $info_value, FILTER_VALIDATE_EMAIL ) ) {
+                                    $info_type = 'email';
+                                } elseif ( preg_match( '/^[\d\s\-\+\(\)]+$/', $info_value ) && strlen( preg_replace( '/\D/', '', $info_value ) ) >= 10 ) {
+                                    $info_type = 'phone';
+                                } elseif ( filter_var( $info_value, FILTER_VALIDATE_URL ) || preg_match( '/^(https?:\/\/|www\.)/i', $info_value ) ) {
+                                    $info_type = 'url';
+                                }
+                            }
+                            
+                            // Формируем ссылку в зависимости от типа
+                            $value_output = '';
+                            if ( $info_type === 'phone' ) {
+                                $phone_clean = preg_replace( '/[^0-9+]/', '', $info_value );
+                                $value_output = '<a href="tel:' . esc_attr( $phone_clean ) . '">' . esc_html( $info_value ) . '</a>';
+                            } elseif ( $info_type === 'email' ) {
+                                $value_output = '<a href="mailto:' . esc_attr( $info_value ) . '">' . esc_html( $info_value ) . '</a>';
+                            } elseif ( $info_type === 'url' ) {
+                                $url = $info_value;
+                                if ( ! preg_match( '/^https?:\/\//', $url ) ) {
+                                    $url = 'https://' . $url;
+                                }
+                                $value_output = '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html( $info_value ) . '</a>';
+                            } else {
+                                $value_output = esc_html( $info_value );
+                            }
+                        ?>
+                            <div class="contact-info-item">
+                                <p class="contact-info-label"><?php echo esc_html( $info_label ); ?></p>
+                                <p class="contact-info-value"><?php echo wp_kses_post( $value_output ); ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+                
+                <?php
+                // Собираем валидные элементы времени работы
+                $valid_work_hours = array();
+                if ( ! empty( $contact_work_hours ) && is_array( $contact_work_hours ) ) {
+                    foreach ( $contact_work_hours as $hours ) {
+                        $hours_label = isset( $hours['hours_label'] ) ? trim( $hours['hours_label'] ) : '';
+                        // Также проверяем альтернативное имя поля
+                        if ( empty( $hours_label ) && isset( $hours['contact_work_hours_label'] ) ) {
+                            $hours_label = trim( $hours['contact_work_hours_label'] );
+                        }
+                        $hours_value = isset( $hours['hours_value'] ) ? trim( $hours['hours_value'] ) : '';
+                        // Также проверяем альтернативное имя поля
+                        if ( empty( $hours_value ) && isset( $hours['contact_work_hours_value'] ) ) {
+                            $hours_value = trim( $hours['contact_work_hours_value'] );
+                        }
+                        
+                        // Если заголовок или значение не указаны, пропускаем этот пункт
+                        if ( empty( $hours_label ) || empty( $hours_value ) ) {
+                            continue;
+                        }
+                        
+                        $valid_work_hours[] = array(
+                            'label' => $hours_label,
+                            'value' => $hours_value
+                        );
+                    }
+                }
+                ?>
+                
+                <?php if ( ! empty( $valid_work_hours ) ) : ?>
+                    <div class="contact-card">
+                        <?php if ( ! empty( $contact_work_hours_title ) ) : ?>
+                            <h4><?php echo esc_html( $contact_work_hours_title ); ?></h4>
+                        <?php endif; ?>
+                        <?php foreach ( $valid_work_hours as $hours ) : ?>
+                            <div class="contact-info-item">
+                                <p class="contact-info-label"><?php echo esc_html( $hours['label'] ); ?></p>
+                                <p class="contact-info-value"><?php echo esc_html( $hours['value'] ); ?></p>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </div>
             
             <div class="contact-cta-buttons">

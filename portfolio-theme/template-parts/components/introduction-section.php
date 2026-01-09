@@ -29,7 +29,7 @@ if ( $intro_image ) {
         $intro_image_url = $intro_image['url'];
     } elseif ( is_numeric( $intro_image ) ) {
         // Если вернулся ID, получаем URL
-        $intro_image_url = wp_get_attachment_image_url( $intro_image, 'full' );
+    $intro_image_url = wp_get_attachment_image_url( $intro_image, 'full' );
     }
     // Принудительно используем HTTPS
     if ( $intro_image_url ) {

@@ -55,7 +55,7 @@ if ( $about_image ) {
         $about_image_url = $about_image['url'];
     } elseif ( is_numeric( $about_image ) ) {
         // Если вернулся ID, получаем URL
-        $about_image_url = wp_get_attachment_image_url( $about_image, 'full' );
+    $about_image_url = wp_get_attachment_image_url( $about_image, 'full' );
     }
     // Принудительно используем HTTPS
     if ( $about_image_url ) {
