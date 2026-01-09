@@ -1595,6 +1595,9 @@
                 font-size: 16px;
                 margin-bottom: 32px;
                 line-height: 1.5;
+                color: #f8f6f3;
+                font-weight: 300;
+                letter-spacing: 0.05em;
             }
             
             .hero-divider {
@@ -2067,6 +2070,11 @@
             
             .hero-subtitle {
                 font-size: 18px;
+                color: #f8f6f3;
+                font-weight: 300;
+                letter-spacing: 0.05em;
+                margin-bottom: 64px;
+                line-height: 1.6;
             }
             
             #introduction {
@@ -2176,6 +2184,11 @@
             
             .hero-subtitle {
                 font-size: 18px;
+                color: #f8f6f3;
+                font-weight: 300;
+                letter-spacing: 0.05em;
+                margin-bottom: 64px;
+                line-height: 1.6;
             }
             
             #introduction {
@@ -2262,6 +2275,11 @@
             
             .hero-subtitle {
                 font-size: 20px;
+                color: #f8f6f3;
+                font-weight: 300;
+                letter-spacing: 0.05em;
+                margin-bottom: 64px;
+                line-height: 1.6;
             }
             
             #introduction {
@@ -2361,6 +2379,11 @@
             
             .hero-subtitle {
                 font-size: 14px;
+                color: #f8f6f3;
+                font-weight: 300;
+                letter-spacing: 0.05em;
+                margin-bottom: 32px;
+                line-height: 1.5;
             }
             
             .intro-image {
