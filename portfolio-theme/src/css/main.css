@@ -1587,6 +1587,7 @@
             }
             
             .hero-content .hero-subtitle,
+            .hero-content p            .hero-content .hero-subtitle,
             .hero-content p.hero-subtitle {
                 font-size: 16px;
                 margin-bottom: 32px;
