@@ -25,7 +25,12 @@ if ( empty( $recognition_stats ) || ! is_array( $recognition_stats ) ) {
     $recognition_stats = array();
 }
 
+// Пробуем разные варианты имен полей для совместимости
 $recognition_partners = function_exists( 'get_field' ) ? get_field( 'recognition_partners', $current_page_id ) : false;
+if ( empty( $recognition_partners ) || ! is_array( $recognition_partners ) ) {
+    // Пробуем альтернативное имя поля
+    $recognition_partners = function_exists( 'get_field' ) ? get_field( 'partners', $current_page_id ) : false;
+}
 if ( empty( $recognition_partners ) || ! is_array( $recognition_partners ) ) {
     $recognition_partners = array();
 }
@@ -71,7 +76,15 @@ if ( empty( $recognition_partners ) || ! is_array( $recognition_partners ) ) {
                 <div class="partners-grid">
                     <?php foreach ( $recognition_partners as $partner ) : 
                         // Получаем данные из repeater элемента напрямую
+                        // Пробуем разные варианты имен полей для совместимости
                         $partner_name = isset( $partner['partner_name'] ) ? $partner['partner_name'] : '';
+                        // Также проверяем альтернативные имена полей
+                        if ( empty( $partner_name ) && isset( $partner['name'] ) ) {
+                            $partner_name = $partner['name'];
+                        }
+                        if ( empty( $partner_name ) && isset( $partner['title'] ) ) {
+                            $partner_name = $partner['title'];
+                        }
                         
                         if ( empty( $partner_name ) ) {
                             continue;
