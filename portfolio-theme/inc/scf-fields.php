@@ -156,7 +156,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   - recognition_number (Text) - Число
  *   - recognition_label (Text) - Подпись
  * - recognition_partners (Repeater) - Партнёры
- *   - partner_name (Text) - Название партнёра
+ *   - partner_name (Textarea) - Название партнёра (поддержка переносов строк)
+ *   - partner_logo (Image) - Логотип/изображение партнёра (опционально)
  */
 
 /**
