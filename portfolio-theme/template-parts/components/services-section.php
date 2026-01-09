@@ -70,9 +70,15 @@ if ( empty( $services_list ) || ! is_array( $services_list ) ) {
                         }
                         $service_description = isset( $service['service_description'] ) ? $service['service_description'] : '';
                         // Пробуем разные варианты для списка пунктов
-                        $service_points = isset( $service['service_points'] ) && is_array( $service['service_points'] ) ? $service['service_points'] : array();
-                        if ( empty( $service_points ) && isset( $service['service_features'] ) && is_array( $service['service_features'] ) ) {
+                        $service_points = null;
+                        if ( isset( $service['service_points'] ) ) {
+                            $service_points = $service['service_points'];
+                        } elseif ( isset( $service['service_features'] ) ) {
                             $service_points = $service['service_features'];
+                        }
+                        // Если это пустой массив, делаем null
+                        if ( is_array( $service_points ) && empty( $service_points ) ) {
+                            $service_points = null;
                         }
                         
                         if ( empty( $service_title ) ) {
@@ -140,9 +146,15 @@ if ( empty( $services_list ) || ! is_array( $services_list ) ) {
                         }
                         $service_description = isset( $service['service_description'] ) ? $service['service_description'] : '';
                         // Пробуем разные варианты для списка пунктов
-                        $service_points = isset( $service['service_points'] ) && is_array( $service['service_points'] ) ? $service['service_points'] : array();
-                        if ( empty( $service_points ) && isset( $service['service_features'] ) && is_array( $service['service_features'] ) ) {
+                        $service_points = null;
+                        if ( isset( $service['service_points'] ) ) {
+                            $service_points = $service['service_points'];
+                        } elseif ( isset( $service['service_features'] ) ) {
                             $service_points = $service['service_features'];
+                        }
+                        // Если это пустой массив, делаем null
+                        if ( is_array( $service_points ) && empty( $service_points ) ) {
+                            $service_points = null;
                         }
                         
                         if ( empty( $service_title ) ) {
