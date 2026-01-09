@@ -576,15 +576,17 @@
             opacity: 1;
         }
 
-        /* Touch devices: автоматический показ overlay при полной видимости */
+        /* Touch devices: автоматический показ overlay при видимости 95% */
         @media (hover: none) and (pointer: coarse) {
-            /* Показываем overlay когда изображение полностью видно */
+            /* Показываем overlay когда изображение видно на 95% или больше */
             .portfolio-item.fully-visible .portfolio-overlay {
                 background-color: rgba(58, 58, 58, 0.6);
+                transition: background-color 0.5s ease;
             }
             
             .portfolio-item.fully-visible .portfolio-overlay p {
                 opacity: 1;
+                transition: opacity 0.5s ease;
             }
             
             /* Отключаем hover эффекты на touch устройствах */
@@ -598,6 +600,17 @@
             
             .portfolio-item:hover .portfolio-overlay p {
                 opacity: 0;
+            }
+        }
+        
+        /* Дополнительная проверка для устройств без hover */
+        @media (hover: none) {
+            .portfolio-item.fully-visible .portfolio-overlay {
+                background-color: rgba(58, 58, 58, 0.6);
+            }
+            
+            .portfolio-item.fully-visible .portfolio-overlay p {
+                opacity: 1;
             }
         }
         

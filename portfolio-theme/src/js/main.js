@@ -133,13 +133,16 @@ import '../css/main.css';
     // ========================================
     // Touch Devices: Portfolio Overlay
     // ========================================
+    // Определяем touch устройство более точно
     const isTouchDevice = 'ontouchstart' in window || 
                           navigator.maxTouchPoints > 0 || 
-                          (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+                          (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
+                          (window.matchMedia && window.matchMedia('(hover: none)').matches);
     
     if (isTouchDevice) {
+        // Настройки для Intersection Observer: проверяем видимость 95%
         const portfolioObserverOptions = {
-            threshold: [0, 0.95, 1.0],
+            threshold: [0, 0.5, 0.75, 0.95, 1.0], // Несколько порогов для плавности
             rootMargin: '0px'
         };
 
@@ -147,6 +150,7 @@ import '../css/main.css';
             entries.forEach(entry => {
                 const portfolioItem = entry.target;
                 
+                // Показываем overlay когда элемент виден на 95% или больше
                 if (entry.isIntersecting && entry.intersectionRatio >= 0.95) {
                     portfolioItem.classList.add('fully-visible');
                 } else {
@@ -155,15 +159,22 @@ import '../css/main.css';
             });
         }, portfolioObserverOptions);
 
-        window.addEventListener('load', function() {
+        // Наблюдаем за элементами портфолио
+        function observePortfolioItems() {
             document.querySelectorAll('.portfolio-item').forEach(item => {
                 portfolioObserver.observe(item);
             });
-        });
+        }
+
+        // Запускаем наблюдение при загрузке страницы
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', observePortfolioItems);
+        } else {
+            observePortfolioItems();
+        }
         
-        document.querySelectorAll('.portfolio-item').forEach(item => {
-            portfolioObserver.observe(item);
-        });
+        // Также запускаем после полной загрузки для динамически добавленных элементов
+        window.addEventListener('load', observePortfolioItems);
     }
 
     // ========================================
