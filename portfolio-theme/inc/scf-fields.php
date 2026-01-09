@@ -201,6 +201,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - site_vk (URL) - Ссылка ВК
  * - site_telegram (URL) - Ссылка Telegram
  * - site_whatsapp (URL) - Ссылка WhatsApp
+ * - footer_copyright_text (Textarea) - Текст копирайта в футере (поддержка %year%)
+ * - footer_top_link_text (Text) - Текст кнопки "Наверх" в футере
  */
 
 /**
