@@ -35,7 +35,8 @@ function ekaterina_get_scf_field( $field_name, $default = '', $context = 'html',
     // Получаем значение поля с указанием ID страницы
     $value = SCF::get( $field_name, $post_id );
     
-    if ( empty( $value ) ) {
+    // Проверяем, что значение не пустое (учитываем, что "0" - это валидное значение)
+    if ( $value === null || $value === false || $value === '' ) {
         return $default;
     }
 
@@ -118,12 +119,26 @@ function ekaterina_get_scf_image( $field_name, $size = 'full', $attr = array(), 
  * @return int ID страницы или 0, если не найдено
  */
 function ekaterina_get_current_page_id() {
-    global $post;
-    $page_id = get_the_ID();
+    // Сначала проверяем глобальную переменную, установленную в шаблоне
+    global $ekaterina_current_page_id;
+    if ( isset( $ekaterina_current_page_id ) && $ekaterina_current_page_id ) {
+        return (int) $ekaterina_current_page_id;
+    }
     
-    // Если get_the_ID() не вернул ID, пытаемся получить из глобальной переменной
-    if ( ! $page_id && isset( $post->ID ) ) {
-        $page_id = $post->ID;
+    // Используем get_queried_object_id() - работает даже в get_template_part()
+    $page_id = get_queried_object_id();
+    
+    // Если не получили ID, пытаемся через get_the_ID()
+    if ( ! $page_id ) {
+        $page_id = get_the_ID();
+    }
+    
+    // Если все еще нет ID, пытаемся получить из глобальной переменной $post
+    if ( ! $page_id ) {
+        global $post;
+        if ( isset( $post->ID ) ) {
+            $page_id = $post->ID;
+        }
     }
     
     // Если все еще нет ID, пытаемся получить через get_queried_object

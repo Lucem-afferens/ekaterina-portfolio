@@ -46,6 +46,8 @@ $portfolio_items = ekaterina_get_scf_repeater( 'portfolio_items' );
                         
                         $image_url = wp_get_attachment_image_url( $image_id, 'portfolio-large' );
                         if ( ! $image_url ) continue;
+                        // Принудительно используем HTTPS
+                        $image_url = set_url_scheme( $image_url, 'https' );
                     ?>
                         <div class="portfolio-item">
                             <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
@@ -69,6 +71,8 @@ $portfolio_items = ekaterina_get_scf_repeater( 'portfolio_items' );
                         
                         $image_url = wp_get_attachment_image_url( $image_id, 'portfolio-large' );
                         if ( ! $image_url ) continue;
+                        // Принудительно используем HTTPS
+                        $image_url = set_url_scheme( $image_url, 'https' );
                     ?>
                         <div class="portfolio-item">
                             <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
@@ -92,6 +96,8 @@ $portfolio_items = ekaterina_get_scf_repeater( 'portfolio_items' );
                         
                         $image_url = wp_get_attachment_image_url( $image_id, 'portfolio-large' );
                         if ( ! $image_url ) continue;
+                        // Принудительно используем HTTPS
+                        $image_url = set_url_scheme( $image_url, 'https' );
                     ?>
                         <div class="portfolio-item">
                             <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
@@ -115,6 +121,8 @@ $portfolio_items = ekaterina_get_scf_repeater( 'portfolio_items' );
                         
                         $image_url = wp_get_attachment_image_url( $image_id, 'portfolio-large' );
                         if ( ! $image_url ) continue;
+                        // Принудительно используем HTTPS
+                        $image_url = set_url_scheme( $image_url, 'https' );
                     ?>
                         <div class="portfolio-item">
                             <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />

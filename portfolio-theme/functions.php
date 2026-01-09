@@ -17,7 +17,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Определяем константы темы
 define( 'EKATERINA_THEME_VERSION', '1.0.0' );
 define( 'EKATERINA_THEME_DIR', get_template_directory() );
-define( 'EKATERINA_THEME_URI', get_template_directory_uri() );
+// Используем set_url_scheme для принудительного использования HTTPS
+define( 'EKATERINA_THEME_URI', set_url_scheme( get_template_directory_uri(), 'https' ) );
 define( 'EKATERINA_ASSETS_URI', EKATERINA_THEME_URI . '/assets' );
 
 /**

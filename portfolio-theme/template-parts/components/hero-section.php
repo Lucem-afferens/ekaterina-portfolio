@@ -27,9 +27,13 @@ $hero_cta_link = ekaterina_get_scf_field( 'hero_cta_link', '#contact', 'url', $c
 $hero_image_url = '';
 if ( $hero_background_image ) {
     $hero_image_url = wp_get_attachment_image_url( $hero_background_image, 'hero-image' );
+    // Принудительно используем HTTPS
+    if ( $hero_image_url ) {
+        $hero_image_url = set_url_scheme( $hero_image_url, 'https' );
+    }
 }
 if ( ! $hero_image_url ) {
-    $hero_image_url = get_template_directory_uri() . '/assets/images/main.png';
+    $hero_image_url = set_url_scheme( get_template_directory_uri() . '/assets/images/main.png', 'https' );
 }
 ?>
 

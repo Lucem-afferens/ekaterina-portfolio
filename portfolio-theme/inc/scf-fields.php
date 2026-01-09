@@ -223,7 +223,8 @@ function ekaterina_get_scf_repeater( $field_name, $post_id = null ) {
     // Получаем значение Repeater поля с указанием ID страницы
     $repeater = SCF::get( $field_name, $post_id );
     
-    if ( empty( $repeater ) || ! is_array( $repeater ) ) {
+    // Проверяем, что значение не пустое и является массивом
+    if ( $repeater === null || $repeater === false || ! is_array( $repeater ) || empty( $repeater ) ) {
         return array();
     }
 

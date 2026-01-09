@@ -51,6 +51,10 @@ if ( empty( $about_timeline ) ) {
 $about_image_url = '';
 if ( $about_image ) {
     $about_image_url = wp_get_attachment_image_url( $about_image, 'full' );
+    // Принудительно используем HTTPS
+    if ( $about_image_url ) {
+        $about_image_url = set_url_scheme( $about_image_url, 'https' );
+    }
 }
 ?>
 

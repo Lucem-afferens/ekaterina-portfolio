@@ -10,6 +10,13 @@
  */
 
 get_header();
+
+// Сохраняем ID текущей страницы в глобальной переменной для использования в компонентах
+global $ekaterina_current_page_id;
+$ekaterina_current_page_id = get_queried_object_id();
+if ( ! $ekaterina_current_page_id ) {
+    $ekaterina_current_page_id = get_the_ID();
+}
 ?>
 
 <main id="main" class="site-main">

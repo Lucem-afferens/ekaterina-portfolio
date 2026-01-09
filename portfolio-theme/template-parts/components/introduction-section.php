@@ -25,9 +25,13 @@ $intro_image = class_exists( 'SCF' ) && $current_page_id ? SCF::get( 'intro_imag
 $intro_image_url = '';
 if ( $intro_image ) {
     $intro_image_url = wp_get_attachment_image_url( $intro_image, 'full' );
+    // Принудительно используем HTTPS
+    if ( $intro_image_url ) {
+        $intro_image_url = set_url_scheme( $intro_image_url, 'https' );
+    }
 }
 if ( ! $intro_image_url ) {
-    $intro_image_url = get_template_directory_uri() . '/assets/images/portrait.png';
+    $intro_image_url = set_url_scheme( get_template_directory_uri() . '/assets/images/portrait.png', 'https' );
 }
 
 // Если описание не заполнено, используем дефолтный текст
