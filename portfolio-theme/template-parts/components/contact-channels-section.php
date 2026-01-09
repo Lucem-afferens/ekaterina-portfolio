@@ -154,13 +154,19 @@ if ( ! empty( $channels_social_networks ) && is_array( $channels_social_networks
                         
                         if ( $network === 'phone' ) {
                             // Для телефона используем tel: протокол
+                            // Очищаем номер от всех символов, кроме цифр и +
                             $phone_clean = preg_replace( '/[^0-9+]/', '', $link );
-                            $social_url = 'tel:' . esc_attr( $phone_clean );
-                            $display_text = $link; // Отображаем полный номер телефона
+                            // Если номер начинается с 8, заменяем на +7 (для России)
+                            if ( substr( $phone_clean, 0, 1 ) === '8' && strlen( $phone_clean ) === 11 ) {
+                                $phone_clean = '+7' . substr( $phone_clean, 1 );
+                            }
+                            // Формируем tel: ссылку
+                            $social_url = 'tel:' . $phone_clean;
+                            $display_text = $link; // Отображаем полный номер телефона, как введен
                         } elseif ( $network === 'email' ) {
                             // Для email используем mailto: протокол
-                            $social_url = 'mailto:' . esc_attr( $link );
-                            $display_text = $link; // Отображаем email
+                            $social_url = 'mailto:' . $link;
+                            $display_text = $link; // Отображаем email, как введен
                         } else {
                             // Для остальных - проверяем наличие протокола
                             if ( ! preg_match( '/^https?:\/\//', $social_url ) ) {
@@ -169,7 +175,7 @@ if ( ! empty( $channels_social_networks ) && is_array( $channels_social_networks
                             $display_text = $network_name; // Отображаем название социальной сети
                         }
                     ?>
-                        <a href="<?php echo esc_url( $social_url ); ?>" target="_blank" class="contact-channel-item" aria-label="<?php echo esc_attr( $network_name ); ?>" rel="noopener">
+                        <a href="<?php echo esc_url( $social_url ); ?>" <?php echo ( $network === 'phone' || $network === 'email' ) ? '' : 'target="_blank" rel="noopener"'; ?> class="contact-channel-item" aria-label="<?php echo esc_attr( $network_name ); ?>">
                             <i class="<?php echo esc_attr( $icon_class ); ?>"></i>
                             <span><?php echo esc_html( $display_text ); ?></span>
                         </a>
