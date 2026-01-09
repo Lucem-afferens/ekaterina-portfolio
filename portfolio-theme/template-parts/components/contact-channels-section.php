@@ -33,20 +33,28 @@ $channels_phone = $channels_phone ?: '+7 (912) 345-67-89';
 <section id="contact-channels" class="contact-channels-section">
     <div class="contact-channels-container">
         <div class="contact-channels-content">
-            <p class="contact-channels-label"><?php echo esc_html( $channels_label ); ?></p>
+            <?php if ( ! empty( $channels_label ) ) : ?>
+                <p class="contact-channels-label"><?php echo esc_html( $channels_label ); ?></p>
+            <?php endif; ?>
             <div class="contact-channels-links">
-                <a href="<?php echo esc_url( $channels_vk ); ?>" target="_blank" class="contact-channel-item" aria-label="ВКонтакте">
-                    <i class="fa-brands fa-vk"></i>
-                    <span>ВКонтакте</span>
-                </a>
-                <a href="<?php echo esc_url( $channels_telegram ); ?>" target="_blank" class="contact-channel-item" aria-label="Telegram">
-                    <i class="fa-brands fa-telegram"></i>
-                    <span>Telegram</span>
-                </a>
-                <a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $channels_phone ) ); ?>" class="contact-channel-item" aria-label="Телефон">
-                    <i class="fa-solid fa-phone"></i>
-                    <span><?php echo esc_html( $channels_phone ); ?></span>
-                </a>
+                <?php if ( ! empty( $channels_vk ) ) : ?>
+                    <a href="<?php echo esc_url( $channels_vk ); ?>" target="_blank" class="contact-channel-item" aria-label="ВКонтакте">
+                        <i class="fa-brands fa-vk"></i>
+                        <span>ВКонтакте</span>
+                    </a>
+                <?php endif; ?>
+                <?php if ( ! empty( $channels_telegram ) ) : ?>
+                    <a href="<?php echo esc_url( $channels_telegram ); ?>" target="_blank" class="contact-channel-item" aria-label="Telegram">
+                        <i class="fa-brands fa-telegram"></i>
+                        <span>Telegram</span>
+                    </a>
+                <?php endif; ?>
+                <?php if ( ! empty( $channels_phone ) ) : ?>
+                    <a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $channels_phone ) ); ?>" class="contact-channel-item" aria-label="Телефон">
+                        <i class="fa-solid fa-phone"></i>
+                        <span><?php echo esc_html( $channels_phone ); ?></span>
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
