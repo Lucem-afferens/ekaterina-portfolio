@@ -20,18 +20,15 @@ $hero_name = $hero_name ?: 'Екатерина<br/>Шулятникова';
 $hero_subtitle = function_exists( 'get_field' ) ? get_field( 'hero_subtitle' ) : null;
 $hero_subtitle = $hero_subtitle ?: 'Ведущая премиальных мероприятий<br/>Пермский край';
 
-// Отключаем wpautop для hero_subtitle, чтобы избежать автоматического создания p тегов
-// wpautop автоматически оборачивает контент в p теги, что ломает нашу структуру
-remove_filter( 'the_content', 'wpautop' );
-$hero_subtitle = apply_filters( 'the_content', $hero_subtitle );
-add_filter( 'the_content', 'wpautop' );
-
-// Альтернативный подход: если wpautop все еще создает p теги, используем прямой вывод
-// Но сначала попробуем без wpautop
-if ( strpos( $hero_subtitle, '<p>' ) !== false ) {
-    // Если все еще есть p теги, убираем их
+// Убираем автоматически созданные p теги из hero_subtitle
+// WordPress/SCF может автоматически оборачивать контент в p теги
+// Удаляем их, чтобы контент выводился напрямую в div, как в h2
+if ( ! empty( $hero_subtitle ) ) {
+    // Удаляем открывающие и закрывающие p теги
     $hero_subtitle = preg_replace( '/<p[^>]*>/', '', $hero_subtitle );
     $hero_subtitle = preg_replace( '/<\/p>/', '', $hero_subtitle );
+    // Убираем лишние пробелы
+    $hero_subtitle = trim( $hero_subtitle );
 }
 
 $hero_background_image = function_exists( 'get_field' ) ? get_field( 'hero_background_image' ) : false;
