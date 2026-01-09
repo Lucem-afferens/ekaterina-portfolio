@@ -194,13 +194,18 @@
         
         /* Fallback анимация через CSS для подзаголовка (на случай, если JavaScript не работает) */
         @keyframes heroSubtitleShow {
+            from {
+                opacity: 0;
+                transform: translateY(32px);
+            }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
         
-        .hero-subtitle {
+        /* Показываем подзаголовок через CSS анимацию, если JavaScript еще не добавил класс visible */
+        .hero-subtitle:not(.visible) {
             animation: heroSubtitleShow 0.8s ease 1.3s forwards;
         }
         
