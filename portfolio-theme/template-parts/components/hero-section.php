@@ -56,7 +56,7 @@ if ( ! $hero_image_url ) {
     <div class="hero-content">
         <h2><?php echo wp_kses_post( $hero_name ); ?></h2>
         <div class="hero-divider"></div>
-        <p><?php echo wp_kses_post( $hero_subtitle ); ?></p>
+        <p class="hero-subtitle"><?php echo wp_kses_post( $hero_subtitle ); ?></p>
         <a href="<?php echo esc_url( $hero_cta_link ); ?>" class="hero-cta"><?php echo esc_html( $hero_cta_text ); ?></a>
     </div>
     <div class="hero-scroll">
