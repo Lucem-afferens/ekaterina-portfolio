@@ -207,14 +207,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Вспомогательная функция для получения Repeater поля
  *
  * @param string $field_name Имя Repeater поля
+ * @param int    $post_id    ID страницы/поста (если не указан, используется текущий)
  * @return array Массив значений или пустой массив
  */
-function ekaterina_get_scf_repeater( $field_name ) {
+function ekaterina_get_scf_repeater( $field_name, $post_id = null ) {
     if ( ! class_exists( 'SCF' ) ) {
         return array();
     }
 
-    $repeater = SCF::get( $field_name );
+    // Получаем ID текущей страницы, если не указан
+    if ( $post_id === null ) {
+        $post_id = ekaterina_get_current_page_id();
+    }
+
+    // Получаем значение Repeater поля с указанием ID страницы
+    $repeater = SCF::get( $field_name, $post_id );
     
     if ( empty( $repeater ) || ! is_array( $repeater ) ) {
         return array();

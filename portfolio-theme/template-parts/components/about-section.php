@@ -13,10 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// Получаем ID текущей страницы
+$current_page_id = ekaterina_get_current_page_id();
+
 // Получаем данные из SCF
-$about_title = ekaterina_get_scf_field( 'about_title', 'Профессиональный путь' );
-$about_timeline = ekaterina_get_scf_repeater( 'about_timeline' );
-$about_image = class_exists( 'SCF' ) ? SCF::get( 'about_image' ) : '';
+$about_title = ekaterina_get_scf_field( 'about_title', 'Профессиональный путь', 'html', $current_page_id );
+$about_timeline = ekaterina_get_scf_repeater( 'about_timeline', $current_page_id );
+$about_image = class_exists( 'SCF' ) && $current_page_id ? SCF::get( 'about_image', $current_page_id ) : '';
 
 // Если timeline не заполнен, используем дефолтные значения
 if ( empty( $about_timeline ) ) {

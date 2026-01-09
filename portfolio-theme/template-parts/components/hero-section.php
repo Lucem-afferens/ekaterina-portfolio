@@ -13,12 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// Получаем ID текущей страницы
+$current_page_id = ekaterina_get_current_page_id();
+
 // Получаем данные из SCF
-$hero_name = ekaterina_get_scf_field( 'hero_name', 'Екатерина<br/>Шулятникова' );
-$hero_subtitle = ekaterina_get_scf_field( 'hero_subtitle', 'Ведущая премиальных мероприятий<br/>Пермский край' );
-$hero_background_image = class_exists( 'SCF' ) ? SCF::get( 'hero_background_image' ) : '';
-$hero_cta_text = ekaterina_get_scf_field( 'hero_cta_text', 'ЗАБРОНИРОВАТЬ ДАТУ' );
-$hero_cta_link = ekaterina_get_scf_field( 'hero_cta_link', '#contact', 'url' );
+$hero_name = ekaterina_get_scf_field( 'hero_name', 'Екатерина<br/>Шулятникова', 'html', $current_page_id );
+$hero_subtitle = ekaterina_get_scf_field( 'hero_subtitle', 'Ведущая премиальных мероприятий<br/>Пермский край', 'html', $current_page_id );
+$hero_background_image = class_exists( 'SCF' ) && $current_page_id ? SCF::get( 'hero_background_image', $current_page_id ) : '';
+$hero_cta_text = ekaterina_get_scf_field( 'hero_cta_text', 'ЗАБРОНИРОВАТЬ ДАТУ', 'html', $current_page_id );
+$hero_cta_link = ekaterina_get_scf_field( 'hero_cta_link', '#contact', 'url', $current_page_id );
 
 // Получаем URL изображения
 $hero_image_url = '';

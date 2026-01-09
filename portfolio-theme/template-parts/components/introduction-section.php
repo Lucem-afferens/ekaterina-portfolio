@@ -13,10 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// Получаем ID текущей страницы
+$current_page_id = ekaterina_get_current_page_id();
+
 // Получаем данные из SCF
-$intro_title = ekaterina_get_scf_field( 'intro_title', 'Создаю атмосферу<br/>незабываемых событий' );
-$intro_description = class_exists( 'SCF' ) ? SCF::get( 'intro_description' ) : '';
-$intro_image = class_exists( 'SCF' ) ? SCF::get( 'intro_image' ) : '';
+$intro_title = ekaterina_get_scf_field( 'intro_title', 'Создаю атмосферу<br/>незабываемых событий', 'html', $current_page_id );
+$intro_description = class_exists( 'SCF' ) && $current_page_id ? SCF::get( 'intro_description', $current_page_id ) : '';
+$intro_image = class_exists( 'SCF' ) && $current_page_id ? SCF::get( 'intro_image', $current_page_id ) : '';
 
 // Получаем URL изображения
 $intro_image_url = '';
