@@ -712,10 +712,14 @@
         
         /* Стили для параграфов в services-header - используем более специфичный селектор */
         .services-header > p,
-        .services-header p {
+        .services-header p,
+        .services-header .services-description,
+        .services-description {
             font-size: 20px;
             color: rgba(248, 246, 243, 0.7);
             font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 32px;
         }
         
         .services-grid-1 {
@@ -817,10 +821,14 @@
         
         /* Стили для параграфов в process-header - используем более специфичный селектор */
         .process-header > p,
-        .process-header p {
+        .process-header p,
+        .process-header .process-description,
+        .process-description {
             font-size: 20px;
             color: rgba(248, 246, 243, 0.7);
             font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 32px;
         }
         
         .process-step {
@@ -1848,7 +1856,9 @@
             }
             
             .services-header > p,
-            .services-header p {
+            .services-header p,
+            .services-header .services-description,
+            .services-description {
                 font-size: 16px;
             }
             
@@ -1877,7 +1887,9 @@
             }
             
             .process-header > p,
-            .process-header p {
+            .process-header p,
+            .process-header .process-description,
+            .process-description {
                 font-size: 16px;
             }
             
