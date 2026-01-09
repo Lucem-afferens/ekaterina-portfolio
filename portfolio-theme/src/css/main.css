@@ -1578,9 +1578,9 @@
             }
             
             .hero-content h2 {
-                font-size: 48px;
-                margin-bottom: 24px;
-                line-height: 1.1;
+                font-size: 48px !important;
+                margin-bottom: 24px !important;
+                line-height: 1.1 !important;
             }
             
             .hero-divider {
@@ -2053,7 +2053,7 @@
             }
             
             .hero-content h2 {
-                font-size: 64px;
+                font-size: 64px !important;
             }
             
             .hero-content p {
@@ -2162,7 +2162,7 @@
             }
             
             .hero-content h2 {
-                font-size: 72px;
+                font-size: 72px !important;
             }
             
             #introduction {
@@ -2244,7 +2244,7 @@
             }
             
             .hero-content h2 {
-                font-size: 88px;
+                font-size: 88px !important;
             }
             
             #introduction {
@@ -2339,7 +2339,7 @@
             }
             
             .hero-content h2 {
-                font-size: 40px;
+                font-size: 40px !important;
             }
             
             .intro-image {
