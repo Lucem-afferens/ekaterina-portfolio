@@ -18,7 +18,7 @@ description: WordPress CMS integration rules and best practices for portfolio th
 
 ### Обязательная структура файлов:
 ```
-ekaterina-portfolio-theme/
+portfolio-theme/
 ├── style.css (обязательный заголовок темы)
 ├── functions.php (инициализация темы, хуки, регистрация скриптов)
 ├── index.php (основной шаблон)

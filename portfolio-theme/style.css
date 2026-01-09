@@ -1,0 +1,21 @@
+/*
+Theme Name: Portfolio Theme
+Theme URI: 
+Author: Николай Д.
+Author URI: https://develonik.ru
+Description: Портфолио ведущей премиальных мероприятий Екатерины Шулятниковой. Кастомная WordPress тема с полным управлением контентом через SCF.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.4
+Requires PHP: 8.1
+License: Proprietary
+License URI: 
+Text Domain: portfolio-theme
+Tags: portfolio, event-host, custom-theme, one-column, flexible-header, custom-colors, custom-menu, featured-images, threaded-comments, translation-ready
+*/
+
+/* 
+ * Основные стили темы находятся в assets/css/main.css
+ * Этот файл используется только для заголовка темы WordPress
+ */
+

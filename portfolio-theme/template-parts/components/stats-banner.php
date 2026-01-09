@@ -1,0 +1,69 @@
+<?php
+/**
+ * Stats Banner Component
+ * 
+ * Компонент секции статистики.
+ *
+ * @package Portfolio_Theme
+ * @since 1.0.0
+ */
+
+// Предотвращаем прямой доступ к файлу
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+// Получаем данные из SCF
+$stats_items = ekaterina_get_scf_repeater( 'stats_items' );
+
+// Если статистика не заполнена, используем дефолтные значения
+if ( empty( $stats_items ) ) {
+    $stats_items = array(
+        array(
+            'stat_number' => '300',
+            'stat_label' => 'МЕРОПРИЯТИЙ ПРОВЕДЕНО',
+        ),
+        array(
+            'stat_number' => '3',
+            'stat_label' => 'ЛЕТ ОПЫТА',
+        ),
+        array(
+            'stat_number' => '95',
+            'stat_label' => 'ПОВТОРНЫХ КЛИЕНТОВ',
+        ),
+        array(
+            'stat_number' => '24',
+            'stat_label' => 'ЧАСА НА ОТВЕТ',
+        ),
+    );
+}
+?>
+
+<section id="stats-banner">
+    <div class="stats-container">
+        <div class="stats-grid">
+            <?php foreach ( $stats_items as $stat ) : 
+                $number = ekaterina_get_repeater_field( $stat, 'stat_number', '0' );
+                $label = ekaterina_get_repeater_field( $stat, 'stat_label', '' );
+                
+                if ( empty( $label ) ) {
+                    continue;
+                }
+                
+                // Определяем суффикс
+                $suffix = '';
+                if ( $number == '95' ) {
+                    $suffix = '%';
+                } elseif ( in_array( $number, array( '300', '3' ) ) ) {
+                    $suffix = '+';
+                }
+            ?>
+                <div class="stat-item">
+                    <div class="stat-number counter" data-target="<?php echo esc_attr( $number ); ?>">0<?php echo esc_html( $suffix ); ?></div>
+                    <p class="stat-label"><?php echo esc_html( $label ); ?></p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+

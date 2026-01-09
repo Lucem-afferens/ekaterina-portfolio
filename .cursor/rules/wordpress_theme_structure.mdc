@@ -10,7 +10,7 @@ description: WordPress theme structure and file organization rules for portfolio
 ### Обязательная структура файлов WordPress темы:
 
 ```
-ekaterina-portfolio-theme/
+portfolio-theme/
 ├── style.css (заголовок темы)
 ├── functions.php (инициализация, хуки, регистрация)
 ├── index.php (fallback шаблон)

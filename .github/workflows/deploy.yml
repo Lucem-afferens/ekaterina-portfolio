@@ -1,0 +1,135 @@
+name: Deploy Portfolio Theme
+
+on:
+  push:
+    branches:
+      - main  # Измените на вашу основную ветку
+    paths:
+      - 'portfolio-theme/**'
+      - 'package.json'
+      - 'vite.config.js'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:  # Позволяет запускать деплой вручную из GitHub UI
+
+jobs:
+  deploy:
+    name: Build and Deploy Theme
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build theme
+        run: npm run build:theme
+
+      - name: Verify build output
+        run: |
+          if [ ! -d "portfolio-theme/assets/css" ] || [ -z "$(ls -A portfolio-theme/assets/css/*.css 2>/dev/null)" ]; then
+            echo "❌ CSS files not found"
+            exit 1
+          fi
+          if [ ! -d "portfolio-theme/assets/js" ] || [ -z "$(ls -A portfolio-theme/assets/js/*.js 2>/dev/null)" ]; then
+            echo "❌ JS files not found"
+            exit 1
+          fi
+          echo "✅ Build files verified"
+
+      - name: Deploy via FTP
+        if: github.event_name == 'push'
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_PORT: ${{ secrets.FTP_PORT }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          FTP_PATH: ${{ secrets.FTP_PATH }}
+          FTP_PROTOCOL: ${{ secrets.FTP_PROTOCOL }}
+        run: |
+          # Установка lftp для FTP или использование SFTP
+          if [ "$FTP_PROTOCOL" = "ftp" ]; then
+            sudo apt-get update && sudo apt-get install -y lftp
+          else
+            # SFTP встроен в Ubuntu
+            sudo apt-get update && sudo apt-get install -y sshpass
+          fi
+
+          # Подготовка временной директории
+          TEMP_DIR=$(mktemp -d)
+          cp -r portfolio-theme "$TEMP_DIR/"
+          
+          # Удаление ненужных файлов
+          find "$TEMP_DIR/portfolio-theme" -name "*.map" -delete
+          find "$TEMP_DIR/portfolio-theme" -type d -name "node_modules" -exec rm -rf {} + 2>/dev/null || true
+          find "$TEMP_DIR/portfolio-theme" -type d -name "src" -exec rm -rf {} + 2>/dev/null || true
+          find "$TEMP_DIR/portfolio-theme" -type d -name ".git" -exec rm -rf {} + 2>/dev/null || true
+
+          # Деплой через FTP или SFTP
+          if [ "$FTP_PROTOCOL" = "sftp" ]; then
+            echo "📤 Deploying via SFTP..."
+            
+            # Создание директории на сервере (если не существует)
+            sshpass -p "$FTP_PASS" ssh -o StrictHostKeyChecking=no -p "$FTP_PORT" "$FTP_USER@$FTP_HOST" "mkdir -p $FTP_PATH/portfolio-theme" || true
+            
+            # Загрузка файлов через SFTP
+            sshpass -p "$FTP_PASS" sftp -o StrictHostKeyChecking=no -P "$FTP_PORT" -b - "$FTP_USER@$FTP_HOST" <<EOF
+cd $FTP_PATH
+put -r $TEMP_DIR/portfolio-theme portfolio-theme
+quit
+EOF
+            
+            if [ $? -eq 0 ]; then
+              echo "✅ Deployment via SFTP successful"
+            else
+              echo "❌ SFTP deployment failed"
+              exit 1
+            fi
+            
+          else
+            echo "📤 Deploying via FTP..."
+            
+            lftp -c "
+            set ftp:ssl-allow no
+            set ftp:passive-mode yes
+            set ftp:list-options -a
+            open -p $FTP_PORT -u $FTP_USER,$FTP_PASS $FTP_HOST
+            cd $FTP_PATH || mkdir -p $FTP_PATH; cd $FTP_PATH
+            mirror -R $TEMP_DIR/portfolio-theme portfolio-theme --delete --verbose --exclude-glob=*.map --exclude-glob=node_modules --exclude-glob=src --exclude-glob=.git
+            quit
+            "
+            
+            if [ $? -eq 0 ]; then
+              echo "✅ Deployment via FTP successful"
+            else
+              echo "❌ FTP deployment failed"
+              exit 1
+            fi
+          fi
+
+          # Очистка
+          rm -rf "$TEMP_DIR"
+
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ Theme deployed successfully to server" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Deployment failed. Check logs for details." >> $GITHUB_STEP_SUMMARY
+          fi
+

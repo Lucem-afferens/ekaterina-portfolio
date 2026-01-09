@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:theme": "vite build --mode production",
     "preview": "vite preview"
   },
   "keywords": [
@@ -22,3 +23,4 @@
     "vite-plugin-html": "^3.2.2"
   }
 }
+
