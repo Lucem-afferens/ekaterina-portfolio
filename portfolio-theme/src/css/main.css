@@ -473,12 +473,14 @@
             line-height: 1.2;
         }
         
-        /* Стили для параграфов в portfolio-header - используем более специфичный селектор */
-        .portfolio-header > p,
-        .portfolio-header p {
+        /* Стили для описания в portfolio-header - используем div вместо p */
+        .portfolio-header .portfolio-description,
+        .portfolio-description {
             font-size: 20px;
             color: #f8f6f3;
             font-weight: 300;
+            line-height: 1.6;
+            margin-top: 16px;
         }
         
         .portfolio-grid-1 {
@@ -1771,9 +1773,10 @@
                 margin-bottom: 16px;
             }
             
-            .portfolio-header > p,
-            .portfolio-header p {
+            .portfolio-header .portfolio-description,
+            .portfolio-description {
                 font-size: 16px;
+                margin-top: 12px;
             }
             
             .portfolio-grid-1,

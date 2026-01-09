@@ -13,19 +13,38 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Получаем данные из SCF
-$portfolio_title = ekaterina_get_scf_field( 'portfolio_title', 'Портфолио' );
-$portfolio_description = ekaterina_get_scf_field( 'portfolio_description', 'Избранные моменты из проведённых мероприятий' );
-$portfolio_items = ekaterina_get_scf_repeater( 'portfolio_items' );
+// Получаем данные из SCF (используем get_field() напрямую, как в других секциях)
+// Получаем ID текущей страницы для правильного контекста
+$current_page_id = ekaterina_get_current_page_id();
+
+$portfolio_title = function_exists( 'get_field' ) ? get_field( 'portfolio_title', $current_page_id ) : null;
+$portfolio_title = $portfolio_title ?: 'Портфолио';
+
+$portfolio_description = function_exists( 'get_field' ) ? get_field( 'portfolio_description', $current_page_id ) : null;
+$portfolio_description = $portfolio_description ?: 'Избранные моменты из проведённых мероприятий';
+
+// Убираем автоматически созданные p теги из описания, если они есть
+if ( ! empty( $portfolio_description ) ) {
+    // Удаляем открывающие и закрывающие p теги
+    $portfolio_description = preg_replace( '/<p[^>]*>/', '', $portfolio_description );
+    $portfolio_description = preg_replace( '/<\/p>/', '', $portfolio_description );
+    // Убираем лишние пробелы
+    $portfolio_description = trim( $portfolio_description );
+}
+
+$portfolio_items = function_exists( 'get_field' ) ? get_field( 'portfolio_items', $current_page_id ) : false;
+if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
+    $portfolio_items = array();
+}
 ?>
 
 <section id="portfolio">
     <div class="portfolio-container">
         <div class="portfolio-header">
             <div class="philosophy-divider" style="margin: 0 auto 48px;"></div>
-            <h3><?php echo esc_html( $portfolio_title ); ?></h3>
+            <h3><?php echo wp_kses_post( $portfolio_title ); ?></h3>
             <?php if ( ! empty( $portfolio_description ) ) : ?>
-                <p><?php echo esc_html( $portfolio_description ); ?></p>
+                <div class="portfolio-description"><?php echo wp_kses_post( $portfolio_description ); ?></div>
             <?php endif; ?>
         </div>
         
@@ -38,9 +57,22 @@ $portfolio_items = ekaterina_get_scf_repeater( 'portfolio_items' );
                 <div class="portfolio-grid-1">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
                         $item = $portfolio_items[ $current_index ];
-                        $image_id = ekaterina_get_repeater_field( $item, 'portfolio_image' );
-                        $title = ekaterina_get_repeater_field( $item, 'portfolio_title', '' );
-                        $category = ekaterina_get_repeater_field( $item, 'portfolio_category', $title );
+                        
+                        // Получаем данные из repeater элемента напрямую
+                        // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
+                        $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
+                        $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
+                        $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
+                        
+                        // Получаем ID изображения
+                        $image_id = false;
+                        if ( $portfolio_image ) {
+                            if ( is_array( $portfolio_image ) && ! empty( $portfolio_image['ID'] ) ) {
+                                $image_id = $portfolio_image['ID'];
+                            } elseif ( is_numeric( $portfolio_image ) ) {
+                                $image_id = $portfolio_image;
+                            }
+                        }
                         
                         if ( ! $image_id ) continue;
                         
@@ -63,9 +95,22 @@ $portfolio_items = ekaterina_get_scf_repeater( 'portfolio_items' );
                 <div class="portfolio-grid-2">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
                         $item = $portfolio_items[ $current_index ];
-                        $image_id = ekaterina_get_repeater_field( $item, 'portfolio_image' );
-                        $title = ekaterina_get_repeater_field( $item, 'portfolio_title', '' );
-                        $category = ekaterina_get_repeater_field( $item, 'portfolio_category', $title );
+                        
+                        // Получаем данные из repeater элемента напрямую
+                        // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
+                        $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
+                        $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
+                        $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
+                        
+                        // Получаем ID изображения
+                        $image_id = false;
+                        if ( $portfolio_image ) {
+                            if ( is_array( $portfolio_image ) && ! empty( $portfolio_image['ID'] ) ) {
+                                $image_id = $portfolio_image['ID'];
+                            } elseif ( is_numeric( $portfolio_image ) ) {
+                                $image_id = $portfolio_image;
+                            }
+                        }
                         
                         if ( ! $image_id ) continue;
                         
@@ -88,9 +133,22 @@ $portfolio_items = ekaterina_get_scf_repeater( 'portfolio_items' );
                 <div class="portfolio-grid-3">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
                         $item = $portfolio_items[ $current_index ];
-                        $image_id = ekaterina_get_repeater_field( $item, 'portfolio_image' );
-                        $title = ekaterina_get_repeater_field( $item, 'portfolio_title', '' );
-                        $category = ekaterina_get_repeater_field( $item, 'portfolio_category', $title );
+                        
+                        // Получаем данные из repeater элемента напрямую
+                        // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
+                        $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
+                        $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
+                        $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
+                        
+                        // Получаем ID изображения
+                        $image_id = false;
+                        if ( $portfolio_image ) {
+                            if ( is_array( $portfolio_image ) && ! empty( $portfolio_image['ID'] ) ) {
+                                $image_id = $portfolio_image['ID'];
+                            } elseif ( is_numeric( $portfolio_image ) ) {
+                                $image_id = $portfolio_image;
+                            }
+                        }
                         
                         if ( ! $image_id ) continue;
                         
@@ -113,9 +171,22 @@ $portfolio_items = ekaterina_get_scf_repeater( 'portfolio_items' );
                 <div class="portfolio-grid-4">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
                         $item = $portfolio_items[ $current_index ];
-                        $image_id = ekaterina_get_repeater_field( $item, 'portfolio_image' );
-                        $title = ekaterina_get_repeater_field( $item, 'portfolio_title', '' );
-                        $category = ekaterina_get_repeater_field( $item, 'portfolio_category', $title );
+                        
+                        // Получаем данные из repeater элемента напрямую
+                        // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
+                        $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
+                        $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
+                        $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
+                        
+                        // Получаем ID изображения
+                        $image_id = false;
+                        if ( $portfolio_image ) {
+                            if ( is_array( $portfolio_image ) && ! empty( $portfolio_image['ID'] ) ) {
+                                $image_id = $portfolio_image['ID'];
+                            } elseif ( is_numeric( $portfolio_image ) ) {
+                                $image_id = $portfolio_image;
+                            }
+                        }
                         
                         if ( ! $image_id ) continue;
                         
