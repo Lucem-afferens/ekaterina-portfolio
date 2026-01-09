@@ -17,6 +17,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Получаем ID текущей страницы для правильного контекста
 $current_page_id = ekaterina_get_current_page_id();
 
+// Проверяем, включена ли секция Отзывы
+$testimonials_enabled = function_exists( 'get_field' ) ? get_field( 'testimonials_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $testimonials_enabled === null ) {
+    $testimonials_enabled = true;
+}
+// Преобразуем в boolean
+$testimonials_enabled = (bool) $testimonials_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $testimonials_enabled ) {
+    return;
+}
+
 $testimonials_title = function_exists( 'get_field' ) ? get_field( 'testimonials_title', $current_page_id ) : null;
 $testimonials_title = $testimonials_title ?: 'Отзывы';
 

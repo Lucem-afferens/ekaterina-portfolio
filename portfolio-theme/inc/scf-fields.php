@@ -138,6 +138,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Привязка: Главная страница
  * 
  * Поля:
+ * - testimonials_enabled (True/False) - Показывать секцию Отзывы (опционально, по умолчанию включено)
  * - testimonials_title (Text) - Заголовок
  * - testimonials_description (Textarea) - Описание
  * - testimonials_list (Repeater) - Отзывы
