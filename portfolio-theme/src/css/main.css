@@ -272,7 +272,7 @@
         
         /* Стили для параграфов в intro-content - используем более специфичный селектор */
         .intro-content > p,
-        .intro-content p:not(.philosophy-quote):not(.hero-subtitle) {
+        .intro-content p:not(.philosophy-quote) {
             font-size: 18px;
             line-height: 1.6;
             margin-bottom: 32px;
@@ -1663,7 +1663,7 @@
             }
             
             .intro-content > p,
-            .intro-content p:not(.philosophy-quote):not(.hero-subtitle) {
+            .intro-content p:not(.philosophy-quote) {
                 font-size: 16px;
                 margin-bottom: 20px;
             }
