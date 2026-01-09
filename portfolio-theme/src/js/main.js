@@ -51,6 +51,8 @@ import '../css/main.css';
             }
             
             if (subtitle) {
+                // Отменяем CSS анимацию и показываем через JavaScript для более точного контроля
+                subtitle.style.animation = 'none';
                 setTimeout(() => {
                     subtitle.style.opacity = '1';
                     subtitle.style.transform = 'translateY(0)';
