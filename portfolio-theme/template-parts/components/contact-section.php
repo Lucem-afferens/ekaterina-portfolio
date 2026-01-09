@@ -87,13 +87,65 @@ if ( empty( $contact_work_hours ) || ! is_array( $contact_work_hours ) ) {
     $contact_work_hours = array();
 }
 
+// Получаем ссылки на социальные сети (пробуем разные варианты имен полей)
 $contact_vk_link = function_exists( 'get_field' ) ? get_field( 'contact_vk_link', $current_page_id ) : null;
+// Также пробуем альтернативные имена полей
+if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
+    $contact_vk_link = get_field( 'contact_social_vk', $current_page_id );
+}
+if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
+    $contact_vk_link = get_field( 'contact_vk', $current_page_id );
+}
+// Также пробуем без передачи ID (автоматически используется текущая страница)
+if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
+    $contact_vk_link = get_field( 'contact_vk_link' );
+}
+if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
+    $contact_vk_link = get_field( 'contact_social_vk' );
+}
+if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
+    $contact_vk_link = get_field( 'contact_vk' );
+}
 $contact_vk_link = $contact_vk_link ?: 'https://vk.com/your-page';
 
 $contact_telegram_link = function_exists( 'get_field' ) ? get_field( 'contact_telegram_link', $current_page_id ) : null;
+// Также пробуем альтернативные имена полей
+if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
+    $contact_telegram_link = get_field( 'contact_social_telegram', $current_page_id );
+}
+if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
+    $contact_telegram_link = get_field( 'contact_telegram', $current_page_id );
+}
+// Также пробуем без передачи ID
+if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
+    $contact_telegram_link = get_field( 'contact_telegram_link' );
+}
+if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
+    $contact_telegram_link = get_field( 'contact_social_telegram' );
+}
+if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
+    $contact_telegram_link = get_field( 'contact_telegram' );
+}
 $contact_telegram_link = $contact_telegram_link ?: 'https://t.me/username';
 
 $contact_whatsapp_link = function_exists( 'get_field' ) ? get_field( 'contact_whatsapp_link', $current_page_id ) : null;
+// Также пробуем альтернативные имена полей
+if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
+    $contact_whatsapp_link = get_field( 'contact_social_whatsapp', $current_page_id );
+}
+if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
+    $contact_whatsapp_link = get_field( 'contact_whatsapp', $current_page_id );
+}
+// Также пробуем без передачи ID
+if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
+    $contact_whatsapp_link = get_field( 'contact_whatsapp_link' );
+}
+if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
+    $contact_whatsapp_link = get_field( 'contact_social_whatsapp' );
+}
+if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
+    $contact_whatsapp_link = get_field( 'contact_whatsapp' );
+}
 $contact_whatsapp_link = $contact_whatsapp_link ?: 'https://wa.me/79123456789';
 ?>
 
@@ -241,15 +293,21 @@ $contact_whatsapp_link = $contact_whatsapp_link ?: 'https://wa.me/79123456789';
             </div>
             
             <div class="contact-socials">
-                <a href="<?php echo esc_url( $contact_vk_link ); ?>" target="_blank">
-                    <i class="fa-brands fa-vk"></i>
-                </a>
-                <a href="<?php echo esc_url( $contact_whatsapp_link ); ?>" target="_blank">
-                    <i class="fa-brands fa-whatsapp"></i>
-                </a>
-                <a href="<?php echo esc_url( $contact_telegram_link ); ?>" target="_blank">
-                    <i class="fa-brands fa-telegram"></i>
-                </a>
+                <?php if ( ! empty( $contact_vk_link ) ) : ?>
+                    <a href="<?php echo esc_url( $contact_vk_link ); ?>" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-vk"></i>
+                    </a>
+                <?php endif; ?>
+                <?php if ( ! empty( $contact_whatsapp_link ) ) : ?>
+                    <a href="<?php echo esc_url( $contact_whatsapp_link ); ?>" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                <?php endif; ?>
+                <?php if ( ! empty( $contact_telegram_link ) ) : ?>
+                    <a href="<?php echo esc_url( $contact_telegram_link ); ?>" target="_blank" rel="noopener">
+                        <i class="fa-brands fa-telegram"></i>
+                    </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
