@@ -164,17 +164,25 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Привязка: Главная страница
  * 
  * Поля:
- * - contact_title (Text) - Заголовок
- * - contact_description (Textarea) - Описание
- * - contact_phone (Text) - Телефон
- * - contact_email (Email) - Email
- * - contact_location (Text) - Локация
+ * - contact_title (Text) - Заголовок секции
+ * - contact_description (Textarea) - Описание секции
+ * - contact_info_title (Text) - Заголовок блока "Контактная информация"
+ * - contact_info_items (Repeater) - Пункты контактной информации
+ *   - contact_info_label (Text) - Заголовок пункта (Телефон, Email и т.д.)
+ *   - contact_info_value (Text) - Значение пункта
+ *   - contact_info_type (Select/Text) - Тип пункта (phone, email, url, text)
+ * - contact_work_hours_title (Text) - Заголовок блока "Время работы"
  * - contact_work_hours (Repeater) - Время работы
- *   - hours_label (Text) - Тип (Консультации, Мероприятия и т.д.)
- *   - hours_value (Text) - Значение
+ *   - hours_label (Text) - Заголовок пункта (Консультации, Мероприятия и т.д.)
+ *   - hours_value (Text) - Значение времени работы
  * - contact_vk_link (URL) - Ссылка ВК
  * - contact_telegram_link (URL) - Ссылка Telegram
  * - contact_whatsapp_link (URL) - Ссылка WhatsApp
+ * 
+ * ОБРАТНАЯ СОВМЕСТИМОСТЬ:
+ * Старые поля contact_phone, contact_email, contact_location автоматически
+ * преобразуются в repeater contact_info_items с дефолтными заголовками.
+ * Если заголовок или значение не указаны, пункт не отображается.
  */
 
 /**
