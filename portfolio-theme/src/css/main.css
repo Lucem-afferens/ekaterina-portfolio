@@ -102,6 +102,11 @@
             color: #9d7e5f;
         }
         
+        /* Desktop: бургер меню скрыто по умолчанию */
+        .mobile-menu-toggle {
+            display: none;
+        }
+        
         .header-cta {
             border: 1px solid #f8f6f3;
             padding: 12px 32px;
@@ -182,16 +187,29 @@
             opacity: 0;
             transform: translateY(32px);
             transition: opacity 0.8s ease, transform 0.8s ease;
-            font-family: 'Inter', sans-serif; /* Используем тот же шрифт, что и body */
+            font-family: 'Inter', sans-serif;
             display: block;
             visibility: visible;
         }
         
-        /* Показываем подзаголовок даже без анимации, если JavaScript не загрузился */
+        /* Fallback анимация через CSS для подзаголовка (на случай, если JavaScript не работает) */
+        @keyframes heroSubtitleShow {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-subtitle {
+            animation: heroSubtitleShow 0.8s ease 1.3s forwards;
+        }
+        
+        /* Показываем подзаголовок, если JavaScript добавил класс visible */
         .hero-subtitle.visible,
         .no-js .hero-subtitle {
-            opacity: 1;
-            transform: translateY(0);
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+            animation: none !important;
         }
         
         .hero-cta {
@@ -2310,7 +2328,43 @@
             }
         }
 
-        /* Small Desktop (900px - 1023px) */
+        /* Все экраны менее 900px - Burger menu */
+        @media screen and (max-width: 899px) {
+            .mobile-menu-toggle {
+                display: flex !important;
+            }
+            
+            .header-nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                max-width: 400px;
+                height: 100vh;
+                background-color: rgba(58, 58, 58, 0.98);
+                backdrop-filter: blur(24px);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 100px 40px 40px;
+                gap: 28px;
+                transition: right 0.3s ease;
+                z-index: 99;
+                box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+            }
+            
+            .header-nav.active {
+                right: 0;
+            }
+            
+            .header-nav a {
+                font-size: 18px;
+                width: 100%;
+                padding: 12px 0;
+                border-bottom: 1px solid rgba(248, 246, 243, 0.1);
+            }
+        }
+        
+        /* Small Desktop (900px - 1023px) - Desktop menu */
         @media screen and (min-width: 900px) and (max-width: 1023px) {
             .header-container {
                 padding: 28px 40px;
@@ -2377,16 +2431,21 @@
                 padding: 12px 0;
                 border-bottom: 1px solid rgba(248, 246, 243, 0.1);
             }
-        }
             
             .header-cta {
-                margin-top: 0;
-                width: auto;
+                margin-top: 16px;
+                width: 100%;
+                text-align: center;
+                padding: 14px 24px;
             }
             
             #hero {
                 height: 800px;
-                margin-top: 76px;
+                margin-top: 0;
+            }
+            
+            .hero-content {
+                padding: 0 32px;
             }
             
             .hero-content h2 {
