@@ -13,19 +13,38 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Получаем данные из SCF
-$services_title = ekaterina_get_scf_field( 'services_title', 'Услуги' );
-$services_description = ekaterina_get_scf_field( 'services_description', 'Комплексный подход к организации вашего события' );
-$services_list = ekaterina_get_scf_repeater( 'services_list' );
+// Получаем данные из SCF (используем get_field() напрямую, как в других секциях)
+// Получаем ID текущей страницы для правильного контекста
+$current_page_id = ekaterina_get_current_page_id();
+
+$services_title = function_exists( 'get_field' ) ? get_field( 'services_title', $current_page_id ) : null;
+$services_title = $services_title ?: 'Услуги';
+
+$services_description = function_exists( 'get_field' ) ? get_field( 'services_description', $current_page_id ) : null;
+$services_description = $services_description ?: 'Комплексный подход к организации вашего события';
+
+// Убираем автоматически созданные p теги из описания, если они есть
+if ( ! empty( $services_description ) ) {
+    // Удаляем открывающие и закрывающие p теги
+    $services_description = preg_replace( '/<p[^>]*>/', '', $services_description );
+    $services_description = preg_replace( '/<\/p>/', '', $services_description );
+    // Убираем лишние пробелы
+    $services_description = trim( $services_description );
+}
+
+$services_list = function_exists( 'get_field' ) ? get_field( 'services_list', $current_page_id ) : false;
+if ( empty( $services_list ) || ! is_array( $services_list ) ) {
+    $services_list = array();
+}
 ?>
 
 <section id="services">
     <div class="services-container">
         <div class="services-header">
             <div class="philosophy-divider" style="margin: 0 auto 48px;"></div>
-            <h3><?php echo esc_html( $services_title ); ?></h3>
+            <h3><?php echo wp_kses_post( $services_title ); ?></h3>
             <?php if ( ! empty( $services_description ) ) : ?>
-                <p><?php echo esc_html( $services_description ); ?></p>
+                <div class="services-description"><?php echo wp_kses_post( $services_description ); ?></div>
             <?php endif; ?>
         </div>
         
@@ -38,9 +57,10 @@ $services_list = ekaterina_get_scf_repeater( 'services_list' );
             <?php if ( ! empty( $first_group ) ) : ?>
                 <div class="services-grid-1">
                     <?php foreach ( $first_group as $service ) : 
-                        $service_title = ekaterina_get_repeater_field( $service, 'service_title', '' );
-                        $service_description = ekaterina_get_repeater_field( $service, 'service_description', '' );
-                        $service_points = ekaterina_get_repeater_field( $service, 'service_points', array() );
+                        // Получаем данные из repeater элемента напрямую
+                        $service_title = isset( $service['service_title'] ) ? $service['service_title'] : '';
+                        $service_description = isset( $service['service_description'] ) ? $service['service_description'] : '';
+                        $service_points = isset( $service['service_points'] ) && is_array( $service['service_points'] ) ? $service['service_points'] : array();
                         
                         if ( empty( $service_title ) ) {
                             continue;
@@ -70,9 +90,10 @@ $services_list = ekaterina_get_scf_repeater( 'services_list' );
             <?php if ( ! empty( $second_group ) ) : ?>
                 <div class="services-grid-2">
                     <?php foreach ( $second_group as $service ) : 
-                        $service_title = ekaterina_get_repeater_field( $service, 'service_title', '' );
-                        $service_description = ekaterina_get_repeater_field( $service, 'service_description', '' );
-                        $service_points = ekaterina_get_repeater_field( $service, 'service_points', array() );
+                        // Получаем данные из repeater элемента напрямую
+                        $service_title = isset( $service['service_title'] ) ? $service['service_title'] : '';
+                        $service_description = isset( $service['service_description'] ) ? $service['service_description'] : '';
+                        $service_points = isset( $service['service_points'] ) && is_array( $service['service_points'] ) ? $service['service_points'] : array();
                         
                         if ( empty( $service_title ) ) {
                             continue;
