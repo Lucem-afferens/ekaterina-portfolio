@@ -136,6 +136,12 @@ $contact_whatsapp_link = $contact_whatsapp_link ?: 'https://wa.me/79123456789';
                             $info_value = isset( $item['contact_info_value'] ) ? trim( $item['contact_info_value'] ) : '';
                             $info_type = isset( $item['contact_info_type'] ) ? $item['contact_info_type'] : 'text';
                             
+                            // Получаем опциональную ссылку на карту для типа "map"
+                            $info_map_link = '';
+                            if ( $info_type === 'map' && isset( $item['contact_info_map_link'] ) ) {
+                                $info_map_link = trim( $item['contact_info_map_link'] );
+                            }
+                            
                             // Автоматически определяем тип по содержимому, если не указан
                             if ( $info_type === 'text' || empty( $info_type ) ) {
                                 if ( filter_var( $info_value, FILTER_VALIDATE_EMAIL ) ) {
@@ -160,6 +166,19 @@ $contact_whatsapp_link = $contact_whatsapp_link ?: 'https://wa.me/79123456789';
                                     $url = 'https://' . $url;
                                 }
                                 $value_output = '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html( $info_value ) . '</a>';
+                            } elseif ( $info_type === 'map' ) {
+                                // Для типа "map" показываем адрес как ссылку, если указана ссылка на карту
+                                if ( ! empty( $info_map_link ) ) {
+                                    // Обрабатываем ссылку на карту (может быть с протоколом или без)
+                                    $map_url = $info_map_link;
+                                    if ( ! preg_match( '/^https?:\/\//', $map_url ) ) {
+                                        $map_url = 'https://' . $map_url;
+                                    }
+                                    $value_output = '<a href="' . esc_url( $map_url ) . '" target="_blank" rel="noopener">' . esc_html( $info_value ) . '</a>';
+                                } else {
+                                    // Если ссылка на карту не указана, показываем просто текст
+                                    $value_output = esc_html( $info_value );
+                                }
                             } else {
                                 $value_output = esc_html( $info_value );
                             }
