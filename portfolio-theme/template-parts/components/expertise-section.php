@@ -13,12 +13,16 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Получаем данные из SCF
-$expertise_title = ekaterina_get_scf_field( 'expertise_title', 'Экспертиза' );
-$expertise_items = ekaterina_get_scf_repeater( 'expertise_items' );
+// Получаем данные из SCF (используем get_field() напрямую, как в других секциях)
+// Получаем ID текущей страницы для правильного контекста
+$current_page_id = ekaterina_get_current_page_id();
 
-// Если элементы не заполнены, используем дефолтные значения
-if ( empty( $expertise_items ) ) {
+$expertise_title = function_exists( 'get_field' ) ? get_field( 'expertise_title', $current_page_id ) : null;
+$expertise_title = $expertise_title ?: 'Экспертиза';
+
+$expertise_items = function_exists( 'get_field' ) ? get_field( 'expertise_items', $current_page_id ) : false;
+if ( empty( $expertise_items ) || ! is_array( $expertise_items ) ) {
+    // Если элементы не заполнены, используем дефолтные значения
     $expertise_items = array(
         array( 'expertise_title' => 'Корпоративные мероприятия', 'expertise_description' => 'Юбилеи компаний, бизнес-форумы, награждения, тимбилдинги, новогодние корпоративы' ),
         array( 'expertise_title' => 'Свадебные торжества', 'expertise_description' => 'Классические и тематические свадьбы, выездные регистрации, камерные церемонии' ),
@@ -34,12 +38,17 @@ if ( empty( $expertise_items ) ) {
     <div class="expertise-container">
         <div class="expertise-header">
             <div class="philosophy-divider" style="margin: 0 auto 48px;"></div>
-            <h3><?php echo esc_html( $expertise_title ); ?></h3>
+            <h3><?php echo wp_kses_post( $expertise_title ); ?></h3>
         </div>
         <div class="expertise-grid">
             <?php foreach ( $expertise_items as $item ) : 
-                $title = ekaterina_get_repeater_field( $item, 'expertise_title', '' );
-                $description = ekaterina_get_repeater_field( $item, 'expertise_description', '' );
+                // Получаем данные из repeater элемента напрямую
+                $title = isset( $item['expertise_title'] ) ? $item['expertise_title'] : '';
+                // Также проверяем альтернативное имя поля (expertise_name)
+                if ( empty( $title ) && isset( $item['expertise_name'] ) ) {
+                    $title = $item['expertise_name'];
+                }
+                $description = isset( $item['expertise_description'] ) ? $item['expertise_description'] : '';
                 
                 if ( empty( $title ) ) {
                     continue;
