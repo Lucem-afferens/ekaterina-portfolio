@@ -13,20 +13,44 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Получаем данные из SCF (используем get_field() напрямую, как в других секциях)
-// Получаем ID текущей страницы для правильного контекста
-$current_page_id = ekaterina_get_current_page_id();
+// Получаем данные из SCF (используем get_field() напрямую, как в hero-section)
+// Используем get_field() без передачи ID - автоматически используется текущая страница
+// Пробуем разные варианты имен полей для совместимости
 
-$channels_label = function_exists( 'get_field' ) ? get_field( 'channels_label', $current_page_id ) : null;
+$channels_label = function_exists( 'get_field' ) ? get_field( 'channels_label' ) : null;
+// Также пробуем альтернативное имя поля из документации
+if ( empty( $channels_label ) && function_exists( 'get_field' ) ) {
+    $channels_label = get_field( 'contact_channels_label' );
+}
 $channels_label = $channels_label ?: 'Свяжитесь со мной:';
 
-$channels_vk = function_exists( 'get_field' ) ? get_field( 'channels_vk', $current_page_id ) : null;
+$channels_vk = function_exists( 'get_field' ) ? get_field( 'channels_vk' ) : null;
+// Также пробуем альтернативное имя поля из документации
+if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
+    $channels_vk = get_field( 'contact_channels_vk_link' );
+}
+// Также пробуем без "_link"
+if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
+    $channels_vk = get_field( 'contact_channels_vk' );
+}
 $channels_vk = $channels_vk ?: 'https://vk.com/your-page';
 
-$channels_telegram = function_exists( 'get_field' ) ? get_field( 'channels_telegram', $current_page_id ) : null;
+$channels_telegram = function_exists( 'get_field' ) ? get_field( 'channels_telegram' ) : null;
+// Также пробуем альтернативное имя поля из документации
+if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
+    $channels_telegram = get_field( 'contact_channels_telegram_link' );
+}
+// Также пробуем без "_link"
+if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
+    $channels_telegram = get_field( 'contact_channels_telegram' );
+}
 $channels_telegram = $channels_telegram ?: 'https://t.me/username';
 
-$channels_phone = function_exists( 'get_field' ) ? get_field( 'channels_phone', $current_page_id ) : null;
+$channels_phone = function_exists( 'get_field' ) ? get_field( 'channels_phone' ) : null;
+// Также пробуем альтернативное имя поля из документации
+if ( empty( $channels_phone ) && function_exists( 'get_field' ) ) {
+    $channels_phone = get_field( 'contact_channels_phone' );
+}
 $channels_phone = $channels_phone ?: '+7 (912) 345-67-89';
 ?>
 
