@@ -36,7 +36,7 @@ import '../css/main.css';
             
             const h2 = heroContent.querySelector('h2');
             const divider = heroContent.querySelector('.hero-divider');
-            const p = heroContent.querySelector('p');
+            const subtitle = heroContent.querySelector('.hero-subtitle');
             const cta = heroContent.querySelector('.hero-cta');
             
             if (h2) {
@@ -50,10 +50,10 @@ import '../css/main.css';
                 }, 400);
             }
             
-            if (p) {
+            if (subtitle) {
                 setTimeout(() => {
-                    p.style.opacity = '1';
-                    p.style.transform = 'translateY(0)';
+                    subtitle.style.opacity = '1';
+                    subtitle.style.transform = 'translateY(0)';
                 }, 600);
             }
             
