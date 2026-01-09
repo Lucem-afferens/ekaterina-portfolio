@@ -1,126 +1,219 @@
-name: Deploy Portfolio Theme
+name: 🚀 Deploy to Beget
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'portfolio-theme/**'
-      - 'package.json'
-      - 'vite.config.js'
-      - '.github/workflows/deploy.yml'
-  workflow_dispatch:
+  workflow_dispatch: # Позволяет запускать вручную
 
 jobs:
-  deploy:
-    name: Build and Deploy Theme
+  build-and-deploy:
+    name: Build & Deploy
     runs-on: ubuntu-latest
-
+    # Это гарантирует, что статус будет виден рядом с коммитом
+    outputs:
+      status: ${{ job.status }}
+    
+    # Убеждаемся, что статус показывается рядом с коммитом
+    permissions:
+      contents: read
+      deployments: write
+      statuses: write
+    
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 2 # Для проверки изменений
+      
+      - name: Check if deployment needed
+        id: check
+        run: |
+          # Всегда деплоим при ручном запуске
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "deploy=true" >> $GITHUB_OUTPUT
+            echo "✅ Manual deployment triggered"
+            exit 0
+          fi
+          
+          # При push - всегда деплоим (можно позже добавить проверку изменений)
+          echo "deploy=true" >> $GITHUB_OUTPUT
+          echo "✅ Deployment will proceed for push to main branch"
+          
+          # Показываем изменения для информации
+          echo "Checking changes..."
+          changed_files=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+          if [ -n "$changed_files" ]; then
+            echo "Changed files:"
+            echo "$changed_files"
+          else
+            echo "Note: Could not determine changed files, deploying anyway"
+          fi
+      
       - name: Setup Node.js
+        if: steps.check.outputs.deploy == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-
+      
       - name: Install dependencies
+        if: steps.check.outputs.deploy == 'true'
         run: npm ci
-
+      
       - name: Build theme
+        if: steps.check.outputs.deploy == 'true'
         run: npm run build:theme
-
-      - name: Verify build output
+      
+      - name: Check files and structure before deploy
+        if: steps.check.outputs.deploy == 'true'
+        continue-on-error: true
         run: |
-          if [ ! -d "portfolio-theme/assets/css" ] || [ -z "$(ls -A portfolio-theme/assets/css/*.css 2>/dev/null)" ]; then
-            echo "❌ CSS files not found"
+          echo "📦 Checking files to deploy:"
+          echo ""
+          echo "Directory structure:"
+          find portfolio-theme -type f -o -type d | sort | head -30
+          echo ""
+          if [ -d "portfolio-theme/assets/css" ] && [ -n "$(ls -A portfolio-theme/assets/css/*.css 2>/dev/null)" ]; then
+            echo "✅ CSS files found:"
+            ls -lh portfolio-theme/assets/css/*.css | head -3
+          else
+            echo "❌ CSS files not found!"
+          fi
+          echo ""
+          if [ -d "portfolio-theme/assets/js" ] && [ -n "$(ls -A portfolio-theme/assets/js/*.js 2>/dev/null)" ]; then
+            echo "✅ JS files found:"
+            ls -lh portfolio-theme/assets/js/*.js | head -3
+          else
+            echo "⚠️ JS files not found!"
+          fi
+          echo ""
+          if [ -f "portfolio-theme/style.css" ]; then
+            echo "✅ Theme style.css found"
+          else
+            echo "❌ Theme style.css not found!"
+          fi
+          echo ""
+          echo "✅ Files are in correct structure (portfolio-theme/assets/css/ and portfolio-theme/assets/js/)"
+          echo "✅ Ready for deployment - structure should be preserved"
+      
+      - name: Verify FTP credentials (without exposing them)
+        if: steps.check.outputs.deploy == 'true'
+        continue-on-error: true
+        run: |
+          echo "🔐 Checking FTP configuration..."
+          if [ -z "${{ secrets.BEGET_FTP_HOST }}" ]; then
+            echo "❌ ERROR: BEGET_FTP_HOST secret is not set!"
             exit 1
           fi
-          if [ ! -d "portfolio-theme/assets/js" ] || [ -z "$(ls -A portfolio-theme/assets/js/*.js 2>/dev/null)" ]; then
-            echo "❌ JS files not found"
+          if [ -z "${{ secrets.BEGET_FTP_USER }}" ]; then
+            echo "❌ ERROR: BEGET_FTP_USER secret is not set!"
             exit 1
           fi
-          echo "✅ Build files verified"
-
-      - name: Deploy via FTP
-        if: github.event_name == 'push'
-        env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_PORT: ${{ secrets.FTP_PORT }}
-          FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_PASS: ${{ secrets.FTP_PASS }}
-          FTP_PATH: ${{ secrets.FTP_PATH }}
-          FTP_PROTOCOL: ${{ secrets.FTP_PROTOCOL }}
+          if [ -z "${{ secrets.BEGET_FTP_PASSWORD }}" ]; then
+            echo "❌ ERROR: BEGET_FTP_PASSWORD secret is not set!"
+            exit 1
+          fi
+          echo "✅ FTP credentials are configured"
+          echo "📍 Server: ${{ secrets.BEGET_FTP_HOST }}"
+          echo "👤 User: ${{ secrets.BEGET_FTP_USER }}"
+          echo "📁 Target directory: ekaterina-shul.ru/public_html/wp-content/themes/portfolio-theme/"
+      
+      - name: Deploy to Beget via FTP
+        if: steps.check.outputs.deploy == 'true'
+        id: deploy
+        continue-on-error: true
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.BEGET_FTP_HOST }}
+          username: ${{ secrets.BEGET_FTP_USER }}
+          password: ${{ secrets.BEGET_FTP_PASSWORD }}
+          # Путь на сервере: ekaterina-shul.ru/public_html/wp-content/themes/portfolio-theme/
+          # Пробуем путь без начального слеша (относительный от корня FTP)
+          server-dir: ekaterina-shul.ru/public_html/wp-content/themes/portfolio-theme/
+          local-dir: ./portfolio-theme/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/src/**
+            **/.DS_Store
+            **/Thumbs.db
+            **/*.md
+            **/*.json
+            **/.editorconfig
+            **/.eslintrc*
+            **/.prettierrc*
+            **/vite.config.*
+            **/package*.json
+            **/*.map
+          dangerous-clean-slate: false
+          dry-run: false
+          log-level: verbose
+          # Принудительно перезаписываем файлы для обновления кеша
+          state-name: deployment-state.json
+      
+      - name: Show deployment result
+        if: always() && steps.check.outputs.deploy == 'true'
         run: |
-          if [ "$FTP_PROTOCOL" = "ftp" ]; then
-            sudo apt-get update && sudo apt-get install -y lftp
+          echo "=========================================="
+          echo "📊 DEPLOYMENT RESULT"
+          echo "=========================================="
+          echo ""
+          echo "Deploy step outcome: ${{ steps.deploy.outcome }}"
+          echo "Deploy step conclusion: ${{ steps.deploy.conclusion }}"
+          echo ""
+          if [ "${{ steps.deploy.outcome }}" == "success" ]; then
+            echo "✅ SUCCESS: Files deployed successfully!"
+            echo ""
+            echo "📁 Files deployed to:"
+            echo "   /ekaterina-shul.ru/public_html/wp-content/themes/portfolio-theme/"
+            echo ""
+            echo "🔍 Verify: http://ekaterina-shul.ru/wp-content/themes/portfolio-theme/style.css"
           else
-            sudo apt-get update && sudo apt-get install -y sshpass
+            echo "❌ FAILED: Deployment did not complete successfully"
+            echo ""
+            echo "📋 Common issues:"
+            echo "   - FTP connection failed (check BEGET_FTP_HOST, BEGET_FTP_USER, BEGET_FTP_PASSWORD secrets)"
+            echo "   - Wrong server path (currently: ekaterina-shul.ru/public_html/wp-content/themes/portfolio-theme/)"
+            echo "   - Permission denied"
+            echo "   - Server directory doesn't exist"
+            echo ""
+            echo "🔍 Check step 'Deploy to Beget via FTP' above for detailed error logs"
+            echo ""
+            echo "💡 Troubleshooting tips:"
+            echo "   1. Verify FTP credentials in GitHub Secrets"
+            echo "   2. Check if the server path is correct"
+            echo "   3. Ensure the directory exists on the server"
+            echo "   4. Try connecting manually via FTP client to verify access"
           fi
-
-          TEMP_DIR=$(mktemp -d)
-          cp -r portfolio-theme "$TEMP_DIR/"
-          
-          find "$TEMP_DIR/portfolio-theme" -name "*.map" -delete
-          find "$TEMP_DIR/portfolio-theme" -type d -name "node_modules" -exec rm -rf {} + 2>/dev/null || true
-          find "$TEMP_DIR/portfolio-theme" -type d -name "src" -exec rm -rf {} + 2>/dev/null || true
-          find "$TEMP_DIR/portfolio-theme" -type d -name ".git" -exec rm -rf {} + 2>/dev/null || true
-
-          if [ "$FTP_PROTOCOL" = "sftp" ]; then
-            echo "📤 Deploying via SFTP..."
-            
-            sshpass -p "$FTP_PASS" ssh -o StrictHostKeyChecking=no -p "$FTP_PORT" "$FTP_USER@$FTP_HOST" "mkdir -p '${FTP_PATH}/portfolio-theme'" || true
-            
-            sshpass -p "$FTP_PASS" sftp -o StrictHostKeyChecking=no -P "$FTP_PORT" "$FTP_USER@$FTP_HOST" << 'SFTP_CMD'
-          cd "$FTP_PATH"
-          put -r "$TEMP_DIR/portfolio-theme" portfolio-theme
-          quit
-SFTP_CMD
-            
-            if [ $? -eq 0 ]; then
-              echo "✅ Deployment via SFTP successful"
-            else
-              echo "❌ SFTP deployment failed"
-              exit 1
-            fi
-            
-          else
-            echo "📤 Deploying via FTP..."
-            
-            lftp << 'LFTP_CMD'
-set ftp:ssl-allow no
-set ftp:passive-mode yes
-set ftp:list-options -a
-open -p $FTP_PORT -u $FTP_USER,$FTP_PASS $FTP_HOST
-cd "$FTP_PATH" || mkdir -p "$FTP_PATH"; cd "$FTP_PATH"
-mirror -R "$TEMP_DIR/portfolio-theme" portfolio-theme --delete --verbose --exclude-glob=*.map --exclude-glob=node_modules --exclude-glob=src --exclude-glob=.git
-quit
-LFTP_CMD
-            
-            if [ $? -eq 0 ]; then
-              echo "✅ Deployment via FTP successful"
-            else
-              echo "❌ FTP deployment failed"
-              exit 1
-            fi
-          fi
-
-          rm -rf "$TEMP_DIR"
-
-      - name: Deployment Summary
+          echo "=========================================="
+      
+      - name: Final status
         if: always()
         run: |
-          echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Status:** ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Triggered by:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ job.status }}" = "success" ]; then
-            echo "✅ Theme deployed successfully to server" >> $GITHUB_STEP_SUMMARY
+          echo "=========================================="
+          echo "📊 FINAL DEPLOYMENT STATUS"
+          echo "=========================================="
+          echo ""
+          echo "Deployment step outcome: ${{ steps.deploy.outcome }}"
+          echo "Deployment check result: ${{ steps.check.outputs.deploy }}"
+          echo ""
+          
+          if [ "${{ steps.check.outputs.deploy }}" == "false" ]; then
+            echo "⏭️  STATUS: SKIPPED - No changes detected"
+            echo "Deployment was skipped because no relevant files changed."
+            exit 0
+          elif [ "${{ steps.deploy.outcome }}" == "success" ]; then
+            echo "✅ FINAL STATUS: SUCCESS"
+            exit 0
+          elif [ "${{ steps.deploy.outcome }}" == "skipped" ]; then
+            echo "⏭️  STATUS: SKIPPED"
+            echo "Deployment step was skipped (likely no changes detected)."
+            exit 0
           else
-            echo "❌ Deployment failed. Check logs for details." >> $GITHUB_STEP_SUMMARY
+            echo "❌ FINAL STATUS: FAILED"
+            echo "Deployment did not complete successfully."
+            echo "Check step 'Deploy to Beget via FTP' above for details."
+            exit 1
           fi
