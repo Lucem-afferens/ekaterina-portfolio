@@ -930,6 +930,11 @@
         
         .testimonials-cta-container {
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 64px;
         }
         
         .testimonials-cta {
@@ -944,6 +949,7 @@
             background: transparent;
             cursor: pointer;
             font-family: 'Inter', sans-serif;
+            text-align: center;
         }
         
         .testimonials-cta:hover {
