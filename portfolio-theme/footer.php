@@ -31,10 +31,29 @@
         </div>
         
         <div class="footer-bottom">
+            <?php
+            // Получаем текст копирайта из SCF Options
+            $footer_copyright = function_exists( 'get_field' ) ? get_field( 'footer_copyright_text', 'option' ) : null;
+            if ( empty( $footer_copyright ) ) {
+                // Формируем копирайт по умолчанию: год + имя + "Все права защищены"
+                $current_year = date( 'Y' );
+                $copyright_name = ! empty( $host_name ) ? $host_name : get_bloginfo( 'name' );
+                $footer_copyright = sprintf( '© %s %s. Все права защищены', $current_year, $copyright_name );
+            } else {
+                // Если указан пользовательский текст, заменяем %year% на текущий год
+                $footer_copyright = str_replace( '%year%', date( 'Y' ), $footer_copyright );
+            }
+            
+            // Получаем текст кнопки "Наверх"
+            $footer_top_link_text = function_exists( 'get_field' ) ? get_field( 'footer_top_link_text', 'option' ) : null;
+            if ( empty( $footer_top_link_text ) ) {
+                $footer_top_link_text = 'Наверх';
+            }
+            ?>
             <p class="footer-copyright">
-                &copy; <?php echo esc_html( date( 'Y' ) ); ?> <?php esc_html_e( 'Все права защищены', 'ekaterina-portfolio' ); ?>
+                <?php echo wp_kses_post( $footer_copyright ); ?>
             </p>
-            <a href="#hero" class="footer-top-link"><?php esc_html_e( 'Наверх', 'ekaterina-portfolio' ); ?></a>
+            <a href="#hero" class="footer-top-link"><?php echo esc_html( $footer_top_link_text ); ?></a>
         </div>
     </div>
 </footer>
