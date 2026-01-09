@@ -32,59 +32,99 @@ if ( empty( $channels_label ) && function_exists( 'get_field' ) ) {
 }
 $channels_label = $channels_label ?: 'Свяжитесь со мной:';
 
-$channels_vk = function_exists( 'get_field' ) ? get_field( 'channels_vk', $current_page_id ) : null;
-// Также пробуем альтернативные имена полей
-if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
-    $channels_vk = get_field( 'contact_channels_vk_link', $current_page_id );
-}
-if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
-    $channels_vk = get_field( 'contact_channels_vk', $current_page_id );
+// Получаем социальные сети из repeater
+$channels_social_networks = function_exists( 'get_field' ) ? get_field( 'channels_social_networks', $current_page_id ) : false;
+if ( empty( $channels_social_networks ) || ! is_array( $channels_social_networks ) ) {
+    // Также пробуем альтернативное имя поля
+    $channels_social_networks = function_exists( 'get_field' ) ? get_field( 'contact_channels_social_networks', $current_page_id ) : false;
 }
 // Также пробуем без передачи ID
-if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
-    $channels_vk = get_field( 'channels_vk' );
+if ( ( empty( $channels_social_networks ) || ! is_array( $channels_social_networks ) ) && function_exists( 'get_field' ) ) {
+    $channels_social_networks = get_field( 'channels_social_networks' );
 }
-if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
-    $channels_vk = get_field( 'contact_channels_vk_link' );
+if ( ( empty( $channels_social_networks ) || ! is_array( $channels_social_networks ) ) && function_exists( 'get_field' ) ) {
+    $channels_social_networks = get_field( 'contact_channels_social_networks' );
 }
-if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
-    $channels_vk = get_field( 'contact_channels_vk' );
-}
-$channels_vk = $channels_vk ?: 'https://vk.com/your-page';
 
-$channels_telegram = function_exists( 'get_field' ) ? get_field( 'channels_telegram', $current_page_id ) : null;
-// Также пробуем альтернативные имена полей
-if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
-    $channels_telegram = get_field( 'contact_channels_telegram_link', $current_page_id );
+// Обратная совместимость: преобразуем старые поля в repeater
+if ( empty( $channels_social_networks ) || ! is_array( $channels_social_networks ) ) {
+    $channels_social_networks = array();
+    
+    // Пробуем получить старые поля
+    $channels_vk = function_exists( 'get_field' ) ? get_field( 'channels_vk', $current_page_id ) : null;
+    if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
+        $channels_vk = get_field( 'contact_channels_vk_link', $current_page_id );
+    }
+    if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
+        $channels_vk = get_field( 'contact_channels_vk', $current_page_id );
+    }
+    if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
+        $channels_vk = get_field( 'channels_vk' );
+    }
+    if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
+        $channels_vk = get_field( 'contact_channels_vk_link' );
+    }
+    if ( empty( $channels_vk ) && function_exists( 'get_field' ) ) {
+        $channels_vk = get_field( 'contact_channels_vk' );
+    }
+    
+    $channels_telegram = function_exists( 'get_field' ) ? get_field( 'channels_telegram', $current_page_id ) : null;
+    if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
+        $channels_telegram = get_field( 'contact_channels_telegram_link', $current_page_id );
+    }
+    if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
+        $channels_telegram = get_field( 'contact_channels_telegram', $current_page_id );
+    }
+    if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
+        $channels_telegram = get_field( 'channels_telegram' );
+    }
+    if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
+        $channels_telegram = get_field( 'contact_channels_telegram_link' );
+    }
+    if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
+        $channels_telegram = get_field( 'contact_channels_telegram' );
+    }
+    
+    $channels_phone = function_exists( 'get_field' ) ? get_field( 'channels_phone', $current_page_id ) : null;
+    if ( empty( $channels_phone ) && function_exists( 'get_field' ) ) {
+        $channels_phone = get_field( 'contact_channels_phone', $current_page_id );
+    }
+    if ( empty( $channels_phone ) && function_exists( 'get_field' ) ) {
+        $channels_phone = get_field( 'channels_phone' );
+    }
+    if ( empty( $channels_phone ) && function_exists( 'get_field' ) ) {
+        $channels_phone = get_field( 'contact_channels_phone' );
+    }
+    
+    // Формируем массив из старых полей для совместимости
+    if ( ! empty( $channels_vk ) ) {
+        $channels_social_networks[] = array(
+            'social_network' => 'vk',
+            'social_link' => $channels_vk
+        );
+    }
+    if ( ! empty( $channels_telegram ) ) {
+        $channels_social_networks[] = array(
+            'social_network' => 'telegram',
+            'social_link' => $channels_telegram
+        );
+    }
+    if ( ! empty( $channels_phone ) ) {
+        $channels_social_networks[] = array(
+            'social_network' => 'phone',
+            'social_link' => $channels_phone
+        );
+    }
 }
-if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
-    $channels_telegram = get_field( 'contact_channels_telegram', $current_page_id );
-}
-// Также пробуем без передачи ID
-if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
-    $channels_telegram = get_field( 'channels_telegram' );
-}
-if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
-    $channels_telegram = get_field( 'contact_channels_telegram_link' );
-}
-if ( empty( $channels_telegram ) && function_exists( 'get_field' ) ) {
-    $channels_telegram = get_field( 'contact_channels_telegram' );
-}
-$channels_telegram = $channels_telegram ?: 'https://t.me/username';
 
-$channels_phone = function_exists( 'get_field' ) ? get_field( 'channels_phone', $current_page_id ) : null;
-// Также пробуем альтернативное имя поля
-if ( empty( $channels_phone ) && function_exists( 'get_field' ) ) {
-    $channels_phone = get_field( 'contact_channels_phone', $current_page_id );
+// Фильтруем массив, оставляя только элементы с заполненными полями
+if ( ! empty( $channels_social_networks ) && is_array( $channels_social_networks ) ) {
+    $channels_social_networks = array_filter( $channels_social_networks, function( $item ) {
+        $network = isset( $item['social_network'] ) ? trim( $item['social_network'] ) : '';
+        $link = isset( $item['social_link'] ) ? trim( $item['social_link'] ) : '';
+        return ! empty( $network ) && ! empty( $link );
+    } );
 }
-// Также пробуем без передачи ID
-if ( empty( $channels_phone ) && function_exists( 'get_field' ) ) {
-    $channels_phone = get_field( 'channels_phone' );
-}
-if ( empty( $channels_phone ) && function_exists( 'get_field' ) ) {
-    $channels_phone = get_field( 'contact_channels_phone' );
-}
-$channels_phone = $channels_phone ?: '+7 (912) 345-67-89';
 ?>
 
 <section id="contact-channels" class="contact-channels-section">
@@ -93,26 +133,49 @@ $channels_phone = $channels_phone ?: '+7 (912) 345-67-89';
             <?php if ( ! empty( $channels_label ) ) : ?>
                 <p class="contact-channels-label"><?php echo esc_html( $channels_label ); ?></p>
             <?php endif; ?>
-            <div class="contact-channels-links">
-                <?php if ( ! empty( $channels_vk ) ) : ?>
-                    <a href="<?php echo esc_url( $channels_vk ); ?>" target="_blank" class="contact-channel-item" aria-label="ВКонтакте">
-                        <i class="fa-brands fa-vk"></i>
-                        <span>ВКонтакте</span>
-                    </a>
-                <?php endif; ?>
-                <?php if ( ! empty( $channels_telegram ) ) : ?>
-                    <a href="<?php echo esc_url( $channels_telegram ); ?>" target="_blank" class="contact-channel-item" aria-label="Telegram">
-                        <i class="fa-brands fa-telegram"></i>
-                        <span>Telegram</span>
-                    </a>
-                <?php endif; ?>
-                <?php if ( ! empty( $channels_phone ) ) : ?>
-                    <a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $channels_phone ) ); ?>" class="contact-channel-item" aria-label="Телефон">
-                        <i class="fa-solid fa-phone"></i>
-                        <span><?php echo esc_html( $channels_phone ); ?></span>
-                    </a>
-                <?php endif; ?>
-            </div>
+            <?php if ( ! empty( $channels_social_networks ) && is_array( $channels_social_networks ) ) : ?>
+                <div class="contact-channels-links">
+                    <?php foreach ( $channels_social_networks as $social ) : 
+                        $network = isset( $social['social_network'] ) ? trim( $social['social_network'] ) : '';
+                        $link = isset( $social['social_link'] ) ? trim( $social['social_link'] ) : '';
+                        
+                        // Если социальная сеть или ссылка не указаны, пропускаем
+                        if ( empty( $network ) || empty( $link ) ) {
+                            continue;
+                        }
+                        
+                        // Получаем иконку и название для социальной сети
+                        $icon_class = ekaterina_get_social_icon( $network );
+                        $network_name = ekaterina_get_social_name( $network );
+                        
+                        // Формируем ссылку и текст для отображения в зависимости от типа
+                        $social_url = $link;
+                        $display_text = $link;
+                        
+                        if ( $network === 'phone' ) {
+                            // Для телефона используем tel: протокол
+                            $phone_clean = preg_replace( '/[^0-9+]/', '', $link );
+                            $social_url = 'tel:' . esc_attr( $phone_clean );
+                            $display_text = $link; // Отображаем полный номер телефона
+                        } elseif ( $network === 'email' ) {
+                            // Для email используем mailto: протокол
+                            $social_url = 'mailto:' . esc_attr( $link );
+                            $display_text = $link; // Отображаем email
+                        } else {
+                            // Для остальных - проверяем наличие протокола
+                            if ( ! preg_match( '/^https?:\/\//', $social_url ) ) {
+                                $social_url = 'https://' . $social_url;
+                            }
+                            $display_text = $network_name; // Отображаем название социальной сети
+                        }
+                    ?>
+                        <a href="<?php echo esc_url( $social_url ); ?>" target="_blank" class="contact-channel-item" aria-label="<?php echo esc_attr( $network_name ); ?>" rel="noopener">
+                            <i class="<?php echo esc_attr( $icon_class ); ?>"></i>
+                            <span><?php echo esc_html( $display_text ); ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>

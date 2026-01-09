@@ -176,13 +176,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - contact_work_hours (Repeater) - Время работы
  *   - hours_label (Text) - Заголовок пункта (Консультации, Мероприятия и т.д.)
  *   - hours_value (Text) - Значение времени работы
- * - contact_vk_link (URL) - Ссылка ВК
- * - contact_telegram_link (URL) - Ссылка Telegram
- * - contact_whatsapp_link (URL) - Ссылка WhatsApp
+ * - contact_social_networks (Repeater) - Социальные сети (новый способ)
+ *   - social_network (Select) - Выбор социальной сети (vk, telegram, whatsapp, instagram, facebook, twitter, youtube, linkedin, ok, tiktok, phone, email, website)
+ *   - social_link (URL/Text) - Ссылка на профиль/страницу
  * 
  * ОБРАТНАЯ СОВМЕСТИМОСТЬ:
  * Старые поля contact_phone, contact_email, contact_location автоматически
  * преобразуются в repeater contact_info_items с дефолтными заголовками.
+ * Старые поля contact_vk_link, contact_telegram_link, contact_whatsapp_link
+ * автоматически преобразуются в repeater contact_social_networks.
  * Если заголовок или значение не указаны, пункт не отображается.
  */
 
@@ -192,9 +194,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 
  * Поля:
  * - channels_label (Text) - Текст перед ссылками
- * - channels_vk (URL) - Ссылка ВК
- * - channels_telegram (URL) - Ссылка Telegram
- * - channels_phone (Text) - Телефон
+ * - channels_social_networks (Repeater) - Социальные сети и каналы связи (новый способ)
+ *   - social_network (Select) - Выбор социальной сети (vk, telegram, whatsapp, instagram, facebook, twitter, youtube, linkedin, ok, tiktok, phone, email, website)
+ *   - social_link (URL/Text) - Ссылка на профиль/страницу или номер телефона
+ * 
+ * ОБРАТНАЯ СОВМЕСТИМОСТЬ:
+ * Старые поля channels_vk, channels_telegram, channels_phone автоматически
+ * преобразуются в repeater channels_social_networks.
+ * Если социальная сеть или ссылка не указаны, пункт не отображается.
  */
 
 /**

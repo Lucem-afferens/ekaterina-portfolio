@@ -168,3 +168,57 @@ function ekaterina_handle_testimonial_form() {
 add_action( 'wp_ajax_ekaterina_testimonial_form', 'ekaterina_handle_testimonial_form' );
 add_action( 'wp_ajax_nopriv_ekaterina_testimonial_form', 'ekaterina_handle_testimonial_form' );
 
+/**
+ * Функция для получения иконки Font Awesome для социальной сети
+ *
+ * @param string $network Название социальной сети
+ * @return string Класс иконки Font Awesome
+ */
+function ekaterina_get_social_icon( $network ) {
+    $icons = array(
+        'vk' => 'fa-brands fa-vk',
+        'telegram' => 'fa-brands fa-telegram',
+        'whatsapp' => 'fa-brands fa-whatsapp',
+        'instagram' => 'fa-brands fa-instagram',
+        'facebook' => 'fa-brands fa-facebook',
+        'twitter' => 'fa-brands fa-twitter',
+        'youtube' => 'fa-brands fa-youtube',
+        'linkedin' => 'fa-brands fa-linkedin',
+        'ok' => 'fa-brands fa-odnoklassniki',
+        'tiktok' => 'fa-brands fa-tiktok',
+        'phone' => 'fa-solid fa-phone',
+        'email' => 'fa-solid fa-envelope',
+        'website' => 'fa-solid fa-globe',
+    );
+    
+    $network = strtolower( trim( $network ) );
+    return isset( $icons[ $network ] ) ? $icons[ $network ] : 'fa-solid fa-link';
+}
+
+/**
+ * Функция для получения названия социальной сети для aria-label
+ *
+ * @param string $network Название социальной сети
+ * @return string Название для aria-label
+ */
+function ekaterina_get_social_name( $network ) {
+    $names = array(
+        'vk' => 'ВКонтакте',
+        'telegram' => 'Telegram',
+        'whatsapp' => 'WhatsApp',
+        'instagram' => 'Instagram',
+        'facebook' => 'Facebook',
+        'twitter' => 'Twitter',
+        'youtube' => 'YouTube',
+        'linkedin' => 'LinkedIn',
+        'ok' => 'Одноклассники',
+        'tiktok' => 'TikTok',
+        'phone' => 'Телефон',
+        'email' => 'Email',
+        'website' => 'Сайт',
+    );
+    
+    $network = strtolower( trim( $network ) );
+    return isset( $names[ $network ] ) ? $names[ $network ] : $network;
+}
+

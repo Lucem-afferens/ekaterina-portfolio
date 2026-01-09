@@ -87,66 +87,117 @@ if ( empty( $contact_work_hours ) || ! is_array( $contact_work_hours ) ) {
     $contact_work_hours = array();
 }
 
-// Получаем ссылки на социальные сети (пробуем разные варианты имен полей)
-$contact_vk_link = function_exists( 'get_field' ) ? get_field( 'contact_vk_link', $current_page_id ) : null;
-// Также пробуем альтернативные имена полей
-if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
-    $contact_vk_link = get_field( 'contact_social_vk', $current_page_id );
+// Получаем социальные сети из repeater
+$contact_social_networks = function_exists( 'get_field' ) ? get_field( 'contact_social_networks', $current_page_id ) : false;
+if ( empty( $contact_social_networks ) || ! is_array( $contact_social_networks ) ) {
+    // Также пробуем альтернативное имя поля
+    $contact_social_networks = function_exists( 'get_field' ) ? get_field( 'social_networks', $current_page_id ) : false;
 }
-if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
-    $contact_vk_link = get_field( 'contact_vk', $current_page_id );
+// Также пробуем без передачи ID
+if ( ( empty( $contact_social_networks ) || ! is_array( $contact_social_networks ) ) && function_exists( 'get_field' ) ) {
+    $contact_social_networks = get_field( 'contact_social_networks' );
 }
-// Также пробуем без передачи ID (автоматически используется текущая страница)
-if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
-    $contact_vk_link = get_field( 'contact_vk_link' );
+if ( ( empty( $contact_social_networks ) || ! is_array( $contact_social_networks ) ) && function_exists( 'get_field' ) ) {
+    $contact_social_networks = get_field( 'social_networks' );
 }
-if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
-    $contact_vk_link = get_field( 'contact_social_vk' );
+
+// Обратная совместимость: преобразуем старые поля в repeater
+if ( empty( $contact_social_networks ) || ! is_array( $contact_social_networks ) ) {
+    $contact_social_networks = array();
+    
+    // Пробуем получить старые поля
+    $contact_vk_link = function_exists( 'get_field' ) ? get_field( 'contact_vk_link', $current_page_id ) : null;
+    if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
+        $contact_vk_link = get_field( 'contact_social_vk', $current_page_id );
+    }
+    if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
+        $contact_vk_link = get_field( 'contact_vk', $current_page_id );
+    }
+    if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
+        $contact_vk_link = get_field( 'contact_vk_link' );
+    }
+    if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
+        $contact_vk_link = get_field( 'contact_social_vk' );
+    }
+    if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
+        $contact_vk_link = get_field( 'contact_vk' );
+    }
+    
+    $contact_telegram_link = function_exists( 'get_field' ) ? get_field( 'contact_telegram_link', $current_page_id ) : null;
+    if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
+        $contact_telegram_link = get_field( 'contact_social_telegram', $current_page_id );
+    }
+    if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
+        $contact_telegram_link = get_field( 'contact_telegram', $current_page_id );
+    }
+    if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
+        $contact_telegram_link = get_field( 'contact_telegram_link' );
+    }
+    if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
+        $contact_telegram_link = get_field( 'contact_social_telegram' );
+    }
+    if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
+        $contact_telegram_link = get_field( 'contact_telegram' );
+    }
+    
+    $contact_whatsapp_link = function_exists( 'get_field' ) ? get_field( 'contact_whatsapp_link', $current_page_id ) : null;
+    if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
+        $contact_whatsapp_link = get_field( 'contact_social_whatsapp', $current_page_id );
+    }
+    if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
+        $contact_whatsapp_link = get_field( 'contact_whatsapp', $current_page_id );
+    }
+    if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
+        $contact_whatsapp_link = get_field( 'contact_whatsapp_link' );
+    }
+    if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
+        $contact_whatsapp_link = get_field( 'contact_social_whatsapp' );
+    }
+    if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
+        $contact_whatsapp_link = get_field( 'contact_whatsapp' );
+    }
+    
+    // Формируем массив из старых полей для совместимости
+    if ( ! empty( $contact_vk_link ) ) {
+        $contact_social_networks[] = array(
+            'social_network' => 'vk',
+            'social_link' => $contact_vk_link
+        );
+    }
+    if ( ! empty( $contact_telegram_link ) ) {
+        $contact_social_networks[] = array(
+            'social_network' => 'telegram',
+            'social_link' => $contact_telegram_link
+        );
+    }
+    if ( ! empty( $contact_whatsapp_link ) ) {
+        $contact_social_networks[] = array(
+            'social_network' => 'whatsapp',
+            'social_link' => $contact_whatsapp_link
+        );
+    }
 }
-if ( empty( $contact_vk_link ) && function_exists( 'get_field' ) ) {
-    $contact_vk_link = get_field( 'contact_vk' );
+
+// Фильтруем массив, оставляя только элементы с заполненными полями
+if ( ! empty( $contact_social_networks ) && is_array( $contact_social_networks ) ) {
+    $contact_social_networks = array_filter( $contact_social_networks, function( $item ) {
+        $network = isset( $item['social_network'] ) ? trim( $item['social_network'] ) : '';
+        $link = isset( $item['social_link'] ) ? trim( $item['social_link'] ) : '';
+        return ! empty( $network ) && ! empty( $link );
+    } );
+}
+
+// Для обратной совместимости сохраняем старые переменные (для кнопки "Написать")
+$contact_vk_link = '';
+if ( ! empty( $contact_social_networks ) && is_array( $contact_social_networks ) ) {
+    foreach ( $contact_social_networks as $social ) {
+        if ( isset( $social['social_network'] ) && strtolower( trim( $social['social_network'] ) ) === 'vk' ) {
+            $contact_vk_link = isset( $social['social_link'] ) ? trim( $social['social_link'] ) : '';
+            break;
+        }
+    }
 }
 $contact_vk_link = $contact_vk_link ?: 'https://vk.com/your-page';
-
-$contact_telegram_link = function_exists( 'get_field' ) ? get_field( 'contact_telegram_link', $current_page_id ) : null;
-// Также пробуем альтернативные имена полей
-if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
-    $contact_telegram_link = get_field( 'contact_social_telegram', $current_page_id );
-}
-if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
-    $contact_telegram_link = get_field( 'contact_telegram', $current_page_id );
-}
-// Также пробуем без передачи ID
-if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
-    $contact_telegram_link = get_field( 'contact_telegram_link' );
-}
-if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
-    $contact_telegram_link = get_field( 'contact_social_telegram' );
-}
-if ( empty( $contact_telegram_link ) && function_exists( 'get_field' ) ) {
-    $contact_telegram_link = get_field( 'contact_telegram' );
-}
-$contact_telegram_link = $contact_telegram_link ?: 'https://t.me/username';
-
-$contact_whatsapp_link = function_exists( 'get_field' ) ? get_field( 'contact_whatsapp_link', $current_page_id ) : null;
-// Также пробуем альтернативные имена полей
-if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
-    $contact_whatsapp_link = get_field( 'contact_social_whatsapp', $current_page_id );
-}
-if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
-    $contact_whatsapp_link = get_field( 'contact_whatsapp', $current_page_id );
-}
-// Также пробуем без передачи ID
-if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
-    $contact_whatsapp_link = get_field( 'contact_whatsapp_link' );
-}
-if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
-    $contact_whatsapp_link = get_field( 'contact_social_whatsapp' );
-}
-if ( empty( $contact_whatsapp_link ) && function_exists( 'get_field' ) ) {
-    $contact_whatsapp_link = get_field( 'contact_whatsapp' );
-}
-$contact_whatsapp_link = $contact_whatsapp_link ?: 'https://wa.me/79123456789';
 ?>
 
 <section id="contact">
@@ -292,23 +343,43 @@ $contact_whatsapp_link = $contact_whatsapp_link ?: 'https://wa.me/79123456789';
                 <a href="<?php echo esc_url( $contact_vk_link ); ?>" target="_blank" class="contact-cta contact-cta-secondary">НАПИСАТЬ</a>
             </div>
             
-            <div class="contact-socials">
-                <?php if ( ! empty( $contact_vk_link ) ) : ?>
-                    <a href="<?php echo esc_url( $contact_vk_link ); ?>" target="_blank" rel="noopener">
-                        <i class="fa-brands fa-vk"></i>
-                    </a>
-                <?php endif; ?>
-                <?php if ( ! empty( $contact_whatsapp_link ) ) : ?>
-                    <a href="<?php echo esc_url( $contact_whatsapp_link ); ?>" target="_blank" rel="noopener">
-                        <i class="fa-brands fa-whatsapp"></i>
-                    </a>
-                <?php endif; ?>
-                <?php if ( ! empty( $contact_telegram_link ) ) : ?>
-                    <a href="<?php echo esc_url( $contact_telegram_link ); ?>" target="_blank" rel="noopener">
-                        <i class="fa-brands fa-telegram"></i>
-                    </a>
-                <?php endif; ?>
-            </div>
+            <?php if ( ! empty( $contact_social_networks ) && is_array( $contact_social_networks ) ) : ?>
+                <div class="contact-socials">
+                    <?php foreach ( $contact_social_networks as $social ) : 
+                        $network = isset( $social['social_network'] ) ? trim( $social['social_network'] ) : '';
+                        $link = isset( $social['social_link'] ) ? trim( $social['social_link'] ) : '';
+                        
+                        // Если социальная сеть или ссылка не указаны, пропускаем
+                        if ( empty( $network ) || empty( $link ) ) {
+                            continue;
+                        }
+                        
+                        // Получаем иконку и название для социальной сети
+                        $icon_class = ekaterina_get_social_icon( $network );
+                        $network_name = ekaterina_get_social_name( $network );
+                        
+                        // Формируем ссылку в зависимости от типа
+                        $social_url = $link;
+                        if ( $network === 'phone' ) {
+                            // Для телефона используем tel: протокол
+                            $phone_clean = preg_replace( '/[^0-9+]/', '', $link );
+                            $social_url = 'tel:' . esc_attr( $phone_clean );
+                        } elseif ( $network === 'email' ) {
+                            // Для email используем mailto: протокол
+                            $social_url = 'mailto:' . esc_attr( $link );
+                        } else {
+                            // Для остальных - проверяем наличие протокола
+                            if ( ! preg_match( '/^https?:\/\//', $social_url ) ) {
+                                $social_url = 'https://' . $social_url;
+                            }
+                        }
+                    ?>
+                        <a href="<?php echo esc_url( $social_url ); ?>" target="_blank" rel="noopener" aria-label="<?php echo esc_attr( $network_name ); ?>">
+                            <i class="<?php echo esc_attr( $icon_class ); ?>"></i>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>
