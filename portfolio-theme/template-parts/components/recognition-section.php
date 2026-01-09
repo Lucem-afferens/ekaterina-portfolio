@@ -25,6 +25,10 @@ if ( empty( $recognition_stats ) || ! is_array( $recognition_stats ) ) {
     $recognition_stats = array();
 }
 
+// Получаем заголовок секции "Сотрудничество"
+$recognition_partners_title = function_exists( 'get_field' ) ? get_field( 'recognition_partners_title', $current_page_id ) : null;
+$recognition_partners_title = $recognition_partners_title ?: 'Сотрудничество';
+
 // Пробуем разные варианты имен полей для совместимости
 $recognition_partners = function_exists( 'get_field' ) ? get_field( 'recognition_partners', $current_page_id ) : false;
 if ( empty( $recognition_partners ) || ! is_array( $recognition_partners ) ) {
@@ -72,7 +76,7 @@ if ( empty( $recognition_partners ) || ! is_array( $recognition_partners ) ) {
         
         <?php if ( ! empty( $recognition_partners ) ) : ?>
             <div class="recognition-partners">
-                <h4>Сотрудничество</h4>
+                <h4><?php echo wp_kses_post( $recognition_partners_title ); ?></h4>
                 <div class="partners-grid">
                     <?php foreach ( $recognition_partners as $partner ) : 
                         // Получаем данные из repeater элемента напрямую
@@ -86,12 +90,57 @@ if ( empty( $recognition_partners ) || ! is_array( $recognition_partners ) ) {
                             $partner_name = $partner['title'];
                         }
                         
-                        if ( empty( $partner_name ) ) {
+                        // Получаем изображение партнера (опционально)
+                        $partner_logo = isset( $partner['partner_logo'] ) ? $partner['partner_logo'] : false;
+                        // Также проверяем альтернативное имя поля
+                        if ( ! $partner_logo && isset( $partner['partner_image'] ) ) {
+                            $partner_logo = $partner['partner_image'];
+                        }
+                        if ( ! $partner_logo && isset( $partner['logo'] ) ) {
+                            $partner_logo = $partner['logo'];
+                        }
+                        if ( ! $partner_logo && isset( $partner['image'] ) ) {
+                            $partner_logo = $partner['image'];
+                        }
+                        
+                        // Получаем ID изображения
+                        $logo_id = false;
+                        $logo_url = '';
+                        $logo_alt = $partner_name ?: 'Логотип партнера';
+                        
+                        if ( $partner_logo ) {
+                            if ( is_array( $partner_logo ) && ! empty( $partner_logo['ID'] ) ) {
+                                $logo_id = $partner_logo['ID'];
+                                $logo_alt = isset( $partner_logo['alt'] ) ? $partner_logo['alt'] : $logo_alt;
+                            } elseif ( is_numeric( $partner_logo ) ) {
+                                $logo_id = $partner_logo;
+                            }
+                            
+                            if ( $logo_id ) {
+                                $logo_url = wp_get_attachment_image_url( $logo_id, 'medium' );
+                                if ( $logo_url ) {
+                                    // Принудительно используем HTTPS
+                                    $logo_url = set_url_scheme( $logo_url, 'https' );
+                                }
+                            }
+                        }
+                        
+                        // Показываем элемент, если есть хотя бы имя или логотип
+                        if ( empty( $partner_name ) && empty( $logo_url ) ) {
                             continue;
                         }
                     ?>
-                        <div>
-                            <p><?php echo wp_kses_post( nl2br( esc_html( $partner_name ) ) ); ?></p>
+                        <div class="partner-item">
+                            <?php if ( ! empty( $logo_url ) ) : ?>
+                                <div class="partner-logo">
+                                    <img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $logo_alt ); ?>" loading="lazy" decoding="async" />
+                                </div>
+                            <?php endif; ?>
+                            <?php if ( ! empty( $partner_name ) ) : ?>
+                                <div class="partner-name">
+                                    <p><?php echo wp_kses_post( nl2br( esc_html( $partner_name ) ) ); ?></p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
