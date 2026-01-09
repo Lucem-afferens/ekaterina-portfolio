@@ -21,6 +21,13 @@
             line-height: inherit;
         }
         
+        /* Глобальный сброс стилей параграфов (предотвращает переопределение браузерных стилей) */
+        p {
+            margin: 0;
+            padding: 0;
+            display: block;
+        }
+        
         body { 
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
@@ -164,17 +171,19 @@
         
         /* Отдельные стили для описания (подзаголовка) - используем более специфичный селектор */
         .hero-content .hero-subtitle,
-        .hero-content p.hero-subtitle {
-            color: #f8f6f3;
-            font-size: 20px;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-            margin-bottom: 64px;
-            line-height: 1.6;
+        .hero-content p.hero-subtitle,
+        p.hero-subtitle {
+            color: #f8f6f3 !important;
+            font-size: 20px !important;
+            font-weight: 300 !important;
+            letter-spacing: 0.05em !important;
+            margin-bottom: 64px !important;
+            line-height: 1.6 !important;
             opacity: 0;
             transform: translateY(32px);
             transition: all 0.8s ease;
-            font-family: 'Inter', sans-serif; /* Используем тот же шрифт, что и body */
+            font-family: 'Inter', sans-serif !important; /* Используем тот же шрифт, что и body */
+            display: block !important;
         }
         
         .hero-cta {
@@ -1605,14 +1614,14 @@
             }
             
             .hero-content .hero-subtitle,
-            .hero-content p            .hero-content .hero-subtitle,
-            .hero-content p.hero-subtitle {
-                font-size: 16px;
-                margin-bottom: 32px;
-                line-height: 1.5;
-                color: #f8f6f3;
-                font-weight: 300;
-                letter-spacing: 0.05em;
+            .hero-content p.hero-subtitle,
+            p.hero-subtitle {
+                font-size: 16px !important;
+                margin-bottom: 32px !important;
+                line-height: 1.5 !important;
+                color: #f8f6f3 !important;
+                font-weight: 300 !important;
+                letter-spacing: 0.05em !important;
             }
             
             .hero-divider {
@@ -2089,13 +2098,14 @@
             }
             
             .hero-content .hero-subtitle,
-            .hero-content p.hero-subtitle {
-                font-size: 18px;
-                color: #f8f6f3;
-                font-weight: 300;
-                letter-spacing: 0.05em;
-                margin-bottom: 64px;
-                line-height: 1.6;
+            .hero-content p.hero-subtitle,
+            p.hero-subtitle {
+                font-size: 18px !important;
+                color: #f8f6f3 !important;
+                font-weight: 300 !important;
+                letter-spacing: 0.05em !important;
+                margin-bottom: 64px !important;
+                line-height: 1.6 !important;
             }
             
             #introduction {
@@ -2204,13 +2214,14 @@
             }
             
             .hero-content .hero-subtitle,
-            .hero-content p.hero-subtitle {
-                font-size: 18px;
-                color: #f8f6f3;
-                font-weight: 300;
-                letter-spacing: 0.05em;
-                margin-bottom: 64px;
-                line-height: 1.6;
+            .hero-content p.hero-subtitle,
+            p.hero-subtitle {
+                font-size: 18px !important;
+                color: #f8f6f3 !important;
+                font-weight: 300 !important;
+                letter-spacing: 0.05em !important;
+                margin-bottom: 64px !important;
+                line-height: 1.6 !important;
             }
             
             #introduction {
@@ -2296,13 +2307,14 @@
             }
             
             .hero-content .hero-subtitle,
-            .hero-content p.hero-subtitle {
-                font-size: 20px;
-                color: #f8f6f3;
-                font-weight: 300;
-                letter-spacing: 0.05em;
-                margin-bottom: 64px;
-                line-height: 1.6;
+            .hero-content p.hero-subtitle,
+            p.hero-subtitle {
+                font-size: 20px !important;
+                color: #f8f6f3 !important;
+                font-weight: 300 !important;
+                letter-spacing: 0.05em !important;
+                margin-bottom: 64px !important;
+                line-height: 1.6 !important;
             }
             
             #introduction {
@@ -2401,13 +2413,14 @@
             }
             
             .hero-content .hero-subtitle,
-            .hero-content p.hero-subtitle {
-                font-size: 14px;
-                color: #f8f6f3;
-                font-weight: 300;
-                letter-spacing: 0.05em;
-                margin-bottom: 32px;
-                line-height: 1.5;
+            .hero-content p.hero-subtitle,
+            p.hero-subtitle {
+                font-size: 14px !important;
+                color: #f8f6f3 !important;
+                font-weight: 300 !important;
+                letter-spacing: 0.05em !important;
+                margin-bottom: 32px !important;
+                line-height: 1.5 !important;
             }
             
             .intro-image {
