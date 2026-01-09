@@ -51,15 +51,29 @@ if ( empty( $recognition_partners ) || ! is_array( $recognition_partners ) ) {
             <div class="recognition-stats">
                 <?php foreach ( $recognition_stats as $stat ) : 
                     // Получаем данные из repeater элемента напрямую
-                    $number = isset( $stat['recognition_number'] ) ? $stat['recognition_number'] : '';
-                    // Также проверяем альтернативное имя поля (number)
-                    if ( empty( $number ) && isset( $stat['number'] ) ) {
+                    // Пробуем разные варианты имен полей для совместимости
+                    $number = '';
+                    // Сначала пробуем правильное имя поля из документации
+                    if ( isset( $stat['recognition_stat_number'] ) ) {
+                        $number = $stat['recognition_stat_number'];
+                    } elseif ( isset( $stat['recognition_number'] ) ) {
+                        $number = $stat['recognition_number'];
+                    } elseif ( isset( $stat['number'] ) ) {
                         $number = $stat['number'];
+                    } elseif ( isset( $stat['stat_number'] ) ) {
+                        $number = $stat['stat_number'];
                     }
-                    $label = isset( $stat['recognition_label'] ) ? $stat['recognition_label'] : '';
-                    // Также проверяем альтернативное имя поля (label)
-                    if ( empty( $label ) && isset( $stat['label'] ) ) {
+                    
+                    $label = '';
+                    // Сначала пробуем правильное имя поля из документации
+                    if ( isset( $stat['recognition_stat_label'] ) ) {
+                        $label = $stat['recognition_stat_label'];
+                    } elseif ( isset( $stat['recognition_label'] ) ) {
+                        $label = $stat['recognition_label'];
+                    } elseif ( isset( $stat['label'] ) ) {
                         $label = $stat['label'];
+                    } elseif ( isset( $stat['stat_label'] ) ) {
+                        $label = $stat['stat_label'];
                     }
                     
                     if ( empty( $number ) || empty( $label ) ) {
