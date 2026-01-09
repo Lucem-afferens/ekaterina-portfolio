@@ -105,37 +105,48 @@ if ( empty( $recognition_partners ) || ! is_array( $recognition_partners ) ) {
                         }
                         
                         // Получаем изображение партнера (опционально)
-                        $partner_logo = isset( $partner['partner_logo'] ) ? $partner['partner_logo'] : false;
-                        // Также проверяем альтернативное имя поля
-                        if ( ! $partner_logo && isset( $partner['partner_image'] ) ) {
+                        // Пробуем разные варианты имен полей для совместимости
+                        $partner_logo = false;
+                        if ( isset( $partner['partner_logo'] ) ) {
+                            $partner_logo = $partner['partner_logo'];
+                        } elseif ( isset( $partner['partner_image'] ) ) {
                             $partner_logo = $partner['partner_image'];
-                        }
-                        if ( ! $partner_logo && isset( $partner['logo'] ) ) {
+                        } elseif ( isset( $partner['logo'] ) ) {
                             $partner_logo = $partner['logo'];
-                        }
-                        if ( ! $partner_logo && isset( $partner['image'] ) ) {
+                        } elseif ( isset( $partner['image'] ) ) {
                             $partner_logo = $partner['image'];
                         }
                         
-                        // Получаем ID изображения
-                        $logo_id = false;
+                        // Получаем URL изображения
+                        // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID или URL
                         $logo_url = '';
                         $logo_alt = $partner_name ?: 'Логотип партнера';
                         
                         if ( $partner_logo ) {
-                            if ( is_array( $partner_logo ) && ! empty( $partner_logo['ID'] ) ) {
-                                $logo_id = $partner_logo['ID'];
-                                $logo_alt = isset( $partner_logo['alt'] ) ? $partner_logo['alt'] : $logo_alt;
+                            if ( is_array( $partner_logo ) ) {
+                                // Если вернулся массив, используем URL из него или ID
+                                if ( ! empty( $partner_logo['url'] ) ) {
+                                    // Если есть URL в массиве, используем его
+                                    $logo_url = $partner_logo['url'];
+                                    $logo_alt = isset( $partner_logo['alt'] ) ? $partner_logo['alt'] : $logo_alt;
+                                } elseif ( ! empty( $partner_logo['ID'] ) ) {
+                                    // Если есть ID, получаем URL по ID
+                                    $logo_id = $partner_logo['ID'];
+                                    $logo_url = wp_get_attachment_image_url( $logo_id, 'medium' );
+                                    $logo_alt = isset( $partner_logo['alt'] ) ? $partner_logo['alt'] : $logo_alt;
+                                }
                             } elseif ( is_numeric( $partner_logo ) ) {
+                                // Если вернулся ID (число), получаем URL
                                 $logo_id = $partner_logo;
+                                $logo_url = wp_get_attachment_image_url( $logo_id, 'medium' );
+                            } elseif ( is_string( $partner_logo ) && filter_var( $partner_logo, FILTER_VALIDATE_URL ) ) {
+                                // Если вернулся URL напрямую (строка с валидным URL)
+                                $logo_url = $partner_logo;
                             }
                             
-                            if ( $logo_id ) {
-                                $logo_url = wp_get_attachment_image_url( $logo_id, 'medium' );
-                                if ( $logo_url ) {
-                                    // Принудительно используем HTTPS
-                                    $logo_url = set_url_scheme( $logo_url, 'https' );
-                                }
+                            // Принудительно используем HTTPS
+                            if ( $logo_url ) {
+                                $logo_url = set_url_scheme( $logo_url, 'https' );
                             }
                         }
                         
