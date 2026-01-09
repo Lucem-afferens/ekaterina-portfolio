@@ -85,14 +85,43 @@ if ( empty( $services_list ) || ! is_array( $services_list ) ) {
                             <?php if ( ! empty( $service_description ) ) : ?>
                                 <p><?php echo esc_html( $service_description ); ?></p>
                             <?php endif; ?>
-                            <?php if ( ! empty( $service_points ) && is_array( $service_points ) ) : ?>
+                            <?php if ( ! empty( $service_points ) ) : ?>
                                 <ul class="service-list">
-                                    <?php foreach ( $service_points as $point ) : 
-                                        $point_text = is_array( $point ) ? ( isset( $point['point_text'] ) ? $point['point_text'] : '' ) : $point;
-                                        if ( empty( $point_text ) ) continue;
+                                    <?php 
+                                    // Если это массив (вложенный repeater)
+                                    if ( is_array( $service_points ) ) {
+                                        foreach ( $service_points as $point ) : 
+                                            // Пробуем разные варианты имен полей
+                                            $point_text = '';
+                                            if ( is_array( $point ) ) {
+                                                $point_text = isset( $point['point_text'] ) ? $point['point_text'] : '';
+                                                if ( empty( $point_text ) && isset( $point['feature_text'] ) ) {
+                                                    $point_text = $point['feature_text'];
+                                                }
+                                            } else {
+                                                $point_text = $point;
+                                            }
+                                            if ( empty( $point_text ) ) continue;
                                     ?>
                                         <li><span>—</span><span><?php echo esc_html( $point_text ); ?></span></li>
-                                    <?php endforeach; ?>
+                                    <?php 
+                                        endforeach;
+                                    } else {
+                                        // Если это строка (textarea с разделителями)
+                                        $points_lines = explode( "\n", $service_points );
+                                        foreach ( $points_lines as $line ) {
+                                            $line = trim( $line );
+                                            if ( empty( $line ) ) continue;
+                                            // Убираем тире в начале, если есть
+                                            $line = preg_replace( '/^[-—]\s*/', '', $line );
+                                            if ( ! empty( $line ) ) {
+                                    ?>
+                                        <li><span>—</span><span><?php echo esc_html( $line ); ?></span></li>
+                                    <?php 
+                                            }
+                                        }
+                                    }
+                                    ?>
                                 </ul>
                             <?php endif; ?>
                         </div>
@@ -126,14 +155,43 @@ if ( empty( $services_list ) || ! is_array( $services_list ) ) {
                             <?php if ( ! empty( $service_description ) ) : ?>
                                 <p><?php echo esc_html( $service_description ); ?></p>
                             <?php endif; ?>
-                            <?php if ( ! empty( $service_points ) && is_array( $service_points ) ) : ?>
+                            <?php if ( ! empty( $service_points ) ) : ?>
                                 <ul class="service-list">
-                                    <?php foreach ( $service_points as $point ) : 
-                                        $point_text = is_array( $point ) ? ( isset( $point['point_text'] ) ? $point['point_text'] : '' ) : $point;
-                                        if ( empty( $point_text ) ) continue;
+                                    <?php 
+                                    // Если это массив (вложенный repeater)
+                                    if ( is_array( $service_points ) ) {
+                                        foreach ( $service_points as $point ) : 
+                                            // Пробуем разные варианты имен полей
+                                            $point_text = '';
+                                            if ( is_array( $point ) ) {
+                                                $point_text = isset( $point['point_text'] ) ? $point['point_text'] : '';
+                                                if ( empty( $point_text ) && isset( $point['feature_text'] ) ) {
+                                                    $point_text = $point['feature_text'];
+                                                }
+                                            } else {
+                                                $point_text = $point;
+                                            }
+                                            if ( empty( $point_text ) ) continue;
                                     ?>
                                         <li><span>—</span><span><?php echo esc_html( $point_text ); ?></span></li>
-                                    <?php endforeach; ?>
+                                    <?php 
+                                        endforeach;
+                                    } else {
+                                        // Если это строка (textarea с разделителями)
+                                        $points_lines = explode( "\n", $service_points );
+                                        foreach ( $points_lines as $line ) {
+                                            $line = trim( $line );
+                                            if ( empty( $line ) ) continue;
+                                            // Убираем тире в начале, если есть
+                                            $line = preg_replace( '/^[-—]\s*/', '', $line );
+                                            if ( ! empty( $line ) ) {
+                                    ?>
+                                        <li><span>—</span><span><?php echo esc_html( $line ); ?></span></li>
+                                    <?php 
+                                            }
+                                        }
+                                    }
+                                    ?>
                                 </ul>
                             <?php endif; ?>
                         </div>
