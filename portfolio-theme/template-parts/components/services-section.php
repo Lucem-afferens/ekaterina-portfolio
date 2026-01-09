@@ -32,7 +32,12 @@ if ( ! empty( $services_description ) ) {
     $services_description = trim( $services_description );
 }
 
+// Пробуем разные варианты имен полей для совместимости
 $services_list = function_exists( 'get_field' ) ? get_field( 'services_list', $current_page_id ) : false;
+if ( empty( $services_list ) || ! is_array( $services_list ) ) {
+    // Пробуем альтернативное имя поля
+    $services_list = function_exists( 'get_field' ) ? get_field( 'services_items', $current_page_id ) : false;
+}
 if ( empty( $services_list ) || ! is_array( $services_list ) ) {
     $services_list = array();
 }
@@ -58,9 +63,17 @@ if ( empty( $services_list ) || ! is_array( $services_list ) ) {
                 <div class="services-grid-1">
                     <?php foreach ( $first_group as $service ) : 
                         // Получаем данные из repeater элемента напрямую
+                        // Пробуем разные варианты имен полей для совместимости
                         $service_title = isset( $service['service_title'] ) ? $service['service_title'] : '';
+                        if ( empty( $service_title ) && isset( $service['service_name'] ) ) {
+                            $service_title = $service['service_name'];
+                        }
                         $service_description = isset( $service['service_description'] ) ? $service['service_description'] : '';
+                        // Пробуем разные варианты для списка пунктов
                         $service_points = isset( $service['service_points'] ) && is_array( $service['service_points'] ) ? $service['service_points'] : array();
+                        if ( empty( $service_points ) && isset( $service['service_features'] ) && is_array( $service['service_features'] ) ) {
+                            $service_points = $service['service_features'];
+                        }
                         
                         if ( empty( $service_title ) ) {
                             continue;
@@ -91,9 +104,17 @@ if ( empty( $services_list ) || ! is_array( $services_list ) ) {
                 <div class="services-grid-2">
                     <?php foreach ( $second_group as $service ) : 
                         // Получаем данные из repeater элемента напрямую
+                        // Пробуем разные варианты имен полей для совместимости
                         $service_title = isset( $service['service_title'] ) ? $service['service_title'] : '';
+                        if ( empty( $service_title ) && isset( $service['service_name'] ) ) {
+                            $service_title = $service['service_name'];
+                        }
                         $service_description = isset( $service['service_description'] ) ? $service['service_description'] : '';
+                        // Пробуем разные варианты для списка пунктов
                         $service_points = isset( $service['service_points'] ) && is_array( $service['service_points'] ) ? $service['service_points'] : array();
+                        if ( empty( $service_points ) && isset( $service['service_features'] ) && is_array( $service['service_features'] ) ) {
+                            $service_points = $service['service_features'];
+                        }
                         
                         if ( empty( $service_title ) ) {
                             continue;
