@@ -1064,18 +1064,25 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            max-width: 200px;
-            height: auto;
-            min-height: 80px;
+            max-width: 240px;
+            height: 120px;
+            min-height: 120px;
+            margin: 0 auto;
+            padding: 16px;
+            box-sizing: border-box;
         }
         
         .partner-logo img {
             max-width: 100%;
+            max-height: 100%;
+            width: auto;
             height: auto;
             object-fit: contain;
+            object-position: center;
             filter: brightness(0) invert(1);
             opacity: 0.7;
             transition: opacity 0.3s ease;
+            display: block;
         }
         
         .partner-logo img:hover {
@@ -2027,6 +2034,13 @@
                 gap: 24px;
             }
             
+            .partner-logo {
+                max-width: 180px;
+                height: 100px;
+                min-height: 100px;
+                padding: 12px;
+            }
+            
             /* Contact Section */
             #contact {
                 padding: 64px 0;
@@ -2364,6 +2378,13 @@
                 grid-template-columns: repeat(2, 1fr);
             }
             
+            .partner-logo {
+                max-width: 200px;
+                height: 110px;
+                min-height: 110px;
+                padding: 14px;
+            }
+            
             .contact-cards {
                 grid-template-columns: 1fr;
             }
@@ -2457,6 +2478,13 @@
             
             .partners-grid {
                 grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .partner-logo {
+                max-width: 240px;
+                height: 120px;
+                min-height: 120px;
+                padding: 16px;
             }
             
             .contact-cards {

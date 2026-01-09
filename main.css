@@ -1545,7 +1545,6 @@
             #hero {
                 height: 100vh;
                 min-height: 600px;
-                margin-top: 60px;
             }
             
             .hero-content {
@@ -2020,7 +2019,6 @@
             #hero {
                 height: 100vh;
                 min-height: 700px;
-                margin-top: 72px;
             }
             
             .hero-content {
@@ -2133,7 +2131,6 @@
             
             #hero {
                 height: 800px;
-                margin-top: 76px;
             }
             
             .hero-content h2 {
