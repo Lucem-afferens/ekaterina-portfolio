@@ -108,7 +108,7 @@ scp -r portfolio-theme/ user@server:/path/to/wordpress/wp-content/themes/
 ## Активация темы
 
 1. В админ-панели WordPress: **Внешний вид → Темы**
-2. Найдите тему "Ekaterina Portfolio"
+2. Найдите тему "Портфолио"
 3. Нажмите "Активировать"
 
 ## Настройка темы

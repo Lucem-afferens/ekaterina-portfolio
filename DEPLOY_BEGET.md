@@ -1,12 +1,12 @@
 # Инструкция по деплою на хостинг Beget
 
-Данная инструкция описывает процесс деплоя темы Ekaterina Portfolio на хостинг Beget (домен: ekaterina-shul.ru).
+Данная инструкция описывает процесс деплоя универсальной темы Portfolio на хостинг Beget.
 
 ## Особенности Beget
 
 - Панель управления Beget (не cPanel)
 - Автоматическая установка WordPress через панель
-- Структура файлов: `/home/u/username/ekaterina-shul.ru/public_html/wp-content/themes/`
+- Структура файлов: `/home/u/username/your-domain.ru/public_html/wp-content/themes/`
 - SSH доступ может требовать активации в панели
 - FTP/SFTP доступ для загрузки файлов
 - Ограничения на права доступа к файлам (обычно 644 для файлов, 755 для директорий)
@@ -76,21 +76,21 @@ cd ..
 
 2. **Подключение:**
    ```bash
-   ssh username@ekaterina-shul.ru
+   ssh username@your-domain.ru
    ```
 
 3. **Копирование файлов:**
    ```bash
    # Используя scp с локальной машины
-   scp -r portfolio-theme/ username@ekaterina-shul.ru:/home/u/username/ekaterina-shul.ru/public_html/wp-content/themes/
+   scp -r portfolio-theme/ username@your-domain.ru:/home/u/username/your-domain.ru/public_html/wp-content/themes/
    
    # Или используя rsync
-   rsync -avz portfolio-theme/ username@ekaterina-shul.ru:/home/u/username/ekaterina-shul.ru/public_html/wp-content/themes/portfolio-theme/
+   rsync -avz portfolio-theme/ username@your-domain.ru:/home/u/username/your-domain.ru/public_html/wp-content/themes/portfolio-theme/
    ```
 
 4. **Установка прав:**
    ```bash
-   cd /home/u/username/ekaterina-shul.ru/public_html/wp-content/themes/portfolio-theme
+   cd /home/u/username/your-domain.ru/public_html/wp-content/themes/portfolio-theme
    find . -type f -exec chmod 644 {} \;
    find . -type d -exec chmod 755 {} \;
    ```
@@ -99,9 +99,9 @@ cd ..
 
 ### 1. Активация темы
 
-1. Войдите в админ-панель WordPress: `https://ekaterina-shul.ru/wp-admin`
+1. Войдите в админ-панель WordPress: `https://your-domain.ru/wp-admin`
 2. **Внешний вид → Темы**
-3. Найдите "Ekaterina Portfolio"
+3. Найдите тему "Портфолио"
 4. Нажмите "Активировать"
 
 ### 2. Установка плагина SCF
@@ -134,7 +134,7 @@ cd ..
 - [ ] Формы работают (проверьте отправку)
 - [ ] SCF плагин установлен и активирован
 - [ ] SCF поля отображаются в админ-панели
-- [ ] Сайт отображается корректно на ekaterina-shul.ru
+- [ ] Сайт отображается корректно на вашем домене
 
 ## Проверка настроек Beget
 
