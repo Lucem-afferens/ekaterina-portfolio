@@ -333,3 +333,49 @@ function ekaterina_get_social_name( $network ) {
     return isset( $names[ $network ] ) ? $names[ $network ] : $network;
 }
 
+/**
+ * Функция для получения URL страницы политики конфиденциальности
+ *
+ * @return string URL страницы политики конфиденциальности
+ */
+function ekaterina_get_privacy_policy_url() {
+    // Сначала проверяем настройки WordPress
+    $privacy_page_id = get_option( 'wp_page_for_privacy_policy' );
+    if ( $privacy_page_id ) {
+        $privacy_page = get_post( $privacy_page_id );
+        if ( $privacy_page && $privacy_page->post_status === 'publish' ) {
+            $url = get_permalink( $privacy_page_id );
+            if ( $url && $url !== home_url( '/' ) ) {
+                return $url;
+            }
+        }
+    }
+    
+    // Если не найдено через настройки, используем функцию WordPress
+    $url = get_privacy_policy_url();
+    if ( $url && $url !== home_url( '/' ) ) {
+        return $url;
+    }
+    
+    // Если не найдено, ищем по slug
+    $privacy_page = get_page_by_path( 'privacy-policy' );
+    if ( $privacy_page && $privacy_page->post_status === 'publish' ) {
+        $url = get_permalink( $privacy_page->ID );
+        if ( $url && $url !== home_url( '/' ) ) {
+            return $url;
+        }
+    }
+    
+    // Если не найдено, ищем по названию
+    $privacy_page_by_title = get_page_by_title( 'Политика конфиденциальности' );
+    if ( $privacy_page_by_title && $privacy_page_by_title->post_status === 'publish' ) {
+        $url = get_permalink( $privacy_page_by_title->ID );
+        if ( $url && $url !== home_url( '/' ) ) {
+            return $url;
+        }
+    }
+    
+    // Fallback на стандартный URL
+    return home_url( '/privacy-policy/' );
+}
+

@@ -62,17 +62,8 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
             
             <?php
-            // Получаем URL страницы политики конфиденциальности
-            $privacy_url = get_privacy_policy_url();
-            if ( ! $privacy_url ) {
-                // Если страница не установлена в настройках WordPress, используем страницу по умолчанию
-                $privacy_page = get_page_by_path( 'privacy-policy' );
-                if ( $privacy_page ) {
-                    $privacy_url = get_permalink( $privacy_page->ID );
-                } else {
-                    $privacy_url = home_url( '/privacy-policy/' );
-                }
-            }
+            // Получаем URL страницы политики конфиденциальности через вспомогательную функцию
+            $privacy_url = ekaterina_get_privacy_policy_url();
             ?>
             <div class="form-group form-group-checkbox">
                 <label class="checkbox-label" for="request-privacy">

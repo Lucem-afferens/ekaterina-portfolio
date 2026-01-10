@@ -1813,6 +1813,7 @@
             border-radius: 0;
             position: relative;
             transition: all 0.3s;
+            box-sizing: border-box;
         }
         
         .checkbox-label input[type="checkbox"]:checked {
@@ -1825,11 +1826,12 @@
             position: absolute;
             left: 5px;
             top: 2px;
-            width: 6px;
-            height: 10px;
+            width: 5px;
+            height: 9px;
             border: solid #f8f6f3;
             border-width: 0 2px 2px 0;
             transform: rotate(45deg);
+            box-sizing: border-box;
         }
         
         .checkbox-label input[type="checkbox"]:focus {

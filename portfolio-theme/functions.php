@@ -50,8 +50,17 @@ require_once EKATERINA_THEME_DIR . '/inc/scf-fields.php';
  * Создание страницы политики конфиденциальности при активации темы
  */
 function ekaterina_create_privacy_policy_page() {
-    // Проверяем, существует ли уже страница политики конфиденциальности
+    // Проверяем, существует ли уже страница политики конфиденциальности по slug
     $privacy_page = get_page_by_path( 'privacy-policy' );
+    
+    // Также проверяем по ID из настроек WordPress
+    $privacy_page_id_option = get_option( 'wp_page_for_privacy_policy' );
+    if ( $privacy_page_id_option ) {
+        $privacy_page_by_id = get_post( $privacy_page_id_option );
+        if ( $privacy_page_by_id && $privacy_page_by_id->post_status === 'publish' ) {
+            $privacy_page = $privacy_page_by_id;
+        }
+    }
     
     if ( ! $privacy_page ) {
         // Создаем страницу с базовым контентом политики конфиденциальности
@@ -156,14 +165,52 @@ function ekaterina_create_privacy_policy_page() {
             'post_type'     => 'page',
             'post_name'     => 'privacy-policy',
             'post_author'   => 1,
-            'page_template' => 'template-privacy-policy.php',
-        ) );
+        ), true ); // true для возврата WP_Error при ошибке
 
-        // Устанавливаем страницу политики конфиденциальности в настройках WordPress
+        // Устанавливаем шаблон страницы и страницу политики конфиденциальности в настройках WordPress
         if ( $privacy_page_id && ! is_wp_error( $privacy_page_id ) ) {
+            // Назначаем шаблон страницы (путь должен быть относительно корня темы)
+            update_post_meta( $privacy_page_id, '_wp_page_template', 'templates/template-privacy-policy.php' );
+            // Устанавливаем страницу политики конфиденциальности в настройках WordPress
             update_option( 'wp_page_for_privacy_policy', $privacy_page_id );
+            // Очищаем кеш постоянных ссылок для правильной работы permalink
+            delete_option( 'rewrite_rules' );
+        }
+    } else {
+        // Если страница уже существует, проверяем и обновляем её при необходимости
+        if ( $privacy_page && $privacy_page->post_status !== 'publish' ) {
+            // Если страница существует, но не опубликована, публикуем её
+            wp_update_post( array(
+                'ID'          => $privacy_page->ID,
+                'post_status' => 'publish',
+            ) );
+        }
+        
+        // Убеждаемся, что шаблон назначен правильно
+        $current_template = get_post_meta( $privacy_page->ID, '_wp_page_template', true );
+        if ( empty( $current_template ) || $current_template === 'default' ) {
+            update_post_meta( $privacy_page->ID, '_wp_page_template', 'templates/template-privacy-policy.php' );
+        }
+        
+        // Убеждаемся, что страница установлена в настройках WordPress
+        $current_privacy_id = get_option( 'wp_page_for_privacy_policy' );
+        if ( empty( $current_privacy_id ) || $current_privacy_id != $privacy_page->ID ) {
+            update_option( 'wp_page_for_privacy_policy', $privacy_page->ID );
         }
     }
 }
 add_action( 'after_switch_theme', 'ekaterina_create_privacy_policy_page' );
+
+/**
+ * Хук для обновления постоянных ссылок при сохранении страницы политики
+ */
+function ekaterina_update_privacy_page_permalink( $post_id ) {
+    // Проверяем, что это страница политики конфиденциальности
+    $privacy_page_id = get_option( 'wp_page_for_privacy_policy' );
+    if ( $privacy_page_id == $post_id ) {
+        // Очищаем кеш постоянных ссылок
+        delete_option( 'rewrite_rules' );
+    }
+}
+add_action( 'save_post_page', 'ekaterina_update_privacy_page_permalink' );
 
