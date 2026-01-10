@@ -118,6 +118,10 @@ if ( empty( $testimonials_list ) || ! is_array( $testimonials_list ) ) {
         // Получаем ссылку для кнопки "Оставить отзыв" из SCF
         $testimonials_cta_link = function_exists( 'get_field' ) ? get_field( 'testimonials_cta_link', $current_page_id ) : null;
         
+        // Получаем текст кнопки из SCF (с fallback на "ОСТАВИТЬ ОТЗЫВ")
+        $testimonials_cta_text = function_exists( 'get_field' ) ? get_field( 'testimonials_cta_text', $current_page_id ) : null;
+        $testimonials_cta_text = ! empty( $testimonials_cta_text ) ? trim( $testimonials_cta_text ) : 'ОСТАВИТЬ ОТЗЫВ';
+        
         // Если ссылка указана, показываем кнопку со ссылкой
         if ( ! empty( $testimonials_cta_link ) ) :
             // Нормализуем ссылку (обеспечиваем HTTPS для внешних ссылок)
@@ -142,7 +146,7 @@ if ( empty( $testimonials_list ) || ! is_array( $testimonials_list ) ) {
                        target="_blank" 
                        rel="noopener noreferrer"
                    <?php endif; ?>>
-                    ОСТАВИТЬ ОТЗЫВ
+                    <?php echo esc_html( $testimonials_cta_text ); ?>
                 </a>
             </div>
         <?php endif; ?>
