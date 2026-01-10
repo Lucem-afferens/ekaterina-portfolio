@@ -1824,14 +1824,13 @@
         .checkbox-label input[type="checkbox"]:checked::after {
             content: '';
             position: absolute;
-            left: 6px;
-            top: 3px;
+            left: 5px;
+            top: 2px;
             width: 5px;
-            height: 9px;
+            height: 8px;
             border: solid #f8f6f3;
             border-width: 0 2px 2px 0;
             transform: rotate(45deg);
-            transform-origin: 0 0;
             box-sizing: border-box;
         }
         
