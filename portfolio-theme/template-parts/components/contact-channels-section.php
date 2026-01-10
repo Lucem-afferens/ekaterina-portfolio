@@ -17,6 +17,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Получаем ID текущей страницы для правильного контекста
 $current_page_id = ekaterina_get_current_page_id();
 
+// Проверяем, включена ли секция Contact Channels
+$contact_channels_enabled = function_exists( 'get_field' ) ? get_field( 'contact_channels_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $contact_channels_enabled === null ) {
+    $contact_channels_enabled = true;
+}
+// Преобразуем в boolean
+$contact_channels_enabled = (bool) $contact_channels_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $contact_channels_enabled ) {
+    return;
+}
+
 // Пробуем разные варианты имен полей для совместимости
 $channels_label = function_exists( 'get_field' ) ? get_field( 'channels_label', $current_page_id ) : null;
 // Также пробуем альтернативное имя поля из документации

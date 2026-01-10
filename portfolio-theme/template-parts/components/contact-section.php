@@ -17,6 +17,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Получаем ID текущей страницы для правильного контекста
 $current_page_id = ekaterina_get_current_page_id();
 
+// Проверяем, включена ли секция Contact
+$contact_enabled = function_exists( 'get_field' ) ? get_field( 'contact_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $contact_enabled === null ) {
+    $contact_enabled = true;
+}
+// Преобразуем в boolean
+$contact_enabled = (bool) $contact_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $contact_enabled ) {
+    return;
+}
+
 $contact_title = function_exists( 'get_field' ) ? get_field( 'contact_title', $current_page_id ) : null;
 $contact_title = $contact_title ?: 'Свяжитесь со мной';
 

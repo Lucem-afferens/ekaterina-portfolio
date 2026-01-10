@@ -14,9 +14,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Получаем данные из SCF
-$philosophy_title = ekaterina_get_scf_field( 'philosophy_title', 'Философия работы' );
-$philosophy_quote = ekaterina_get_scf_field( 'philosophy_quote', '"Настоящая элегантность не привлекает внимание к себе, она создаёт пространство, в котором каждый гость чувствует себя особенным"' );
-$philosophy_principles = ekaterina_get_scf_repeater( 'philosophy_principles' );
+// Получаем ID текущей страницы для правильного контекста
+$current_page_id = ekaterina_get_current_page_id();
+
+// Проверяем, включена ли секция Philosophy
+$philosophy_enabled = function_exists( 'get_field' ) ? get_field( 'philosophy_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $philosophy_enabled === null ) {
+    $philosophy_enabled = true;
+}
+// Преобразуем в boolean
+$philosophy_enabled = (bool) $philosophy_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $philosophy_enabled ) {
+    return;
+}
+
+$philosophy_title = function_exists( 'get_field' ) ? get_field( 'philosophy_title', $current_page_id ) : null;
+$philosophy_title = $philosophy_title ?: 'Философия работы';
+$philosophy_quote = function_exists( 'get_field' ) ? get_field( 'philosophy_quote', $current_page_id ) : null;
+$philosophy_quote = $philosophy_quote ?: '"Настоящая элегантность не привлекает внимание к себе, она создаёт пространство, в котором каждый гость чувствует себя особенным"';
+$philosophy_principles = function_exists( 'get_field' ) ? get_field( 'philosophy_principles', $current_page_id ) : false;
 
 // Если принципы не заполнены, используем дефолтные значения
 if ( empty( $philosophy_principles ) ) {

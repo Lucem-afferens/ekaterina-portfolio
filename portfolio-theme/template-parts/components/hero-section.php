@@ -17,6 +17,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Получаем ID текущей страницы для правильного контекста
 $current_page_id = ekaterina_get_current_page_id();
 
+// Проверяем, включена ли секция Hero
+$hero_enabled = function_exists( 'get_field' ) ? get_field( 'hero_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $hero_enabled === null ) {
+    $hero_enabled = true;
+}
+// Преобразуем в boolean
+$hero_enabled = (bool) $hero_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $hero_enabled ) {
+    return;
+}
+
 // Пробуем разные варианты получения полей для совместимости
 $hero_name = function_exists( 'get_field' ) ? get_field( 'hero_name', $current_page_id ) : null;
 // Также пробуем без передачи ID (автоматически используется текущая страница)

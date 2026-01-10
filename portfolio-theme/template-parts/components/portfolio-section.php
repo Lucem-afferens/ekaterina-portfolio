@@ -17,6 +17,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Получаем ID текущей страницы для правильного контекста
 $current_page_id = ekaterina_get_current_page_id();
 
+// Проверяем, включена ли секция Portfolio
+$portfolio_enabled = function_exists( 'get_field' ) ? get_field( 'portfolio_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $portfolio_enabled === null ) {
+    $portfolio_enabled = true;
+}
+// Преобразуем в boolean
+$portfolio_enabled = (bool) $portfolio_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $portfolio_enabled ) {
+    return;
+}
+
 $portfolio_title = function_exists( 'get_field' ) ? get_field( 'portfolio_title', $current_page_id ) : null;
 $portfolio_title = $portfolio_title ?: 'Портфолио';
 

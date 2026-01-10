@@ -17,6 +17,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Получаем ID текущей страницы для правильного контекста
 $current_page_id = ekaterina_get_current_page_id();
 
+// Проверяем, включена ли секция Recognition
+$recognition_enabled = function_exists( 'get_field' ) ? get_field( 'recognition_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $recognition_enabled === null ) {
+    $recognition_enabled = true;
+}
+// Преобразуем в boolean
+$recognition_enabled = (bool) $recognition_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $recognition_enabled ) {
+    return;
+}
+
 $recognition_title = function_exists( 'get_field' ) ? get_field( 'recognition_title', $current_page_id ) : null;
 $recognition_title = $recognition_title ?: 'Признание';
 

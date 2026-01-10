@@ -14,11 +14,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Получаем данные из SCF (используем get_field() напрямую, как в Tochka-Gg)
-$about_title = function_exists( 'get_field' ) ? get_field( 'about_title' ) : null;
+// Получаем ID текущей страницы для правильного контекста
+$current_page_id = ekaterina_get_current_page_id();
+
+// Проверяем, включена ли секция About
+$about_enabled = function_exists( 'get_field' ) ? get_field( 'about_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $about_enabled === null ) {
+    $about_enabled = true;
+}
+// Преобразуем в boolean
+$about_enabled = (bool) $about_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $about_enabled ) {
+    return;
+}
+
+$about_title = function_exists( 'get_field' ) ? get_field( 'about_title', $current_page_id ) : null;
 $about_title = $about_title ?: 'Профессиональный путь';
 
-$about_timeline = function_exists( 'get_field' ) ? get_field( 'about_timeline' ) : false;
-$about_image = function_exists( 'get_field' ) ? get_field( 'about_image' ) : false;
+$about_timeline = function_exists( 'get_field' ) ? get_field( 'about_timeline', $current_page_id ) : false;
+$about_image = function_exists( 'get_field' ) ? get_field( 'about_image', $current_page_id ) : false;
 
 // Если timeline не заполнен, используем дефолтные значения
 if ( empty( $about_timeline ) ) {

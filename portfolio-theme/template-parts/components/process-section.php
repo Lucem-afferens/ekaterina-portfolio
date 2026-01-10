@@ -17,6 +17,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Получаем ID текущей страницы для правильного контекста
 $current_page_id = ekaterina_get_current_page_id();
 
+// Проверяем, включена ли секция Process
+$process_enabled = function_exists( 'get_field' ) ? get_field( 'process_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $process_enabled === null ) {
+    $process_enabled = true;
+}
+// Преобразуем в boolean
+$process_enabled = (bool) $process_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $process_enabled ) {
+    return;
+}
+
 $process_title = function_exists( 'get_field' ) ? get_field( 'process_title', $current_page_id ) : null;
 $process_title = $process_title ?: 'Процесс работы';
 

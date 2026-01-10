@@ -17,6 +17,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Получаем ID текущей страницы для правильного контекста
 $current_page_id = ekaterina_get_current_page_id();
 
+// Проверяем, включена ли секция Services
+$services_enabled = function_exists( 'get_field' ) ? get_field( 'services_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $services_enabled === null ) {
+    $services_enabled = true;
+}
+// Преобразуем в boolean
+$services_enabled = (bool) $services_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $services_enabled ) {
+    return;
+}
+
 $services_title = function_exists( 'get_field' ) ? get_field( 'services_title', $current_page_id ) : null;
 $services_title = $services_title ?: 'Услуги';
 

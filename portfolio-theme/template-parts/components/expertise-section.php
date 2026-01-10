@@ -17,6 +17,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Получаем ID текущей страницы для правильного контекста
 $current_page_id = ekaterina_get_current_page_id();
 
+// Проверяем, включена ли секция Expertise
+$expertise_enabled = function_exists( 'get_field' ) ? get_field( 'expertise_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $expertise_enabled === null ) {
+    $expertise_enabled = true;
+}
+// Преобразуем в boolean
+$expertise_enabled = (bool) $expertise_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $expertise_enabled ) {
+    return;
+}
+
 $expertise_title = function_exists( 'get_field' ) ? get_field( 'expertise_title', $current_page_id ) : null;
 $expertise_title = $expertise_title ?: 'Экспертиза';
 

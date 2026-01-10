@@ -14,11 +14,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Получаем данные из SCF (используем get_field() напрямую, как в Tochka-Gg)
-$intro_title = function_exists( 'get_field' ) ? get_field( 'intro_title' ) : null;
+// Получаем ID текущей страницы для правильного контекста
+$current_page_id = ekaterina_get_current_page_id();
+
+// Проверяем, включена ли секция Introduction
+$introduction_enabled = function_exists( 'get_field' ) ? get_field( 'introduction_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $introduction_enabled === null ) {
+    $introduction_enabled = true;
+}
+// Преобразуем в boolean
+$introduction_enabled = (bool) $introduction_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $introduction_enabled ) {
+    return;
+}
+
+$intro_title = function_exists( 'get_field' ) ? get_field( 'intro_title', $current_page_id ) : null;
 $intro_title = $intro_title ?: 'Создаю качественные<br/>решения для вашего проекта';
 
-$intro_description = function_exists( 'get_field' ) ? get_field( 'intro_description' ) : '';
-$intro_image = function_exists( 'get_field' ) ? get_field( 'intro_image' ) : false;
+$intro_description = function_exists( 'get_field' ) ? get_field( 'intro_description', $current_page_id ) : '';
+$intro_image = function_exists( 'get_field' ) ? get_field( 'intro_image', $current_page_id ) : false;
 
 // Получаем URL изображения
 // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID

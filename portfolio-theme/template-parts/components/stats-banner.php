@@ -14,7 +14,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Получаем данные из SCF (используем get_field() напрямую, как в Tochka-Gg)
-$stats_items = function_exists( 'get_field' ) ? get_field( 'stats_items' ) : false;
+// Получаем ID текущей страницы для правильного контекста
+$current_page_id = ekaterina_get_current_page_id();
+
+// Проверяем, включена ли секция Stats
+$stats_enabled = function_exists( 'get_field' ) ? get_field( 'stats_enabled', $current_page_id ) : true;
+// Если поле не установлено, по умолчанию секция включена
+if ( $stats_enabled === null ) {
+    $stats_enabled = true;
+}
+// Преобразуем в boolean
+$stats_enabled = (bool) $stats_enabled;
+
+// Если секция отключена, не выводим её
+if ( ! $stats_enabled ) {
+    return;
+}
+
+$stats_items = function_exists( 'get_field' ) ? get_field( 'stats_items', $current_page_id ) : false;
 
 // Если статистика не заполнена, используем дефолтные значения
 if ( empty( $stats_items ) ) {
