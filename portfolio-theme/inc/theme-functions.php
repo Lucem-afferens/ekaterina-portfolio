@@ -334,6 +334,59 @@ function ekaterina_get_social_name( $network ) {
 }
 
 /**
+ * Функция для проверки, является ли страница страницей политики конфиденциальности
+ *
+ * @param int|WP_Post|null $post_id ID страницы или объект страницы. Если не указан, используется текущая страница.
+ * @return bool true если это страница политики конфиденциальности
+ */
+function ekaterina_is_privacy_policy_page( $post_id = null ) {
+    if ( ! $post_id ) {
+        global $post;
+        if ( ! $post ) {
+            return false;
+        }
+        $post_id = $post->ID;
+        $post_obj = $post;
+    } else {
+        $post_obj = get_post( $post_id );
+        if ( ! $post_obj ) {
+            return false;
+        }
+    }
+    
+    // Проверяем, что это страница (post_type = 'page')
+    if ( $post_obj->post_type !== 'page' ) {
+        return false;
+    }
+    
+    // Проверяем шаблон страницы
+    $page_template = get_page_template_slug( $post_id );
+    if ( $page_template === 'templates/template-privacy-policy.php' ) {
+        return true;
+    }
+    
+    // Проверяем по slug
+    $post_slug = $post_obj->post_name;
+    $slug_patterns = array( 'privacy-policy', 'politika-konfidentsialnosti', 'politika', 'privacy' );
+    foreach ( $slug_patterns as $pattern ) {
+        if ( $post_slug === $pattern || strpos( strtolower( $post_slug ), $pattern ) !== false ) {
+            return true;
+        }
+    }
+    
+    // Проверяем по названию
+    $post_title = $post_obj->post_title;
+    $title_patterns = array( 'Политика конфиденциальности', 'Privacy Policy', 'политика', 'privacy' );
+    foreach ( $title_patterns as $pattern ) {
+        if ( stripos( $post_title, $pattern ) !== false ) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+/**
  * Функция для получения URL страницы политики конфиденциальности
  *
  * @return string URL страницы политики конфиденциальности
@@ -357,19 +410,40 @@ function ekaterina_get_privacy_policy_url() {
         return $url;
     }
     
-    // Если не найдено, ищем по slug
-    $privacy_page = get_page_by_path( 'privacy-policy' );
-    if ( $privacy_page && $privacy_page->post_status === 'publish' ) {
-        $url = get_permalink( $privacy_page->ID );
-        if ( $url && $url !== home_url( '/' ) ) {
-            return $url;
+    // Если не найдено, ищем по slug (различные варианты)
+    $slug_variants = array( 'privacy-policy', 'politika-konfidentsialnosti', 'privacy', 'politika' );
+    foreach ( $slug_variants as $slug ) {
+        $privacy_page = get_page_by_path( $slug );
+        if ( $privacy_page && $privacy_page->post_status === 'publish' ) {
+            $url = get_permalink( $privacy_page->ID );
+            if ( $url && $url !== home_url( '/' ) ) {
+                return $url;
+            }
         }
     }
     
     // Если не найдено, ищем по названию
-    $privacy_page_by_title = get_page_by_title( 'Политика конфиденциальности' );
-    if ( $privacy_page_by_title && $privacy_page_by_title->post_status === 'publish' ) {
-        $url = get_permalink( $privacy_page_by_title->ID );
+    $title_variants = array( 'Политика конфиденциальности', 'Privacy Policy' );
+    foreach ( $title_variants as $title ) {
+        $privacy_page_by_title = get_page_by_title( $title );
+        if ( $privacy_page_by_title && $privacy_page_by_title->post_status === 'publish' ) {
+            $url = get_permalink( $privacy_page_by_title->ID );
+            if ( $url && $url !== home_url( '/' ) ) {
+                return $url;
+            }
+        }
+    }
+    
+    // Если не найдено, ищем любую опубликованную страницу с "политика" в названии или slug
+    $pages = get_pages( array(
+        'post_status' => 'publish',
+        'number' => 1,
+        'meta_key' => '_wp_page_template',
+        'meta_value' => 'templates/template-privacy-policy.php',
+    ) );
+    
+    if ( ! empty( $pages ) ) {
+        $url = get_permalink( $pages[0]->ID );
         if ( $url && $url !== home_url( '/' ) ) {
             return $url;
         }

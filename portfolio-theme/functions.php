@@ -211,6 +211,58 @@ function ekaterina_update_privacy_page_permalink( $post_id ) {
         // Очищаем кеш постоянных ссылок
         delete_option( 'rewrite_rules' );
     }
+    
+    // Автоматически назначаем шаблон для страницы политики, если это она
+    if ( function_exists( 'ekaterina_is_privacy_policy_page' ) ) {
+        $post = get_post( $post_id );
+        if ( $post && ekaterina_is_privacy_policy_page( $post_id ) ) {
+            $current_template = get_post_meta( $post_id, '_wp_page_template', true );
+            if ( empty( $current_template ) || $current_template === 'default' ) {
+                update_post_meta( $post_id, '_wp_page_template', 'templates/template-privacy-policy.php' );
+            }
+            // Устанавливаем страницу в настройках WordPress, если еще не установлена
+            $current_privacy_id = get_option( 'wp_page_for_privacy_policy' );
+            if ( empty( $current_privacy_id ) || $current_privacy_id != $post_id ) {
+                update_option( 'wp_page_for_privacy_policy', $post_id );
+            }
+        }
+    }
 }
 add_action( 'save_post_page', 'ekaterina_update_privacy_page_permalink' );
+
+/**
+ * Функция для автоматического назначения шаблона для существующих страниц политики
+ * Вызывается при загрузке админ-панели
+ */
+function ekaterina_fix_privacy_page_template() {
+    // Проверяем только в админ-панели
+    if ( ! is_admin() ) {
+        return;
+    }
+    
+    // Ищем все страницы с политикой конфиденциальности
+    $pages = get_pages( array(
+        'post_status' => array( 'publish', 'draft' ),
+        'number' => -1,
+    ) );
+    
+    foreach ( $pages as $page ) {
+        if ( function_exists( 'ekaterina_is_privacy_policy_page' ) && ekaterina_is_privacy_policy_page( $page->ID ) ) {
+            $current_template = get_post_meta( $page->ID, '_wp_page_template', true );
+            if ( empty( $current_template ) || $current_template === 'default' ) {
+                update_post_meta( $page->ID, '_wp_page_template', 'templates/template-privacy-policy.php' );
+            }
+            // Убеждаемся, что страница опубликована
+            if ( $page->post_status !== 'publish' ) {
+                wp_update_post( array(
+                    'ID' => $page->ID,
+                    'post_status' => 'publish',
+                ) );
+            }
+            // Устанавливаем страницу в настройках WordPress
+            update_option( 'wp_page_for_privacy_policy', $page->ID );
+        }
+    }
+}
+add_action( 'admin_init', 'ekaterina_fix_privacy_page_template', 20 );
 
