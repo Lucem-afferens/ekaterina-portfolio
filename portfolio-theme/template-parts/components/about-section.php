@@ -26,7 +26,7 @@ if ( empty( $about_timeline ) ) {
         array(
             'timeline_year' => '2022',
             'timeline_title' => 'Начало карьеры',
-            'timeline_description' => 'Первые шаги в индустрии событий, работа с локальными площадками и частными мероприятиями',
+            'timeline_description' => 'Начало профессиональной деятельности, первые проекты и достижения',
         ),
         array(
             'timeline_year' => '2023',
@@ -41,7 +41,7 @@ if ( empty( $about_timeline ) ) {
         array(
             'timeline_year' => '2025',
             'timeline_title' => 'Настоящее время',
-            'timeline_description' => 'Статус ведущей премиум-сегмента Пермского края, более 300 успешных мероприятий',
+            'timeline_description' => 'Текущий статус и достижения, количество успешных проектов',
         ),
     );
 }

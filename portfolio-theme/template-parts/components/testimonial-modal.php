@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
             
             <div class="form-group">
-                <label for="testimonial-event">Тип мероприятия</label>
+                <label for="testimonial-event">Тип проекта</label>
                 <input type="text" id="testimonial-event" name="event" placeholder="Например: Корпоративный юбилей">
             </div>
             

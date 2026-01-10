@@ -24,12 +24,12 @@ $expertise_items = function_exists( 'get_field' ) ? get_field( 'expertise_items'
 if ( empty( $expertise_items ) || ! is_array( $expertise_items ) ) {
     // Если элементы не заполнены, используем дефолтные значения
     $expertise_items = array(
-        array( 'expertise_title' => 'Корпоративные мероприятия', 'expertise_description' => 'Юбилеи компаний, бизнес-форумы, награждения, тимбилдинги, новогодние корпоративы' ),
-        array( 'expertise_title' => 'Свадебные торжества', 'expertise_description' => 'Классические и тематические свадьбы, выездные регистрации, камерные церемонии' ),
-        array( 'expertise_title' => 'Частные приёмы', 'expertise_description' => 'Юбилеи, семейные торжества, дни рождения в премиум-формате' ),
-        array( 'expertise_title' => 'Благотворительные вечера', 'expertise_description' => 'Гала-ужины, аукционы, фандрайзинговые мероприятия' ),
-        array( 'expertise_title' => 'Презентации и запуски', 'expertise_description' => 'Открытия бизнесов, презентации продуктов, пресс-конференции' ),
-        array( 'expertise_title' => 'Конференции', 'expertise_description' => 'Модерация панельных дискуссий, ведение пленарных заседаний' ),
+        array( 'expertise_title' => 'Веб-разработка', 'expertise_description' => 'Разработка веб-приложений, интернет-магазинов, корпоративных сайтов' ),
+        array( 'expertise_title' => 'UX/UI Дизайн', 'expertise_description' => 'Создание интерфейсов, проектирование пользовательского опыта, визуальный дизайн' ),
+        array( 'expertise_title' => 'Мобильная разработка', 'expertise_description' => 'Разработка мобильных приложений для iOS и Android' ),
+        array( 'expertise_title' => 'Консалтинг', 'expertise_description' => 'Техническое консультирование, аудит проектов, стратегическое планирование' ),
+        array( 'expertise_title' => 'Интеграции', 'expertise_description' => 'Интеграция систем, работа с API, автоматизация процессов' ),
+        array( 'expertise_title' => 'Поддержка', 'expertise_description' => 'Техническая поддержка проектов, обновления и оптимизация' ),
     );
 }
 ?>

@@ -124,11 +124,11 @@ function ekaterina_handle_request_form() {
         wp_send_json_error( array( 'message' => 'Необходимо согласиться с политикой конфиденциальности' ) );
     }
 
-    // Маппинг типов мероприятий для читаемого отображения
+    // Маппинг типов проектов для читаемого отображения
     $event_types_map = array(
         'wedding' => 'Свадьба',
         'corporate' => 'Корпоративное мероприятие',
-        'private' => 'Частный приём',
+        'private' => 'Частное мероприятие',
         'charity' => 'Благотворительное мероприятие',
         'conference' => 'Конференция',
         'other' => 'Другое',
@@ -146,7 +146,7 @@ function ekaterina_handle_request_form() {
         $email_body .= "Email: $email\n";
     }
     if ( ! empty( $event_type_display ) ) {
-        $email_body .= "Тип мероприятия: $event_type_display\n";
+        $email_body .= "Тип проекта: $event_type_display\n";
     }
     if ( ! empty( $date ) ) {
         // Форматируем дату для читаемости
@@ -168,7 +168,7 @@ function ekaterina_handle_request_form() {
         $telegram_message .= "<b>Email:</b> " . esc_html( $email ) . "\n";
     }
     if ( ! empty( $event_type_display ) ) {
-        $telegram_message .= "<b>Тип мероприятия:</b> " . esc_html( $event_type_display ) . "\n";
+        $telegram_message .= "<b>Тип проекта:</b> " . esc_html( $event_type_display ) . "\n";
     }
     if ( ! empty( $date ) ) {
         $date_formatted = date_i18n( 'd.m.Y', strtotime( $date ) );
@@ -263,7 +263,7 @@ function ekaterina_handle_testimonial_form() {
     }
     $email_body .= "Email: $email\n";
     if ( ! empty( $event ) ) {
-        $email_body .= "Тип мероприятия: $event\n";
+        $email_body .= "Тип проекта: $event\n";
     }
     $email_body .= "Отзыв: $message\n";
 

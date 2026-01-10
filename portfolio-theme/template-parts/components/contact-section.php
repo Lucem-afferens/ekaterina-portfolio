@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $current_page_id = ekaterina_get_current_page_id();
 
 $contact_title = function_exists( 'get_field' ) ? get_field( 'contact_title', $current_page_id ) : null;
-$contact_title = $contact_title ?: 'Обсудим ваше мероприятие';
+$contact_title = $contact_title ?: 'Свяжитесь со мной';
 
 $contact_description = function_exists( 'get_field' ) ? get_field( 'contact_description', $current_page_id ) : null;
 $contact_description = $contact_description ?: 'Свяжитесь со мной для обсуждения деталей вашего события.<br/>Отвечу на все вопросы и помогу определиться с форматом.';

@@ -21,7 +21,7 @@ $portfolio_title = function_exists( 'get_field' ) ? get_field( 'portfolio_title'
 $portfolio_title = $portfolio_title ?: 'Портфолио';
 
 $portfolio_description = function_exists( 'get_field' ) ? get_field( 'portfolio_description', $current_page_id ) : null;
-$portfolio_description = $portfolio_description ?: 'Избранные моменты из проведённых мероприятий';
+$portfolio_description = $portfolio_description ?: 'Избранные работы из портфолио';
 
 // Убираем автоматически созданные p теги из описания, если они есть
 if ( ! empty( $portfolio_description ) ) {
@@ -247,7 +247,7 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
         <?php endif; ?>
         
         <div class="portfolio-cta-container">
-            <a href="#contact" class="portfolio-cta">ОБСУДИТЬ ВАШЕ МЕРОПРИЯТИЕ</a>
+            <a href="#contact" class="portfolio-cta">СВЯЗАТЬСЯ СО МНОЙ</a>
         </div>
     </div>
 </section>

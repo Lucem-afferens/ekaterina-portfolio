@@ -21,7 +21,7 @@ $process_title = function_exists( 'get_field' ) ? get_field( 'process_title', $c
 $process_title = $process_title ?: 'Процесс работы';
 
 $process_description = function_exists( 'get_field' ) ? get_field( 'process_description', $current_page_id ) : null;
-$process_description = $process_description ?: 'От первой встречи до завершения мероприятия';
+$process_description = $process_description ?: 'От первой встречи до завершения проекта';
 
 // Убираем автоматически созданные p теги из описания, если они есть
 if ( ! empty( $process_description ) ) {

@@ -23,14 +23,14 @@ $hero_name = function_exists( 'get_field' ) ? get_field( 'hero_name', $current_p
 if ( empty( $hero_name ) && function_exists( 'get_field' ) ) {
     $hero_name = get_field( 'hero_name' );
 }
-$hero_name = $hero_name ?: 'Екатерина<br/>Шулятникова';
+$hero_name = $hero_name ?: 'Ваше Имя';
 
 $hero_subtitle = function_exists( 'get_field' ) ? get_field( 'hero_subtitle', $current_page_id ) : null;
 // Также пробуем без передачи ID (автоматически используется текущая страница)
 if ( empty( $hero_subtitle ) && function_exists( 'get_field' ) ) {
     $hero_subtitle = get_field( 'hero_subtitle' );
 }
-$hero_subtitle = $hero_subtitle ?: 'Ведущая премиальных мероприятий<br/>Пермский край';
+$hero_subtitle = $hero_subtitle ?: 'Ваша специализация<br/>Локация';
 
 // Убираем автоматически созданные p теги из hero_subtitle
 // WordPress/SCF может автоматически оборачивать контент в p теги
@@ -54,7 +54,7 @@ $hero_cta_text = function_exists( 'get_field' ) ? get_field( 'hero_cta_text', $c
 if ( empty( $hero_cta_text ) && function_exists( 'get_field' ) ) {
     $hero_cta_text = get_field( 'hero_cta_text' );
 }
-$hero_cta_text = $hero_cta_text ?: 'ЗАБРОНИРОВАТЬ ДАТУ';
+$hero_cta_text = $hero_cta_text ?: 'СВЯЗАТЬСЯ СО МНОЙ';
 
 $hero_cta_link = function_exists( 'get_field' ) ? get_field( 'hero_cta_link', $current_page_id ) : null;
 // Также пробуем без передачи ID

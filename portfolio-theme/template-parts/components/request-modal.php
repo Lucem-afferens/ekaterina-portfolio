@@ -39,12 +39,12 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
             
             <div class="form-group">
-                <label for="request-event-type">Тип мероприятия</label>
+                <label for="request-event-type">Тип проекта</label>
                 <select id="request-event-type" name="event-type">
-                    <option value="">Выберите тип мероприятия</option>
+                    <option value="">Выберите тип проекта</option>
                     <option value="wedding">Свадьба</option>
                     <option value="corporate">Корпоративное мероприятие</option>
-                    <option value="private">Частный приём</option>
+                    <option value="private">Частное мероприятие</option>
                     <option value="charity">Благотворительное мероприятие</option>
                     <option value="conference">Конференция</option>
                     <option value="other">Другое</option>
@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             
             <div class="form-group">
                 <label for="request-message">Сообщение</label>
-                <textarea id="request-message" name="message" rows="4" placeholder="Расскажите о вашем мероприятии..."></textarea>
+                <textarea id="request-message" name="message" rows="4" placeholder="Расскажите о вашем проекте..."></textarea>
             </div>
             
             <?php

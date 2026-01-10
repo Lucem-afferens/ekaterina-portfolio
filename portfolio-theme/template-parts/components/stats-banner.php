@@ -21,7 +21,7 @@ if ( empty( $stats_items ) ) {
     $stats_items = array(
         array(
             'stat_number' => '300',
-            'stat_label' => 'МЕРОПРИЯТИЙ ПРОВЕДЕНО',
+            'stat_label' => 'ПРОЕКТОВ ВЫПОЛНЕНО',
         ),
         array(
             'stat_number' => '3',

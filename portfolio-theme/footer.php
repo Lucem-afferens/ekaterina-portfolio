@@ -22,7 +22,7 @@
                     $host_name = get_bloginfo( 'name' );
                 }
                 if ( empty( $host_title ) ) {
-                    $host_title = 'Ведущая премиальных мероприятий';
+                    $host_title = 'Ваша специализация';
                 }
                 ?>
                 <h4><?php echo esc_html( $host_name ); ?></h4>
