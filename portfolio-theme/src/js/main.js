@@ -395,66 +395,7 @@ import '../css/main.css';
         });
     }
     
-    // Обработка формы отзыва
-    const testimonialForm = document.getElementById('testimonial-form');
-    if (testimonialForm) {
-        testimonialForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Получаем данные формы
-            const formData = new FormData(this);
-            const name = document.getElementById('testimonial-name').value.trim();
-            const email = document.getElementById('testimonial-email').value.trim();
-            const message = document.getElementById('testimonial-message').value.trim();
-            
-            // Валидация обязательных полей
-            if (!name || !email || !message) {
-                alert('Пожалуйста, заполните все обязательные поля');
-                return;
-            }
-            
-            // Валидация email
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                alert('Пожалуйста, введите корректный email адрес');
-                return;
-            }
-            
-            // Добавляем nonce для безопасности
-            formData.append('action', 'ekaterina_testimonial_form');
-            if (typeof ekaterinaAjax !== 'undefined') {
-                formData.append('nonce', ekaterinaAjax.nonce);
-            }
-            
-            // Отправка через WordPress AJAX
-            fetch(ekaterinaAjax.ajaxurl, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Скрываем форму и показываем сообщение об успехе
-                    this.style.display = 'none';
-                    const successMessage = document.getElementById('testimonial-success');
-                    if (successMessage) {
-                        successMessage.style.display = 'block';
-                    }
-                    
-                    // Автоматически закрываем модальное окно через 6 секунд
-                    setTimeout(() => {
-                        closeModal('testimonial-modal');
-                    }, 6000);
-                } else {
-                    alert(data.data.message || 'Ошибка при отправке отзыва');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Ошибка при отправке отзыва. Пожалуйста, попробуйте позже.');
-            });
-        });
-    }
+    // Обработка формы отзыва больше не используется (кнопка теперь ведет на ссылку)
     
     // ========================================
     // Phone Input Mask

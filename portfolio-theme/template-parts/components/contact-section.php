@@ -278,8 +278,8 @@ $contact_vk_link = $contact_vk_link ?: 'https://vk.com/your-page';
 </section>
 
 <?php
-// Подключаем модальные окна
+// Подключаем модальное окно для заявки
 get_template_part( 'template-parts/components/request-modal' );
-get_template_part( 'template-parts/components/testimonial-modal' );
+// Модальное окно для отзывов больше не используется (кнопка теперь ведет на ссылку)
 ?>
 
