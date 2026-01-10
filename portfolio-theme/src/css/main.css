@@ -1773,6 +1773,35 @@
             min-height: 120px;
         }
         
+        /* Стили для ошибок валидации */
+        .form-group input.error,
+        .form-group select.error,
+        .form-group textarea.error {
+            border-color: #e74c3c;
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .form-group input.error:focus,
+        .form-group select.error:focus,
+        .form-group textarea.error:focus {
+            border-color: #e74c3c;
+            background-color: rgba(231, 76, 60, 0.15);
+        }
+        
+        .error-message {
+            display: block;
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+        
+        .form-group input:valid:not(:placeholder-shown),
+        .form-group input.error:valid:not(:placeholder-shown) {
+            border-color: rgba(248, 246, 243, 0.2);
+            background-color: rgba(58, 58, 58, 0.8);
+        }
+        
         .modal-submit-btn {
             background-color: #9d7e5f;
             border: 2px solid #9d7e5f;
@@ -4670,6 +4699,11 @@
             
             .form-group textarea {
                 min-height: 100px;
+            }
+            
+            .error-message {
+                font-size: 11px;
+                margin-top: 4px;
             }
             
             .modal-submit-btn {

@@ -342,6 +342,50 @@ import '../css/main.css';
     // Form Handling with WordPress AJAX
     // ========================================
     
+    /**
+     * Функция валидации российского номера телефона
+     * Принимает отформатированный номер (+7 (XXX) XXX-XX-XX) или сырые цифры
+     * Возвращает объект с результатом валидации
+     */
+    function validatePhone(phone) {
+        if (!phone || typeof phone !== 'string') {
+            return { valid: false, message: 'Номер телефона не указан' };
+        }
+        
+        // Убираем все нецифровые символы кроме +
+        const cleanPhone = phone.replace(/[^\d+]/g, '');
+        
+        // Убираем + для проверки
+        const digitsOnly = cleanPhone.replace(/\+/g, '');
+        
+        // Если начинается с 8, заменяем на 7
+        let normalized = digitsOnly;
+        if (normalized.startsWith('8')) {
+            normalized = '7' + normalized.slice(1);
+        }
+        
+        // Проверяем, что номер начинается с 7 и содержит 11 цифр (7 + 10 цифр номера)
+        if (!normalized.startsWith('7')) {
+            return { valid: false, message: 'Номер должен начинаться с +7 или 8' };
+        }
+        
+        if (normalized.length !== 11) {
+            return { valid: false, message: 'Номер должен содержать 11 цифр (включая код страны 7)' };
+        }
+        
+        // Проверяем, что код оператора (вторая цифра после 7) корректный (3, 4, 5, 6, 7, 8, 9)
+        const operatorCode = normalized.charAt(1);
+        if (!['3', '4', '5', '6', '7', '8', '9'].includes(operatorCode)) {
+            return { valid: false, message: 'Неверный код оператора' };
+        }
+        
+        // Форматируем номер для отображения (+7 (XXX) XXX-XX-XX)
+        const phoneDigits = normalized.slice(1); // 10 цифр без 7
+        const formatted = '+7 (' + phoneDigits.slice(0, 3) + ') ' + phoneDigits.slice(3, 6) + '-' + phoneDigits.slice(6, 8) + '-' + phoneDigits.slice(8, 10);
+        
+        return { valid: true, normalized: '+7' + phoneDigits, formatted: formatted };
+    }
+    
     // Обработка формы заявки
     const requestForm = document.getElementById('request-form');
     if (requestForm) {
@@ -350,20 +394,69 @@ import '../css/main.css';
             
             // Получаем данные формы
             const formData = new FormData(this);
-            const name = document.getElementById('request-name').value.trim();
-            const phone = document.getElementById('request-phone').value.trim();
+            const nameInput = document.getElementById('request-name');
+            const phoneInput = document.getElementById('request-phone');
             const privacyCheckbox = document.getElementById('request-privacy');
+            
+            const name = nameInput ? nameInput.value.trim() : '';
+            const phone = phoneInput ? phoneInput.value.trim() : '';
             
             // Валидация обязательных полей
             if (!name || !phone) {
                 alert('Пожалуйста, заполните все обязательные поля');
+                if (!name && nameInput) {
+                    nameInput.focus();
+                } else if (!phone && phoneInput) {
+                    phoneInput.focus();
+                }
                 return;
+            }
+            
+            // Валидация номера телефона
+            const phoneValidation = validatePhone(phone);
+            if (!phoneValidation.valid) {
+                alert('Ошибка: ' + phoneValidation.message + '\n\nПожалуйста, введите корректный номер телефона в формате: +7 (XXX) XXX-XX-XX');
+                if (phoneInput) {
+                    phoneInput.classList.add('error');
+                    phoneInput.focus();
+                    // Показываем сообщение об ошибке
+                    let phoneErrorMessage = phoneInput.parentElement.querySelector('.error-message');
+                    if (!phoneErrorMessage) {
+                        phoneErrorMessage = document.createElement('span');
+                        phoneErrorMessage.className = 'error-message';
+                        phoneInput.parentElement.appendChild(phoneErrorMessage);
+                    }
+                    phoneErrorMessage.textContent = phoneValidation.message;
+                }
+                return;
+            }
+            
+            // Убираем класс ошибки, если валидация прошла успешно
+            if (phoneInput) {
+                phoneInput.classList.remove('error');
+                const phoneErrorMessage = phoneInput.parentElement.querySelector('.error-message');
+                if (phoneErrorMessage) {
+                    phoneErrorMessage.remove();
+                }
+            }
+            
+            // Обновляем значение телефона на нормализованное (без форматирования) перед отправкой
+            // Но в поле оставляем отформатированное для красоты
+            if (phoneValidation.normalized) {
+                // Отправляем нормализованный номер (для обработки на сервере)
+                formData.set('phone', phoneValidation.formatted || phoneValidation.normalized);
+                // Обновляем поле на отформатированное значение для красоты
+                if (phoneInput && phoneValidation.formatted && phone !== phoneValidation.formatted) {
+                    phoneInput.value = phoneValidation.formatted;
+                }
             }
             
             // Валидация чекбокса политики конфиденциальности
             if (!privacyCheckbox || !privacyCheckbox.checked) {
                 alert('Необходимо согласиться с политикой конфиденциальности');
-                privacyCheckbox.focus();
+                if (privacyCheckbox) {
+                    privacyCheckbox.focus();
+                }
                 return;
             }
             
@@ -393,7 +486,26 @@ import '../css/main.css';
                         closeModal('request-modal');
                     }, 6000);
                 } else {
-                    alert(data.data.message || 'Ошибка при отправке заявки');
+                    // Обработка ошибок валидации с сервера
+                    const errorMessage = data.data && data.data.message ? data.data.message : 'Ошибка при отправке заявки';
+                    
+                    // Если ошибка связана с телефоном, показываем сообщение под полем
+                    if (errorMessage.toLowerCase().includes('телефон') || errorMessage.toLowerCase().includes('номер')) {
+                        if (phoneInput) {
+                            phoneInput.classList.add('error');
+                            phoneInput.focus();
+                            // Показываем сообщение об ошибке
+                            let phoneErrorMessage = phoneInput.parentElement.querySelector('.error-message');
+                            if (!phoneErrorMessage) {
+                                phoneErrorMessage = document.createElement('span');
+                                phoneErrorMessage.className = 'error-message';
+                                phoneInput.parentElement.appendChild(phoneErrorMessage);
+                            }
+                            phoneErrorMessage.textContent = errorMessage;
+                        }
+                    }
+                    
+                    alert(errorMessage);
                 }
             })
             .catch(error => {
@@ -406,12 +518,21 @@ import '../css/main.css';
     // Обработка формы отзыва больше не используется (кнопка теперь ведет на ссылку)
     
     // ========================================
-    // Phone Input Mask
+    // Phone Input Mask and Validation
     // ========================================
     const phoneInput = document.getElementById('request-phone');
     if (phoneInput) {
+        let phoneErrorMessage = null; // Элемент для сообщения об ошибке
+        
         phoneInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
+            
+            // Убираем сообщение об ошибке при вводе
+            if (phoneErrorMessage) {
+                phoneErrorMessage.remove();
+                phoneErrorMessage = null;
+            }
+            phoneInput.classList.remove('error');
             
             // Если начинается с 8, заменяем на 7
             if (value.startsWith('8')) {
@@ -436,6 +557,36 @@ import '../css/main.css';
                 e.target.value = formatted;
             } else if (value.length === 0) {
                 e.target.value = '';
+            }
+        });
+        
+        // Валидация при потере фокуса (blur)
+        phoneInput.addEventListener('blur', function(e) {
+            const phone = e.target.value.trim();
+            if (phone) {
+                const validation = validatePhone(phone);
+                if (!validation.valid) {
+                    phoneInput.classList.add('error');
+                    // Создаем сообщение об ошибке
+                    if (!phoneErrorMessage) {
+                        phoneErrorMessage = document.createElement('span');
+                        phoneErrorMessage.className = 'error-message';
+                        phoneErrorMessage.textContent = validation.message;
+                        phoneInput.parentElement.appendChild(phoneErrorMessage);
+                    } else {
+                        phoneErrorMessage.textContent = validation.message;
+                    }
+                } else {
+                    phoneInput.classList.remove('error');
+                    if (phoneErrorMessage) {
+                        phoneErrorMessage.remove();
+                        phoneErrorMessage = null;
+                    }
+                    // Обновляем значение на отформатированное (если отличается)
+                    if (validation.formatted && phone !== validation.formatted) {
+                        e.target.value = validation.formatted;
+                    }
+                }
             }
         });
         
