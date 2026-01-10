@@ -4757,6 +4757,10 @@
                 min-height: 120px;
             }
             
+            .checkbox-label {
+                font-size: 13px;
+            }
+            
             .modal-submit-btn {
                 padding: 16px 32px;
                 font-size: 12px;
