@@ -2818,7 +2818,7 @@
            Применяется ко всем устройствам с шириной менее 900px
            ======================================== */
         @media screen and (max-width: 899px) {
-            /* На мобильных устройствах: показываем только бургер, навигация скрыта */
+            /* На маленьких экранах: показываем бургер (для мобильных устройств) */
             .mobile-menu-toggle {
                 display: flex !important;
                 width: 44px;
@@ -2842,9 +2842,9 @@
                 opacity: 1; /* Убеждаемся, что span видим */
             }
             
-            /* Навигация скрыта по умолчанию на мобильных, показывается только при открытии меню */
+            /* Навигация скрыта по умолчанию на маленьких экранах, показывается только при открытии меню */
             .header-nav {
-                display: none; /* Скрываем навигацию на мобильных по умолчанию */
+                display: none; /* Скрываем навигацию на маленьких экранах по умолчанию */
                 position: fixed;
                 top: 0;
                 right: -100%;
@@ -2881,7 +2881,7 @@
         
         /* ========================================
            Breakpoint 3: Small Desktop (900px - 1023px)
-           Планшеты в альбоме, маленькие ноутбуки - Desktop menu
+           Планшеты в альбоме, маленькие ноутбуки
            ======================================== */
         @media screen and (min-width: 900px) and (max-width: 1023px) {
             /* Header */
@@ -2893,13 +2893,14 @@
                 font-size: clamp(22px, 2.75vw, 24px);
             }
             
-            /* На десктопе: скрываем бургер, показываем навигацию */
+            /* Для non-touch устройств на этом breakpoint: скрываем бургер, показываем навигацию */
+            /* (Для touch-устройств стили применяются из @media (hover: none) and (pointer: coarse)) */
             .mobile-menu-toggle {
-                display: none !important; /* Явно скрываем бургер на десктопе */
+                display: none; /* Скрываем бургер для non-touch устройств */
             }
             
             .header-nav {
-                display: flex !important; /* Явно показываем навигацию на десктопе */
+                display: flex; /* Показываем навигацию для non-touch устройств */
                 position: static;
                 flex-direction: row;
                 width: auto;
@@ -3527,13 +3528,14 @@
                 font-size: 24px;
             }
             
-            /* На десктопе: скрываем бургер, показываем навигацию */
+            /* Для non-touch устройств на этом breakpoint: скрываем бургер, показываем навигацию */
+            /* (Для touch-устройств стили применяются из @media (hover: none) and (pointer: coarse)) */
             .mobile-menu-toggle {
-                display: none !important; /* Явно скрываем бургер на десктопе */
+                display: none; /* Скрываем бургер для non-touch устройств */
             }
             
             .header-nav {
-                display: flex !important; /* Явно показываем навигацию на десктопе */
+                display: flex; /* Показываем навигацию для non-touch устройств */
                 position: static;
                 flex-direction: row;
                 width: auto;
@@ -3835,13 +3837,14 @@
                 font-size: 24px;
             }
             
-            /* На десктопе: скрываем бургер, показываем навигацию */
+            /* Для non-touch устройств на этом breakpoint: скрываем бургер, показываем навигацию */
+            /* (Для touch-устройств стили применяются из @media (hover: none) and (pointer: coarse)) */
             .mobile-menu-toggle {
-                display: none !important; /* Явно скрываем бургер на десктопе */
+                display: none; /* Скрываем бургер для non-touch устройств */
             }
             
             .header-nav {
-                display: flex !important; /* Явно показываем навигацию на десктопе */
+                display: flex; /* Показываем навигацию для non-touch устройств */
                 position: static;
                 flex-direction: row;
                 width: auto;
@@ -4025,6 +4028,72 @@
 
         /* Touch Device Optimizations */
         @media (hover: none) and (pointer: coarse) {
+            /* На всех touch-устройствах: показываем бургер, скрываем навигацию в шапке */
+            .mobile-menu-toggle {
+                display: flex !important; /* Показываем бургер на всех touch-устройствах */
+                min-height: 44px;
+                min-width: 44px;
+                width: 44px;
+                height: 44px;
+                flex-direction: column;
+                justify-content: center; /* Центрируем элементы по вертикали */
+                align-items: center;
+                padding: 10px 7px; /* Сохраняем padding для правильного отображения span */
+                gap: 5px; /* Расстояние между полосками */
+            }
+            
+            .mobile-menu-toggle span {
+                width: 100%;
+                height: 2px;
+                background-color: #f8f6f3;
+                border-radius: 2px;
+                display: block;
+                flex-shrink: 0;
+                opacity: 1;
+            }
+            
+            /* Навигация в шапке скрыта на всех touch-устройствах по умолчанию */
+            /* Навигация показывается только в боковом меню при открытии бургера */
+            .header-nav {
+                display: none !important; /* Скрываем навигацию в шапке на touch-устройствах */
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                max-width: 400px;
+                height: 100vh;
+                background-color: rgba(58, 58, 58, 0.98);
+                backdrop-filter: blur(24px);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 100px 40px 40px;
+                gap: 28px;
+                transition: right 0.3s ease;
+                z-index: 99;
+                box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+            }
+            
+            /* Когда меню открыто на touch-устройствах, показываем навигацию в боковом меню */
+            .header-nav.active {
+                display: flex !important; /* Показываем навигацию при открытии меню */
+                right: 0;
+            }
+            
+            /* Стили для ссылок в боковом меню на touch-устройствах */
+            .header-nav a {
+                font-size: 18px;
+                width: 100%;
+                padding: 12px 0;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid rgba(248, 246, 243, 0.1);
+            }
+            
+            .header-nav a:hover {
+                color: #9d7e5f;
+            }
+            
             /* Увеличиваем размеры кликабельных элементов для touch устройств (минимум 44px согласно рекомендациям Apple и Google) */
             .header-nav a,
             .header-cta,
@@ -4045,28 +4114,6 @@
                 align-items: center;
                 justify-content: center;
                 padding: 12px 16px;
-            }
-            
-            /* Специальные стили для бургер-кнопки, чтобы сохранить правильную структуру */
-            .mobile-menu-toggle {
-                min-height: 44px;
-                min-width: 44px;
-                display: flex !important; /* Используем flex для правильного отображения span */
-                flex-direction: column;
-                justify-content: center; /* Центрируем элементы по вертикали */
-                align-items: center;
-                padding: 10px 7px; /* Сохраняем padding для правильного отображения span */
-                gap: 5px; /* Расстояние между полосками */
-            }
-            
-            .mobile-menu-toggle span {
-                width: 100%;
-                height: 2px;
-                background-color: #f8f6f3;
-                border-radius: 2px;
-                display: block;
-                flex-shrink: 0;
-                opacity: 1;
             }
             
             /* Увеличиваем отступы между интерактивными элементами для удобства нажатия */
