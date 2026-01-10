@@ -109,10 +109,24 @@ function ekaterina_handle_request_form() {
     $name = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
     $phone = isset( $_POST['phone'] ) ? sanitize_text_field( $_POST['phone'] ) : '';
     $email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
+    $telegram = isset( $_POST['telegram'] ) ? sanitize_text_field( $_POST['telegram'] ) : '';
     $event_type = isset( $_POST['event-type'] ) ? sanitize_text_field( $_POST['event-type'] ) : '';
     $date = isset( $_POST['date'] ) ? sanitize_text_field( $_POST['date'] ) : '';
     $message = isset( $_POST['message'] ) ? sanitize_textarea_field( $_POST['message'] ) : '';
     $privacy = isset( $_POST['privacy'] ) ? sanitize_text_field( $_POST['privacy'] ) : '';
+    
+    // Очистка и форматирование Telegram username (убираем @ если есть, добавляем если нет)
+    if ( ! empty( $telegram ) ) {
+        $telegram = trim( $telegram );
+        // Убираем @ в начале, если есть
+        if ( strpos( $telegram, '@' ) === 0 ) {
+            $telegram = substr( $telegram, 1 );
+        }
+        // Добавляем @ для отображения
+        $telegram_display = '@' . $telegram;
+    } else {
+        $telegram_display = '';
+    }
 
     // Валидация обязательных полей
     if ( empty( $name ) || empty( $phone ) ) {
@@ -145,6 +159,9 @@ function ekaterina_handle_request_form() {
     if ( ! empty( $email ) ) {
         $email_body .= "Email: $email\n";
     }
+    if ( ! empty( $telegram_display ) ) {
+        $email_body .= "Telegram: $telegram_display\n";
+    }
     if ( ! empty( $event_type_display ) ) {
         $email_body .= "Тип проекта: $event_type_display\n";
     }
@@ -166,6 +183,9 @@ function ekaterina_handle_request_form() {
     $telegram_message .= "<b>Телефон:</b> " . esc_html( $phone ) . "\n";
     if ( ! empty( $email ) ) {
         $telegram_message .= "<b>Email:</b> " . esc_html( $email ) . "\n";
+    }
+    if ( ! empty( $telegram_display ) ) {
+        $telegram_message .= "<b>Telegram:</b> " . esc_html( $telegram_display ) . "\n";
     }
     if ( ! empty( $event_type_display ) ) {
         $telegram_message .= "<b>Тип проекта:</b> " . esc_html( $event_type_display ) . "\n";

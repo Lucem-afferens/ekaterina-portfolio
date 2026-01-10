@@ -39,6 +39,11 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
             
             <div class="form-group">
+                <label for="request-telegram">Telegram</label>
+                <input type="text" id="request-telegram" name="telegram" placeholder="@username">
+            </div>
+            
+            <div class="form-group">
                 <label for="request-event-type">Тип проекта</label>
                 <select id="request-event-type" name="event-type">
                     <option value="">Выберите тип проекта</option>
