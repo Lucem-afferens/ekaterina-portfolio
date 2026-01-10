@@ -84,11 +84,14 @@
             color: #9d7e5f;
         }
         
-        /* Навигация: по умолчанию видна для десктопа */
+        /* Навигация: по умолчанию видна для non-touch устройств (десктоп) */
+        /* На touch-устройствах навигация скрыта через @media (hover: none) and (pointer: coarse) */
         .header-nav {
             display: flex;
             gap: 48px;
             align-items: center;
+            position: static; /* По умолчанию статичная позиция для десктопа */
+            flex-direction: row; /* По умолчанию горизонтальная навигация */
         }
         
         .header-nav a {
