@@ -1359,7 +1359,7 @@ https://forms.gle/example123
 
 ---
 
-### Поле 2: recognition_stats (Тип: Repeater)
+### Поле 3: recognition_stats (Тип: Repeater)
 
 **Инструкция:**
 1. **Тип поля**: **Repeater**
@@ -1401,7 +1401,7 @@ https://forms.gle/example123
 
 ---
 
-### Поле 3: recognition_partners_title (Тип: Text)
+### Поле 4: recognition_partners_title (Тип: Text)
 
 **Инструкция:**
 1. **Тип поля**: **Text**
@@ -1415,7 +1415,7 @@ https://forms.gle/example123
 
 ---
 
-### Поле 4: recognition_partners (Тип: Repeater)
+### Поле 5: recognition_partners (Тип: Repeater)
 
 **Инструкция:**
 1. **Тип поля**: **Repeater**
@@ -1521,7 +1521,7 @@ https://forms.gle/example123
 
 ---
 
-### Поле 2: contact_description (Тип: Textarea)
+### Поле 3: contact_description (Тип: Textarea)
 
 **Инструкция:**
 1. **Тип поля**: **Textarea**
@@ -1537,7 +1537,7 @@ https://forms.gle/example123
 
 ---
 
-### Поле 3: contact_info_title (Тип: Text)
+### Поле 4: contact_info_title (Тип: Text)
 
 **Инструкция:**
 1. **Тип поля**: **Text**
