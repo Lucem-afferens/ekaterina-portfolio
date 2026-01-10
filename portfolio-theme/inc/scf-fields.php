@@ -227,6 +227,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - site_whatsapp (URL) - Ссылка WhatsApp
  * - footer_copyright_text (Textarea) - Текст копирайта в футере (поддержка %year%)
  * - footer_top_link_text (Text) - Текст кнопки "Наверх" в футере
+ * 
+ * 15. OPTIONS PAGE: "Form Settings" (form_settings)
+ * Тип: Options Page (или можно добавить в Theme Options)
+ * 
+ * Поля:
+ * - form_email (Email) - Email для получения заявок с форм (опционально)
+ *   Если не указан, используется site_email из Theme Options
+ * - form_telegram_bot_token (Text) - Токен Telegram бота для отправки уведомлений (опционально)
+ *   Получить можно у @BotFather в Telegram
+ * - form_telegram_chat_id (Text) - ID чата в Telegram для получения уведомлений (опционально)
+ *   Можно получить у @userinfobot или @getidsbot в Telegram
+ * 
+ * ПРИМЕЧАНИЕ: Формы отправляют данные в Email (если указан form_email или site_email)
+ * и/или в Telegram (если указаны form_telegram_bot_token и form_telegram_chat_id).
+ * Можно использовать оба способа одновременно или только один из них.
  */
 
 /**

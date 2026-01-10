@@ -56,6 +56,47 @@ function ekaterina_excerpt_more( $more ) {
 add_filter( 'excerpt_more', 'ekaterina_excerpt_more' );
 
 /**
+ * Функция для отправки сообщения в Telegram через Bot API
+ *
+ * @param string $bot_token Токен бота
+ * @param string $chat_id ID чата
+ * @param string $message Текст сообщения
+ * @return bool|WP_Error true при успехе, WP_Error при ошибке
+ */
+function ekaterina_send_telegram_message( $bot_token, $chat_id, $message ) {
+    if ( empty( $bot_token ) || empty( $chat_id ) ) {
+        return new WP_Error( 'telegram_config', 'Telegram Bot Token или Chat ID не указаны' );
+    }
+
+    $api_url = sprintf( 'https://api.telegram.org/bot%s/sendMessage', $bot_token );
+    
+    $data = array(
+        'chat_id' => $chat_id,
+        'text' => $message,
+        'parse_mode' => 'HTML', // Используем HTML для форматирования
+    );
+
+    $response = wp_remote_post( $api_url, array(
+        'body' => $data,
+        'timeout' => 15,
+    ) );
+
+    if ( is_wp_error( $response ) ) {
+        return $response;
+    }
+
+    $body = wp_remote_retrieve_body( $response );
+    $result = json_decode( $body, true );
+
+    if ( isset( $result['ok'] ) && $result['ok'] === true ) {
+        return true;
+    }
+
+    $error_message = isset( $result['description'] ) ? $result['description'] : 'Неизвестная ошибка Telegram API';
+    return new WP_Error( 'telegram_api', $error_message );
+}
+
+/**
  * Обработчик AJAX для формы заявки
  */
 function ekaterina_handle_request_form() {
@@ -77,36 +118,100 @@ function ekaterina_handle_request_form() {
         wp_send_json_error( array( 'message' => 'Пожалуйста, заполните все обязательные поля' ) );
     }
 
-    // Получение email получателя из настроек темы
-    $recipient_email = ekaterina_get_scf_option( 'site_email', 'theme_options', get_option( 'admin_email' ) );
+    // Маппинг типов мероприятий для читаемого отображения
+    $event_types_map = array(
+        'wedding' => 'Свадьба',
+        'corporate' => 'Корпоративное мероприятие',
+        'private' => 'Частный приём',
+        'charity' => 'Благотворительное мероприятие',
+        'conference' => 'Конференция',
+        'other' => 'Другое',
+    );
+    $event_type_display = isset( $event_types_map[ $event_type ] ) ? $event_types_map[ $event_type ] : $event_type;
 
     // Формирование темы письма
     $subject = sprintf( 'Новая заявка с сайта %s', get_bloginfo( 'name' ) );
 
-    // Формирование тела письма
+    // Формирование тела письма для Email (текстовый формат)
     $email_body = "Новая заявка с сайта\n\n";
     $email_body .= "Имя: $name\n";
     $email_body .= "Телефон: $phone\n";
     if ( ! empty( $email ) ) {
         $email_body .= "Email: $email\n";
     }
-    if ( ! empty( $event_type ) ) {
-        $email_body .= "Тип мероприятия: $event_type\n";
+    if ( ! empty( $event_type_display ) ) {
+        $email_body .= "Тип мероприятия: $event_type_display\n";
     }
     if ( ! empty( $date ) ) {
-        $email_body .= "Дата: $date\n";
+        // Форматируем дату для читаемости
+        $date_formatted = date_i18n( 'd.m.Y', strtotime( $date ) );
+        $email_body .= "Предполагаемая дата: $date_formatted\n";
     }
     if ( ! empty( $message ) ) {
-        $email_body .= "Сообщение: $message\n";
+        $email_body .= "\nСообщение:\n$message\n";
+    }
+    $email_body .= "\n---\n";
+    $email_body .= "Время отправки: " . date_i18n( 'd.m.Y H:i' ) . "\n";
+    $email_body .= "IP адрес: " . ( isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : 'не определен' ) . "\n";
+
+    // Формирование сообщения для Telegram (HTML формат)
+    $telegram_message = "<b>📋 Новая заявка с сайта</b>\n\n";
+    $telegram_message .= "<b>Имя:</b> " . esc_html( $name ) . "\n";
+    $telegram_message .= "<b>Телефон:</b> " . esc_html( $phone ) . "\n";
+    if ( ! empty( $email ) ) {
+        $telegram_message .= "<b>Email:</b> " . esc_html( $email ) . "\n";
+    }
+    if ( ! empty( $event_type_display ) ) {
+        $telegram_message .= "<b>Тип мероприятия:</b> " . esc_html( $event_type_display ) . "\n";
+    }
+    if ( ! empty( $date ) ) {
+        $date_formatted = date_i18n( 'd.m.Y', strtotime( $date ) );
+        $telegram_message .= "<b>Предполагаемая дата:</b> " . esc_html( $date_formatted ) . "\n";
+    }
+    if ( ! empty( $message ) ) {
+        $telegram_message .= "\n<b>Сообщение:</b>\n" . esc_html( $message ) . "\n";
+    }
+    $telegram_message .= "\n---\n";
+    $telegram_message .= "<i>Время: " . date_i18n( 'd.m.Y H:i' ) . "</i>";
+
+    // Получение настроек отправки из Options Page
+    $form_email = ekaterina_get_scf_option( 'form_email', 'form_settings', '' );
+    $site_email = ekaterina_get_scf_option( 'site_email', 'theme_options', get_option( 'admin_email' ) );
+    $recipient_email = ! empty( $form_email ) ? $form_email : $site_email;
+
+    $telegram_bot_token = ekaterina_get_scf_option( 'form_telegram_bot_token', 'form_settings', '' );
+    $telegram_chat_id = ekaterina_get_scf_option( 'form_telegram_chat_id', 'form_settings', '' );
+
+    // Флаги успешной отправки
+    $email_sent = false;
+    $telegram_sent = false;
+    $errors = array();
+
+    // Отправка в Email (если указан email)
+    if ( ! empty( $recipient_email ) && is_email( $recipient_email ) ) {
+        $email_sent = wp_mail( $recipient_email, $subject, $email_body );
+        if ( ! $email_sent ) {
+            $errors[] = 'Ошибка отправки email';
+        }
     }
 
-    // Отправка email
-    $sent = wp_mail( $recipient_email, $subject, $email_body );
+    // Отправка в Telegram (если указаны bot token и chat id)
+    if ( ! empty( $telegram_bot_token ) && ! empty( $telegram_chat_id ) ) {
+        $telegram_result = ekaterina_send_telegram_message( $telegram_bot_token, $telegram_chat_id, $telegram_message );
+        if ( ! is_wp_error( $telegram_result ) ) {
+            $telegram_sent = true;
+        } else {
+            $errors[] = 'Ошибка отправки в Telegram: ' . $telegram_result->get_error_message();
+        }
+    }
 
-    if ( $sent ) {
+    // Проверяем, была ли хотя бы одна успешная отправка
+    if ( $email_sent || $telegram_sent ) {
         wp_send_json_success( array( 'message' => 'Заявка успешно отправлена' ) );
     } else {
-        wp_send_json_error( array( 'message' => 'Ошибка при отправке заявки' ) );
+        // Если ни один способ не сработал, возвращаем ошибку
+        $error_message = ! empty( $errors ) ? implode( ', ', $errors ) : 'Ошибка при отправке заявки. Проверьте настройки отправки.';
+        wp_send_json_error( array( 'message' => $error_message ) );
     }
 }
 add_action( 'wp_ajax_ekaterina_request_form', 'ekaterina_handle_request_form' );
