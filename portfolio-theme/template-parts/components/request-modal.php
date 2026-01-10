@@ -61,6 +61,32 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <textarea id="request-message" name="message" rows="4" placeholder="Расскажите о вашем мероприятии..."></textarea>
             </div>
             
+            <?php
+            // Получаем URL страницы политики конфиденциальности
+            $privacy_url = get_privacy_policy_url();
+            if ( ! $privacy_url ) {
+                // Если страница не установлена в настройках WordPress, используем страницу по умолчанию
+                $privacy_page = get_page_by_path( 'privacy-policy' );
+                if ( $privacy_page ) {
+                    $privacy_url = get_permalink( $privacy_page->ID );
+                } else {
+                    $privacy_url = home_url( '/privacy-policy/' );
+                }
+            }
+            ?>
+            <div class="form-group form-group-checkbox">
+                <label class="checkbox-label" for="request-privacy">
+                    <input type="checkbox" id="request-privacy" name="privacy" required aria-required="true">
+                    <span class="checkbox-text">
+                        Я согласен(а) с 
+                        <a href="<?php echo esc_url( $privacy_url ); ?>" target="_blank" rel="noopener noreferrer" class="privacy-link">
+                            политикой конфиденциальности
+                        </a>
+                        *
+                    </span>
+                </label>
+            </div>
+            
             <button type="submit" class="modal-submit-btn">ОТПРАВИТЬ ЗАЯВКУ</button>
         </form>
         

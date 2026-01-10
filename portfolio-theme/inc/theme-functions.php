@@ -112,10 +112,16 @@ function ekaterina_handle_request_form() {
     $event_type = isset( $_POST['event-type'] ) ? sanitize_text_field( $_POST['event-type'] ) : '';
     $date = isset( $_POST['date'] ) ? sanitize_text_field( $_POST['date'] ) : '';
     $message = isset( $_POST['message'] ) ? sanitize_textarea_field( $_POST['message'] ) : '';
+    $privacy = isset( $_POST['privacy'] ) ? sanitize_text_field( $_POST['privacy'] ) : '';
 
     // Валидация обязательных полей
     if ( empty( $name ) || empty( $phone ) ) {
         wp_send_json_error( array( 'message' => 'Пожалуйста, заполните все обязательные поля' ) );
+    }
+
+    // Валидация согласия с политикой конфиденциальности
+    if ( empty( $privacy ) ) {
+        wp_send_json_error( array( 'message' => 'Необходимо согласиться с политикой конфиденциальности' ) );
     }
 
     // Маппинг типов мероприятий для читаемого отображения

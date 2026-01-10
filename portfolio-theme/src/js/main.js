@@ -352,10 +352,18 @@ import '../css/main.css';
             const formData = new FormData(this);
             const name = document.getElementById('request-name').value.trim();
             const phone = document.getElementById('request-phone').value.trim();
+            const privacyCheckbox = document.getElementById('request-privacy');
             
             // Валидация обязательных полей
             if (!name || !phone) {
                 alert('Пожалуйста, заполните все обязательные поля');
+                return;
+            }
+            
+            // Валидация чекбокса политики конфиденциальности
+            if (!privacyCheckbox || !privacyCheckbox.checked) {
+                alert('Необходимо согласиться с политикой конфиденциальности');
+                privacyCheckbox.focus();
                 return;
             }
             
