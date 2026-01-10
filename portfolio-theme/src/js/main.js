@@ -307,14 +307,7 @@ import '../css/main.css';
         });
     }
     
-    // Открытие модального окна отзыва
-    const openTestimonialModalBtn = document.getElementById('open-testimonial-modal');
-    if (openTestimonialModalBtn) {
-        openTestimonialModalBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            openModal('testimonial-modal');
-        });
-    }
+    // Кнопка "Оставить отзыв" теперь является ссылкой, поэтому обработчик модального окна удален
     
     // Закрытие модальных окон по кнопке закрытия
     document.querySelectorAll('.modal-close').forEach(closeBtn => {

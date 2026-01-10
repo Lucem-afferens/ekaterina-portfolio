@@ -145,6 +145,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   - testimonial_quote (Textarea) - Текст отзыва
  *   - testimonial_author (Text) - Имя автора
  *   - testimonial_title (Text) - Должность/Компания
+ * - testimonials_cta_link (URL) - Ссылка для кнопки "Оставить отзыв" (опционально)
+ *   Если ссылка не указана, кнопка не отображается.
+ *   Внешние ссылки открываются в новой вкладке с rel="noopener noreferrer".
  */
 
 /**

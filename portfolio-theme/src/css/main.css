@@ -1008,6 +1008,15 @@
             cursor: pointer;
             font-family: 'Inter', sans-serif;
             text-align: center;
+            /* Стили для ссылки (кнопка теперь ссылка) */
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        /* Убираем стандартные стили браузера для ссылок */
+        .testimonials-cta:focus {
+            outline: 2px solid #f8f6f3;
+            outline-offset: 2px;
         }
         
         .testimonials-cta:hover {

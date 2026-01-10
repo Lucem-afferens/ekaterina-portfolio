@@ -140,3 +140,4 @@ server-dir: ekaterina-shul.ru/public_html/wp-content/themes/portfolio-theme/
 - Деплой автоматически исключает ненужные файлы (node_modules, src, .git и т.д.)
 - Все файлы из папки `portfolio-theme/` будут загружены на сервер
 - Workflow показывает детальную информацию о результате деплоя
+

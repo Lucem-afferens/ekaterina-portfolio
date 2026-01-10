@@ -114,9 +114,38 @@ if ( empty( $testimonials_list ) || ! is_array( $testimonials_list ) ) {
             <?php endforeach; ?>
         <?php endif; ?>
         
-        <div class="testimonials-cta-container">
-            <button class="testimonials-cta" id="open-testimonial-modal">ОСТАВИТЬ ОТЗЫВ</button>
-        </div>
+        <?php 
+        // Получаем ссылку для кнопки "Оставить отзыв" из SCF
+        $testimonials_cta_link = function_exists( 'get_field' ) ? get_field( 'testimonials_cta_link', $current_page_id ) : null;
+        
+        // Если ссылка указана, показываем кнопку со ссылкой
+        if ( ! empty( $testimonials_cta_link ) ) :
+            // Нормализуем ссылку (обеспечиваем HTTPS для внешних ссылок)
+            $testimonials_cta_link = set_url_scheme( esc_url_raw( $testimonials_cta_link ), 'https' );
+            
+            // Определяем, является ли ссылка внешней (начинается с http:// или https:// и не относится к текущему домену)
+            $is_external = false;
+            if ( strpos( $testimonials_cta_link, 'http://' ) === 0 || strpos( $testimonials_cta_link, 'https://' ) === 0 ) {
+                // Извлекаем домен из ссылки
+                $link_host = parse_url( $testimonials_cta_link, PHP_URL_HOST );
+                $site_host = parse_url( home_url(), PHP_URL_HOST );
+                // Если домены не совпадают, это внешняя ссылка
+                if ( $link_host && $site_host && $link_host !== $site_host ) {
+                    $is_external = true;
+                }
+            }
+        ?>
+            <div class="testimonials-cta-container">
+                <a href="<?php echo esc_url( $testimonials_cta_link ); ?>" 
+                   class="testimonials-cta" 
+                   <?php if ( $is_external ) : ?>
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                   <?php endif; ?>>
+                    ОСТАВИТЬ ОТЗЫВ
+                </a>
+            </div>
+        <?php endif; ?>
     </div>
 </section>
 
