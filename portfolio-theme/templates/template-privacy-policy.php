@@ -8,6 +8,11 @@
  * @since 1.0.0
  */
 
+// Предотвращаем прямой доступ к файлу
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 get_header();
 ?>
 
