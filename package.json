@@ -1,7 +1,7 @@
 {
-  "name": "ekaterina-portfolio",
+  "name": "portfolio-theme",
   "version": "1.0.0",
-  "description": "Портфолио ведущей премиальных мероприятий Екатерины Шулятниковой",
+  "description": "Универсальная WordPress тема для создания портфолио",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,8 +11,10 @@
   },
   "keywords": [
     "portfolio",
-    "event-host",
-    "vite"
+    "wordpress",
+    "theme",
+    "vite",
+    "scf"
   ],
   "author": "",
   "license": "ISC",
