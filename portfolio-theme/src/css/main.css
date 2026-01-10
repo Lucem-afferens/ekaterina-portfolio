@@ -84,6 +84,7 @@
             color: #9d7e5f;
         }
         
+        /* Навигация: по умолчанию видна для десктопа */
         .header-nav {
             display: flex;
             gap: 48px;
@@ -1710,7 +1711,9 @@
                 opacity: 1;
             }
             
+            /* Навигация скрыта по умолчанию на мобильных */
             .header-nav {
+                display: none; /* Скрываем навигацию на мобильных по умолчанию */
                 position: fixed;
                 top: 0;
                 right: -100%;
@@ -1728,7 +1731,9 @@
                 box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
             }
             
+            /* Когда меню открыто, показываем навигацию */
             .header-nav.active {
+                display: flex; /* Показываем навигацию при открытии меню */
                 right: 0;
             }
             
@@ -2302,7 +2307,9 @@
                 opacity: 1;
             }
             
+            /* Навигация скрыта по умолчанию на мобильных */
             .header-nav {
+                display: none; /* Скрываем навигацию на мобильных по умолчанию */
                 position: fixed;
                 top: 0;
                 right: -100%;
@@ -2320,7 +2327,9 @@
                 box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
             }
             
+            /* Когда меню открыто, показываем навигацию */
             .header-nav.active {
+                display: flex; /* Показываем навигацию при открытии меню */
                 right: 0;
             }
             
@@ -2809,6 +2818,7 @@
            Применяется ко всем устройствам с шириной менее 900px
            ======================================== */
         @media screen and (max-width: 899px) {
+            /* На мобильных устройствах: показываем только бургер, навигация скрыта */
             .mobile-menu-toggle {
                 display: flex !important;
                 width: 44px;
@@ -2832,7 +2842,9 @@
                 opacity: 1; /* Убеждаемся, что span видим */
             }
             
+            /* Навигация скрыта по умолчанию на мобильных, показывается только при открытии меню */
             .header-nav {
+                display: none; /* Скрываем навигацию на мобильных по умолчанию */
                 position: fixed;
                 top: 0;
                 right: -100%;
@@ -2850,7 +2862,9 @@
                 box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
             }
             
+            /* Когда меню открыто, показываем навигацию */
             .header-nav.active {
+                display: flex; /* Показываем навигацию при открытии меню */
                 right: 0;
             }
             
@@ -2879,11 +2893,13 @@
                 font-size: clamp(22px, 2.75vw, 24px);
             }
             
+            /* На десктопе: скрываем бургер, показываем навигацию */
             .mobile-menu-toggle {
-                display: none;
+                display: none !important; /* Явно скрываем бургер на десктопе */
             }
             
             .header-nav {
+                display: flex !important; /* Явно показываем навигацию на десктопе */
                 position: static;
                 flex-direction: row;
                 width: auto;
@@ -2891,7 +2907,6 @@
                 background: transparent;
                 padding: 0;
                 box-shadow: none;
-                display: flex;
                 gap: 36px;
             }
             
@@ -3174,6 +3189,9 @@
             .header-logo {
                 font-size: clamp(20px, 2.5vw, 22px);
             }
+            
+            /* На мобильных устройствах (<900px): бургер виден, навигация скрыта */
+            /* Стили применяются из общего медиа-запроса @media screen and (max-width: 899px) */
             
             /* Hero Section */
             #hero {
@@ -3509,16 +3527,28 @@
                 font-size: 24px;
             }
             
+            /* На десктопе: скрываем бургер, показываем навигацию */
             .mobile-menu-toggle {
-                display: none;
+                display: none !important; /* Явно скрываем бургер на десктопе */
             }
             
             .header-nav {
+                display: flex !important; /* Явно показываем навигацию на десктопе */
+                position: static;
+                flex-direction: row;
+                width: auto;
+                height: auto;
+                background: transparent;
+                padding: 0;
+                box-shadow: none;
                 gap: 40px;
             }
             
             .header-nav a {
                 font-size: 14px;
+                padding: 0;
+                border: none;
+                min-height: auto;
             }
             
             /* Hero Section */
@@ -3805,12 +3835,28 @@
                 font-size: 24px;
             }
             
+            /* На десктопе: скрываем бургер, показываем навигацию */
+            .mobile-menu-toggle {
+                display: none !important; /* Явно скрываем бургер на десктопе */
+            }
+            
             .header-nav {
+                display: flex !important; /* Явно показываем навигацию на десктопе */
+                position: static;
+                flex-direction: row;
+                width: auto;
+                height: auto;
+                background: transparent;
+                padding: 0;
+                box-shadow: none;
                 gap: 48px;
             }
             
             .header-nav a {
                 font-size: 14px;
+                padding: 0;
+                border: none;
+                min-height: auto;
             }
             
             /* Hero Section */
