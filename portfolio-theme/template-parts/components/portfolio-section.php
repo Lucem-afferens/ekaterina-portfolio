@@ -63,6 +63,7 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
                         $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
                         $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
                         $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
+                        $link = isset( $item['portfolio_link'] ) ? esc_url( $item['portfolio_link'] ) : '';
                         
                         // Получаем ID изображения
                         $image_id = false;
@@ -82,10 +83,19 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
                         $image_url = set_url_scheme( $image_url, 'https' );
                     ?>
                         <div class="portfolio-item">
-                            <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                            <div class="portfolio-overlay">
-                                <p><?php echo esc_html( $category ); ?></p>
-                            </div>
+                            <?php if ( ! empty( $link ) ) : ?>
+                                <a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer" class="portfolio-link">
+                                    <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+                                    <div class="portfolio-overlay">
+                                        <p><?php echo esc_html( $category ); ?></p>
+                                    </div>
+                                </a>
+                            <?php else : ?>
+                                <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+                                <div class="portfolio-overlay">
+                                    <p><?php echo esc_html( $category ); ?></p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endfor; ?>
                 </div>
@@ -101,6 +111,7 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
                         $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
                         $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
                         $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
+                        $link = isset( $item['portfolio_link'] ) ? esc_url( $item['portfolio_link'] ) : '';
                         
                         // Получаем ID изображения
                         $image_id = false;
@@ -120,10 +131,19 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
                         $image_url = set_url_scheme( $image_url, 'https' );
                     ?>
                         <div class="portfolio-item">
-                            <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                            <div class="portfolio-overlay">
-                                <p><?php echo esc_html( $category ); ?></p>
-                            </div>
+                            <?php if ( ! empty( $link ) ) : ?>
+                                <a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer" class="portfolio-link">
+                                    <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+                                    <div class="portfolio-overlay">
+                                        <p><?php echo esc_html( $category ); ?></p>
+                                    </div>
+                                </a>
+                            <?php else : ?>
+                                <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+                                <div class="portfolio-overlay">
+                                    <p><?php echo esc_html( $category ); ?></p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endfor; ?>
                 </div>
@@ -139,6 +159,7 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
                         $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
                         $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
                         $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
+                        $link = isset( $item['portfolio_link'] ) ? esc_url( $item['portfolio_link'] ) : '';
                         
                         // Получаем ID изображения
                         $image_id = false;
@@ -158,10 +179,19 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
                         $image_url = set_url_scheme( $image_url, 'https' );
                     ?>
                         <div class="portfolio-item">
-                            <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                            <div class="portfolio-overlay">
-                                <p><?php echo esc_html( $category ); ?></p>
-                            </div>
+                            <?php if ( ! empty( $link ) ) : ?>
+                                <a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer" class="portfolio-link">
+                                    <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+                                    <div class="portfolio-overlay">
+                                        <p><?php echo esc_html( $category ); ?></p>
+                                    </div>
+                                </a>
+                            <?php else : ?>
+                                <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+                                <div class="portfolio-overlay">
+                                    <p><?php echo esc_html( $category ); ?></p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endfor; ?>
                 </div>
@@ -177,6 +207,7 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
                         $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
                         $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
                         $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
+                        $link = isset( $item['portfolio_link'] ) ? esc_url( $item['portfolio_link'] ) : '';
                         
                         // Получаем ID изображения
                         $image_id = false;
@@ -196,10 +227,19 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
                         $image_url = set_url_scheme( $image_url, 'https' );
                     ?>
                         <div class="portfolio-item">
-                            <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                            <div class="portfolio-overlay">
-                                <p><?php echo esc_html( $category ); ?></p>
-                            </div>
+                            <?php if ( ! empty( $link ) ) : ?>
+                                <a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer" class="portfolio-link">
+                                    <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+                                    <div class="portfolio-overlay">
+                                        <p><?php echo esc_html( $category ); ?></p>
+                                    </div>
+                                </a>
+                            <?php else : ?>
+                                <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+                                <div class="portfolio-overlay">
+                                    <p><?php echo esc_html( $category ); ?></p>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endfor; ?>
                 </div>
