@@ -4,6 +4,8 @@
  * 
  * Основной файл функций темы. Подключает все необходимые модули
  * и инициализирует функциональность темы.
+ * 
+ * Универсальная тема для создания портфолио.
  *
  * @package Portfolio_Theme
  * @since 1.0.0
@@ -29,7 +31,7 @@ function ekaterina_check_scf_plugin() {
         add_action( 'admin_notices', function() {
             ?>
             <div class="notice notice-error">
-                <p><strong>Portfolio Theme:</strong> Для работы темы требуется плагин <a href="https://wordpress.org/plugins/secure-custom-fields/" target="_blank">Secure Custom Fields (SCF)</a>. Пожалуйста, установите и активируйте его.</p>
+                <p><strong>Портфолио:</strong> Для работы темы требуется плагин <a href="https://wordpress.org/plugins/secure-custom-fields/" target="_blank">Secure Custom Fields (SCF)</a>. Пожалуйста, установите и активируйте его.</p>
             </div>
             <?php
         });
