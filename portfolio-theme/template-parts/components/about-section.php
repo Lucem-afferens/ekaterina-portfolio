@@ -142,6 +142,8 @@ $about_video_url = '';
 $video_embed_code = '';
 $is_vk_video = false;
 $vk_video_id = '';
+$is_iframe_code = false;
+$iframe_code = '';
 // Проверяем тип медиа явно, чтобы не обрабатывать видео, если выбран тип photo
 if ( $about_media_type === 'video' && $about_video ) {
     // Нормализуем значение - может быть строка, массив или значение с пробелами
@@ -149,10 +151,35 @@ if ( $about_media_type === 'video' && $about_video ) {
     if ( is_array( $video_raw ) ) {
         $video_raw = isset( $video_raw['url'] ) ? $video_raw['url'] : ( isset( $video_raw['value'] ) ? $video_raw['value'] : ( isset( $video_raw[0] ) ? $video_raw[0] : '' ) );
     }
-    $about_video_url = trim( (string) $video_raw );
+    $video_raw = trim( (string) $video_raw );
     
-    // Определяем тип видео и формируем embed код
-    if ( ! empty( $about_video_url ) ) {
+    // Проверяем, является ли значение готовым iframe кодом (например, от VK)
+    if ( ! empty( $video_raw ) && stripos( $video_raw, '<iframe' ) !== false ) {
+        // Это готовый iframe код - извлекаем src или используем код целиком
+        $is_iframe_code = true;
+        
+        // Пытаемся извлечь src из iframe
+        if ( preg_match( '/src=["\']([^"\']+)["\']/', $video_raw, $src_matches ) ) {
+            $about_video_url = $src_matches[1];
+            // Если это VK video_ext.php, используем извлеченный src
+            if ( strpos( $about_video_url, 'vk.com/video_ext.php' ) !== false ) {
+                $video_embed_code = esc_url( $about_video_url );
+                // Для VK video_ext.php можно использовать iframe напрямую
+            } else {
+                // Для других платформ также используем извлеченный src
+                $video_embed_code = esc_url( $about_video_url );
+            }
+        } else {
+            // Если не удалось извлечь src, сохраняем весь iframe код для вывода
+            $iframe_code = $video_raw;
+        }
+    } else {
+        // Это обычная ссылка - обрабатываем как раньше
+        $about_video_url = $video_raw;
+    }
+    
+    // Определяем тип видео и формируем embed код (только если это не iframe код)
+    if ( ! $is_iframe_code && ! empty( $about_video_url ) ) {
         // YouTube (youtube.com/watch?v=..., youtu.be/..., youtube.com/embed/...)
         if ( preg_match( '/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/', $about_video_url, $matches ) ||
              preg_match( '/youtu\.be\/([a-zA-Z0-9_-]+)/', $about_video_url, $matches ) ||
@@ -210,13 +237,49 @@ if ( $about_media_type === 'video' && $about_video ) {
         <?php 
         // Показываем видео, если тип медиа = video И есть видео (или embed код)
         if ( $about_media_type === 'video' ) : 
-            // Если есть embed код, показываем его
-            if ( ! empty( $video_embed_code ) ) :
+            // Если есть embed код или iframe код, показываем его
+            if ( ! empty( $video_embed_code ) || ! empty( $iframe_code ) ) :
         ?>
             <div class="about-media about-video">
                 <?php
-                // Специальная обработка для VK видео
-                if ( $is_vk_video && ! empty( $vk_video_id ) ) {
+                // Если это готовый iframe код (например, от VK через кнопку "Экспортировать")
+                if ( $is_iframe_code && ! empty( $iframe_code ) ) {
+                    // Выводим iframe код напрямую (с безопасностью через wp_kses)
+                    // Разрешаем только необходимые атрибуты iframe для безопасности
+                    $allowed_iframe_attrs = array(
+                        'iframe' => array(
+                            'src' => true,
+                            'width' => true,
+                            'height' => true,
+                            'frameborder' => true,
+                            'allow' => true,
+                            'allowfullscreen' => true,
+                            'loading' => true,
+                            'title' => true,
+                            'style' => true,
+                            'class' => true,
+                            'id' => true,
+                        ),
+                    );
+                    echo wp_kses( $iframe_code, $allowed_iframe_attrs );
+                }
+                // Если iframe код был обработан и извлечен src (VK video_ext.php или другие)
+                elseif ( $is_iframe_code && ! empty( $video_embed_code ) ) {
+                    // Используем извлеченный src для видео (VK video_ext.php работает через iframe)
+                ?>
+                    <iframe 
+                        src="<?php echo esc_url( $video_embed_code ); ?>" 
+                        frameborder="0" 
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock" 
+                        allowfullscreen
+                        loading="lazy"
+                        title="<?php echo esc_attr( $about_title ); ?>"
+                        style="width: 100%; height: 100%; background-color: #000;"
+                    ></iframe>
+                <?php
+                }
+                // Специальная обработка для VK видео (старый способ - через ссылку, без iframe кода)
+                elseif ( $is_vk_video && ! empty( $vk_video_id ) && ! $is_iframe_code ) {
                     // VK блокирует встраивание через iframe из-за политики безопасности (X-Frame-Options)
                     // Показываем превью с кнопкой перехода на VK
                 ?>
