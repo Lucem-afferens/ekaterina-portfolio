@@ -2167,6 +2167,84 @@
             outline-offset: 2px;
         }
         
+        /* Сетка изображений (первый уровень) */
+        .portfolio-gallery-grid-view {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .portfolio-gallery-grid {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 32px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            align-content: start;
+        }
+        
+        .portfolio-gallery-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .portfolio-gallery-grid::-webkit-scrollbar-track {
+            background: rgba(248, 246, 243, 0.1);
+        }
+        
+        .portfolio-gallery-grid::-webkit-scrollbar-thumb {
+            background: rgba(157, 126, 95, 0.5);
+            border-radius: 4px;
+        }
+        
+        .portfolio-gallery-grid::-webkit-scrollbar-thumb:hover {
+            background: rgba(157, 126, 95, 0.7);
+        }
+        
+        .portfolio-gallery-grid-item {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            background-color: rgba(58, 58, 58, 0.5);
+            border-radius: 4px;
+        }
+        
+        .portfolio-gallery-grid-item:hover {
+            border-color: rgba(157, 126, 95, 0.6);
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .portfolio-gallery-grid-item:focus {
+            outline: 2px solid #9d7e5f;
+            outline-offset: 2px;
+        }
+        
+        .portfolio-gallery-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        
+        .portfolio-gallery-grid-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Просмотр изображения (второй уровень) */
+        .portfolio-gallery-viewer-view {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+        
         /* Responsive styles for portfolio gallery */
         @media (max-width: 768px) {
             .portfolio-gallery-modal .modal-content {
@@ -2181,6 +2259,12 @@
             
             .portfolio-gallery-title {
                 font-size: 22px;
+            }
+            
+            .portfolio-gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 12px;
+                padding: 16px 20px;
             }
             
             .portfolio-gallery-main {
@@ -2211,6 +2295,14 @@
             .portfolio-gallery-thumbnail {
                 width: 60px;
                 height: 60px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .portfolio-gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+                padding: 12px 16px;
             }
         }
 

@@ -346,6 +346,7 @@ import '../css/main.css';
         images: [],
         currentIndex: 0,
         category: '',
+        isViewerOpen: false, // Флаг открытого просмотра изображения
         
         init: function() {
             // Обработчики для открытия галереи
@@ -361,6 +362,7 @@ import '../css/main.css';
                                 this.images = JSON.parse(imagesData);
                                 this.category = category;
                                 this.currentIndex = 0;
+                                this.isViewerOpen = false;
                                 this.open();
                             } catch (err) {
                                 console.error('Error parsing gallery images:', err);
@@ -370,7 +372,7 @@ import '../css/main.css';
                 });
             });
             
-            // Навигация по галерее
+            // Навигация по просмотру изображения
             const prevBtn = document.getElementById('portfolio-gallery-prev');
             const nextBtn = document.getElementById('portfolio-gallery-next');
             
@@ -386,24 +388,36 @@ import '../css/main.css';
             if (galleryModal) {
                 const closeBtn = galleryModal.querySelector('.portfolio-gallery-close');
                 if (closeBtn) {
-                    closeBtn.addEventListener('click', () => this.close());
+                    closeBtn.addEventListener('click', () => this.handleClose());
                 }
                 
                 const overlay = galleryModal.querySelector('.modal-overlay');
                 if (overlay) {
-                    overlay.addEventListener('click', () => this.close());
+                    overlay.addEventListener('click', () => this.handleClose());
                 }
             }
             
             // Навигация клавиатурой
             document.addEventListener('keydown', (e) => {
                 if (galleryModal && galleryModal.classList.contains('active')) {
-                    if (e.key === 'ArrowLeft') {
-                        e.preventDefault();
-                        this.prev();
-                    } else if (e.key === 'ArrowRight') {
-                        e.preventDefault();
-                        this.next();
+                    if (this.isViewerOpen) {
+                        // В режиме просмотра - навигация по изображениям
+                        if (e.key === 'ArrowLeft') {
+                            e.preventDefault();
+                            this.prev();
+                        } else if (e.key === 'ArrowRight') {
+                            e.preventDefault();
+                            this.next();
+                        } else if (e.key === 'Escape') {
+                            e.preventDefault();
+                            this.handleClose();
+                        }
+                    } else {
+                        // В режиме сетки - только закрытие
+                        if (e.key === 'Escape') {
+                            e.preventDefault();
+                            this.handleClose();
+                        }
                     }
                 }
             });
@@ -415,17 +429,8 @@ import '../css/main.css';
             const modal = document.getElementById('portfolio-gallery-modal');
             if (!modal) return;
             
-            // Устанавливаем заголовок
-            const titleEl = document.getElementById('portfolio-gallery-title');
-            if (titleEl) {
-                titleEl.textContent = this.category || 'Галерея';
-            }
-            
-            // Обновляем счетчик
-            this.updateCounter();
-            
-            // Загружаем изображения
-            this.loadImages();
+            // Показываем сетку, скрываем просмотр
+            this.showGridView();
             
             // Открываем модальное окно
             openModal('portfolio-gallery-modal');
@@ -437,14 +442,109 @@ import '../css/main.css';
             }
         },
         
+        showGridView: function() {
+            const gridView = document.getElementById('portfolio-gallery-grid-view');
+            const viewerView = document.getElementById('portfolio-gallery-viewer-view');
+            
+            if (gridView) {
+                gridView.style.display = 'block';
+            }
+            if (viewerView) {
+                viewerView.style.display = 'none';
+            }
+            
+            this.isViewerOpen = false;
+            
+            // Устанавливаем заголовок
+            const titleEl = document.getElementById('portfolio-gallery-title');
+            if (titleEl) {
+                titleEl.textContent = this.category || 'Галерея';
+            }
+            
+            // Обновляем счетчик
+            const totalEl = document.getElementById('portfolio-gallery-total');
+            if (totalEl) {
+                totalEl.textContent = this.images.length;
+            }
+            
+            // Загружаем сетку изображений
+            this.loadGrid();
+        },
+        
+        showViewer: function(index) {
+            if (index < 0 || index >= this.images.length) return;
+            
+            this.currentIndex = index;
+            this.isViewerOpen = true;
+            
+            const gridView = document.getElementById('portfolio-gallery-grid-view');
+            const viewerView = document.getElementById('portfolio-gallery-viewer-view');
+            
+            if (gridView) {
+                gridView.style.display = 'none';
+            }
+            if (viewerView) {
+                viewerView.style.display = 'block';
+            }
+            
+            // Устанавливаем заголовок
+            const titleEl = document.getElementById('portfolio-gallery-viewer-title');
+            if (titleEl) {
+                titleEl.textContent = this.category || 'Галерея';
+            }
+            
+            // Загружаем изображения для просмотра
+            this.loadViewer();
+        },
+        
+        handleClose: function() {
+            // Если открыт просмотр - сначала закрываем его
+            if (this.isViewerOpen) {
+                this.showGridView();
+            } else {
+                // Если открыта только сетка - закрываем галерею
+                this.close();
+            }
+        },
+        
         close: function() {
             closeModal('portfolio-gallery-modal');
             this.images = [];
             this.currentIndex = 0;
             this.category = '';
+            this.isViewerOpen = false;
         },
         
-        loadImages: function() {
+        loadGrid: function() {
+            const grid = document.getElementById('portfolio-gallery-grid');
+            if (!grid) return;
+            
+            // Очищаем предыдущие изображения
+            grid.innerHTML = '';
+            
+            // Добавляем изображения в сетку
+            this.images.forEach((image, index) => {
+                const gridItem = document.createElement('div');
+                gridItem.className = 'portfolio-gallery-grid-item';
+                gridItem.dataset.index = index;
+                
+                const img = document.createElement('img');
+                img.src = image.url;
+                img.alt = image.alt || '';
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                
+                gridItem.appendChild(img);
+                
+                gridItem.addEventListener('click', () => {
+                    this.showViewer(index);
+                });
+                
+                grid.appendChild(gridItem);
+            });
+        },
+        
+        loadViewer: function() {
             const slider = document.getElementById('portfolio-gallery-slider');
             const thumbnails = document.getElementById('portfolio-gallery-thumbnails');
             
