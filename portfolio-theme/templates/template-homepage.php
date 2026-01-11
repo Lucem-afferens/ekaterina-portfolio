@@ -35,6 +35,9 @@ if ( ! $ekaterina_current_page_id ) {
     get_template_part( 'template-parts/components/recognition-section' );
     get_template_part( 'template-parts/components/contact-section' );
     get_template_part( 'template-parts/components/contact-channels-section' );
+    
+    // Модальные окна
+    get_template_part( 'template-parts/components/portfolio-gallery-modal' );
     ?>
 </main>
 

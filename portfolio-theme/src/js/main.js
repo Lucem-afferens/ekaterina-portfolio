@@ -339,6 +339,235 @@ import '../css/main.css';
     });
     
     // ========================================
+    // Portfolio Gallery Modal
+    // ========================================
+    
+    let portfolioGallery = {
+        images: [],
+        currentIndex: 0,
+        category: '',
+        
+        init: function() {
+            // Обработчики для открытия галереи
+            document.querySelectorAll('.portfolio-gallery-trigger').forEach(trigger => {
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const portfolioItem = trigger.closest('.portfolio-item');
+                    if (portfolioItem && portfolioItem.dataset.galleryAction === 'true') {
+                        const imagesData = portfolioItem.dataset.galleryImages;
+                        const category = portfolioItem.dataset.galleryCategory || '';
+                        if (imagesData) {
+                            try {
+                                this.images = JSON.parse(imagesData);
+                                this.category = category;
+                                this.currentIndex = 0;
+                                this.open();
+                            } catch (err) {
+                                console.error('Error parsing gallery images:', err);
+                            }
+                        }
+                    }
+                });
+            });
+            
+            // Навигация по галерее
+            const prevBtn = document.getElementById('portfolio-gallery-prev');
+            const nextBtn = document.getElementById('portfolio-gallery-next');
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => this.prev());
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => this.next());
+            }
+            
+            // Закрытие галереи
+            const galleryModal = document.getElementById('portfolio-gallery-modal');
+            if (galleryModal) {
+                const closeBtn = galleryModal.querySelector('.portfolio-gallery-close');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => this.close());
+                }
+                
+                const overlay = galleryModal.querySelector('.modal-overlay');
+                if (overlay) {
+                    overlay.addEventListener('click', () => this.close());
+                }
+            }
+            
+            // Навигация клавиатурой
+            document.addEventListener('keydown', (e) => {
+                if (galleryModal && galleryModal.classList.contains('active')) {
+                    if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        this.prev();
+                    } else if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        this.next();
+                    }
+                }
+            });
+        },
+        
+        open: function() {
+            if (this.images.length === 0) return;
+            
+            const modal = document.getElementById('portfolio-gallery-modal');
+            if (!modal) return;
+            
+            // Устанавливаем заголовок
+            const titleEl = document.getElementById('portfolio-gallery-title');
+            if (titleEl) {
+                titleEl.textContent = this.category || 'Галерея';
+            }
+            
+            // Обновляем счетчик
+            this.updateCounter();
+            
+            // Загружаем изображения
+            this.loadImages();
+            
+            // Открываем модальное окно
+            openModal('portfolio-gallery-modal');
+            
+            // Фокус на кнопке закрытия для доступности
+            const closeBtn = modal.querySelector('.portfolio-gallery-close');
+            if (closeBtn) {
+                setTimeout(() => closeBtn.focus(), 100);
+            }
+        },
+        
+        close: function() {
+            closeModal('portfolio-gallery-modal');
+            this.images = [];
+            this.currentIndex = 0;
+            this.category = '';
+        },
+        
+        loadImages: function() {
+            const slider = document.getElementById('portfolio-gallery-slider');
+            const thumbnails = document.getElementById('portfolio-gallery-thumbnails');
+            
+            if (!slider || !thumbnails) return;
+            
+            // Очищаем предыдущие изображения
+            slider.innerHTML = '';
+            thumbnails.innerHTML = '';
+            
+            // Добавляем изображения в слайдер
+            this.images.forEach((image, index) => {
+                // Основное изображение
+                const slide = document.createElement('div');
+                slide.className = 'portfolio-gallery-slide';
+                slide.dataset.index = index;
+                if (index === this.currentIndex) {
+                    slide.classList.add('active');
+                }
+                
+                const img = document.createElement('img');
+                img.src = image.url;
+                img.alt = image.alt || '';
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                slide.appendChild(img);
+                slider.appendChild(slide);
+                
+                // Миниатюра
+                const thumb = document.createElement('button');
+                thumb.type = 'button';
+                thumb.className = 'portfolio-gallery-thumbnail';
+                thumb.dataset.index = index;
+                if (index === this.currentIndex) {
+                    thumb.classList.add('active');
+                }
+                thumb.setAttribute('aria-label', `Показать изображение ${index + 1}`);
+                
+                const thumbImg = document.createElement('img');
+                thumbImg.src = image.url;
+                thumbImg.alt = image.alt || '';
+                thumbImg.loading = 'lazy';
+                thumb.appendChild(thumbImg);
+                
+                thumb.addEventListener('click', () => {
+                    this.goTo(index);
+                });
+                
+                thumbnails.appendChild(thumb);
+            });
+            
+            // Показываем текущее изображение
+            this.showCurrent();
+        },
+        
+        showCurrent: function() {
+            const slides = document.querySelectorAll('.portfolio-gallery-slide');
+            const thumbs = document.querySelectorAll('.portfolio-gallery-thumbnail');
+            
+            slides.forEach((slide, index) => {
+                if (index === this.currentIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            
+            thumbs.forEach((thumb, index) => {
+                if (index === this.currentIndex) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
+            
+            // Прокручиваем миниатюры к активной
+            const activeThumb = thumbs[this.currentIndex];
+            if (activeThumb) {
+                activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+            
+            this.updateCounter();
+        },
+        
+        updateCounter: function() {
+            const currentEl = document.getElementById('portfolio-gallery-current');
+            const totalEl = document.getElementById('portfolio-gallery-total');
+            
+            if (currentEl) {
+                currentEl.textContent = this.currentIndex + 1;
+            }
+            if (totalEl) {
+                totalEl.textContent = this.images.length;
+            }
+        },
+        
+        prev: function() {
+            if (this.images.length === 0) return;
+            this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+            this.showCurrent();
+        },
+        
+        next: function() {
+            if (this.images.length === 0) return;
+            this.currentIndex = (this.currentIndex + 1) % this.images.length;
+            this.showCurrent();
+        },
+        
+        goTo: function(index) {
+            if (index >= 0 && index < this.images.length) {
+                this.currentIndex = index;
+                this.showCurrent();
+            }
+        }
+    };
+    
+    // Инициализация галереи после загрузки DOM
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => portfolioGallery.init());
+    } else {
+        portfolioGallery.init();
+    }
+    
+    // ========================================
     // Form Handling with WordPress AJAX
     // ========================================
     

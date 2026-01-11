@@ -50,6 +50,122 @@ $portfolio_items = function_exists( 'get_field' ) ? get_field( 'portfolio_items'
 if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
     $portfolio_items = array();
 }
+
+/**
+ * Функция для вывода элемента портфолио
+ * 
+ * @param array $item Элемент из repeater
+ * @param array $all_items Все элементы портфолио (для фильтрации по категории)
+ * @return void
+ */
+function ekaterina_render_portfolio_item( $item, $all_items = array() ) {
+    // Получаем данные из repeater элемента
+    $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
+    $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
+    $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
+    $action_type = isset( $item['portfolio_action_type'] ) ? trim( strtolower( (string) $item['portfolio_action_type'] ) ) : 'link';
+    $link = isset( $item['portfolio_link'] ) ? esc_url( $item['portfolio_link'] ) : '';
+    
+    // Нормализуем action_type
+    if ( empty( $action_type ) || ( $action_type !== 'gallery' && $action_type !== 'link' ) ) {
+        $action_type = 'link';
+    }
+    
+    // Получаем ID изображения
+    $image_id = false;
+    if ( $portfolio_image ) {
+        if ( is_array( $portfolio_image ) && ! empty( $portfolio_image['ID'] ) ) {
+            $image_id = $portfolio_image['ID'];
+        } elseif ( is_numeric( $portfolio_image ) ) {
+            $image_id = $portfolio_image;
+        }
+    }
+    
+    if ( ! $image_id ) {
+        return;
+    }
+    
+    $image_url = wp_get_attachment_image_url( $image_id, 'portfolio-large' );
+    if ( ! $image_url ) {
+        return;
+    }
+    // Принудительно используем HTTPS
+    $image_url = set_url_scheme( $image_url, 'https' );
+    
+    // Получаем полный URL изображения для галереи
+    $image_url_full = wp_get_attachment_image_url( $image_id, 'full' );
+    if ( $image_url_full ) {
+        $image_url_full = set_url_scheme( $image_url_full, 'https' );
+    }
+    
+    // Если action_type = 'gallery', собираем все изображения из той же категории
+    $gallery_images = array();
+    if ( $action_type === 'gallery' && ! empty( $all_items ) && ! empty( $category ) ) {
+        foreach ( $all_items as $gallery_item ) {
+            $gallery_category = isset( $gallery_item['portfolio_category'] ) ? $gallery_item['portfolio_category'] : ( isset( $gallery_item['portfolio_title'] ) ? $gallery_item['portfolio_title'] : '' );
+            if ( $gallery_category === $category ) {
+                $gallery_image = isset( $gallery_item['portfolio_image'] ) ? $gallery_item['portfolio_image'] : false;
+                if ( $gallery_image ) {
+                    $gallery_image_id = false;
+                    if ( is_array( $gallery_image ) && ! empty( $gallery_image['ID'] ) ) {
+                        $gallery_image_id = $gallery_image['ID'];
+                    } elseif ( is_numeric( $gallery_image ) ) {
+                        $gallery_image_id = $gallery_image;
+                    }
+                    if ( $gallery_image_id ) {
+                        $gallery_image_url = wp_get_attachment_image_url( $gallery_image_id, 'full' );
+                        if ( $gallery_image_url ) {
+                            $gallery_images[] = array(
+                                'id' => $gallery_image_id,
+                                'url' => set_url_scheme( $gallery_image_url, 'https' ),
+                                'alt' => $gallery_category
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // Если для галереи нет изображений, используем текущее
+    if ( $action_type === 'gallery' && empty( $gallery_images ) && $image_url_full ) {
+        $gallery_images[] = array(
+            'id' => $image_id,
+            'url' => $image_url_full,
+            'alt' => $category
+        );
+    }
+    ?>
+    <div class="portfolio-item" 
+         <?php if ( $action_type === 'gallery' && ! empty( $gallery_images ) ) : ?>
+             data-gallery-action="true"
+             data-gallery-category="<?php echo esc_attr( $category ); ?>"
+             data-gallery-images='<?php echo esc_attr( wp_json_encode( $gallery_images ) ); ?>'
+         <?php endif; ?>
+    >
+        <?php if ( $action_type === 'link' && ! empty( $link ) ) : ?>
+            <a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer" class="portfolio-link">
+                <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+                <div class="portfolio-overlay">
+                    <p><?php echo esc_html( $category ); ?></p>
+                </div>
+            </a>
+        <?php elseif ( $action_type === 'gallery' && ! empty( $gallery_images ) ) : ?>
+            <button type="button" class="portfolio-gallery-trigger" aria-label="Открыть галерею: <?php echo esc_attr( $category ); ?>">
+                <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+                <div class="portfolio-overlay">
+                    <p><?php echo esc_html( $category ); ?></p>
+                </div>
+            </button>
+        <?php else : ?>
+            <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
+            <div class="portfolio-overlay">
+                <p><?php echo esc_html( $category ); ?></p>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php
+}
 ?>
 
 <section id="portfolio">
@@ -70,192 +186,32 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
             <?php if ( $current_index < $items_count ) : ?>
                 <div class="portfolio-grid-1">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
-                        $item = $portfolio_items[ $current_index ];
-                        
-                        // Получаем данные из repeater элемента напрямую
-                        // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
-                        $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
-                        $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
-                        $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
-                        $link = isset( $item['portfolio_link'] ) ? esc_url( $item['portfolio_link'] ) : '';
-                        
-                        // Получаем ID изображения
-                        $image_id = false;
-                        if ( $portfolio_image ) {
-                            if ( is_array( $portfolio_image ) && ! empty( $portfolio_image['ID'] ) ) {
-                                $image_id = $portfolio_image['ID'];
-                            } elseif ( is_numeric( $portfolio_image ) ) {
-                                $image_id = $portfolio_image;
-                            }
-                        }
-                        
-                        if ( ! $image_id ) continue;
-                        
-                        $image_url = wp_get_attachment_image_url( $image_id, 'portfolio-large' );
-                        if ( ! $image_url ) continue;
-                        // Принудительно используем HTTPS
-                        $image_url = set_url_scheme( $image_url, 'https' );
-                    ?>
-                        <div class="portfolio-item">
-                            <?php if ( ! empty( $link ) ) : ?>
-                                <a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer" class="portfolio-link">
-                                    <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                                    <div class="portfolio-overlay">
-                                        <p><?php echo esc_html( $category ); ?></p>
-                                    </div>
-                                </a>
-                            <?php else : ?>
-                                <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                                <div class="portfolio-overlay">
-                                    <p><?php echo esc_html( $category ); ?></p>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endfor; ?>
+                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ], $portfolio_items );
+                    endfor; ?>
                 </div>
             <?php endif; ?>
             
             <?php if ( $current_index < $items_count ) : ?>
                 <div class="portfolio-grid-2">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
-                        $item = $portfolio_items[ $current_index ];
-                        
-                        // Получаем данные из repeater элемента напрямую
-                        // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
-                        $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
-                        $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
-                        $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
-                        $link = isset( $item['portfolio_link'] ) ? esc_url( $item['portfolio_link'] ) : '';
-                        
-                        // Получаем ID изображения
-                        $image_id = false;
-                        if ( $portfolio_image ) {
-                            if ( is_array( $portfolio_image ) && ! empty( $portfolio_image['ID'] ) ) {
-                                $image_id = $portfolio_image['ID'];
-                            } elseif ( is_numeric( $portfolio_image ) ) {
-                                $image_id = $portfolio_image;
-                            }
-                        }
-                        
-                        if ( ! $image_id ) continue;
-                        
-                        $image_url = wp_get_attachment_image_url( $image_id, 'portfolio-large' );
-                        if ( ! $image_url ) continue;
-                        // Принудительно используем HTTPS
-                        $image_url = set_url_scheme( $image_url, 'https' );
-                    ?>
-                        <div class="portfolio-item">
-                            <?php if ( ! empty( $link ) ) : ?>
-                                <a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer" class="portfolio-link">
-                                    <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                                    <div class="portfolio-overlay">
-                                        <p><?php echo esc_html( $category ); ?></p>
-                                    </div>
-                                </a>
-                            <?php else : ?>
-                                <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                                <div class="portfolio-overlay">
-                                    <p><?php echo esc_html( $category ); ?></p>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endfor; ?>
+                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ], $portfolio_items );
+                    endfor; ?>
                 </div>
             <?php endif; ?>
             
             <?php if ( $current_index < $items_count ) : ?>
                 <div class="portfolio-grid-3">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
-                        $item = $portfolio_items[ $current_index ];
-                        
-                        // Получаем данные из repeater элемента напрямую
-                        // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
-                        $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
-                        $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
-                        $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
-                        $link = isset( $item['portfolio_link'] ) ? esc_url( $item['portfolio_link'] ) : '';
-                        
-                        // Получаем ID изображения
-                        $image_id = false;
-                        if ( $portfolio_image ) {
-                            if ( is_array( $portfolio_image ) && ! empty( $portfolio_image['ID'] ) ) {
-                                $image_id = $portfolio_image['ID'];
-                            } elseif ( is_numeric( $portfolio_image ) ) {
-                                $image_id = $portfolio_image;
-                            }
-                        }
-                        
-                        if ( ! $image_id ) continue;
-                        
-                        $image_url = wp_get_attachment_image_url( $image_id, 'portfolio-large' );
-                        if ( ! $image_url ) continue;
-                        // Принудительно используем HTTPS
-                        $image_url = set_url_scheme( $image_url, 'https' );
-                    ?>
-                        <div class="portfolio-item">
-                            <?php if ( ! empty( $link ) ) : ?>
-                                <a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer" class="portfolio-link">
-                                    <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                                    <div class="portfolio-overlay">
-                                        <p><?php echo esc_html( $category ); ?></p>
-                                    </div>
-                                </a>
-                            <?php else : ?>
-                                <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                                <div class="portfolio-overlay">
-                                    <p><?php echo esc_html( $category ); ?></p>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endfor; ?>
+                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ], $portfolio_items );
+                    endfor; ?>
                 </div>
             <?php endif; ?>
             
             <?php if ( $current_index < $items_count ) : ?>
                 <div class="portfolio-grid-4">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
-                        $item = $portfolio_items[ $current_index ];
-                        
-                        // Получаем данные из repeater элемента напрямую
-                        // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
-                        $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
-                        $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
-                        $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
-                        $link = isset( $item['portfolio_link'] ) ? esc_url( $item['portfolio_link'] ) : '';
-                        
-                        // Получаем ID изображения
-                        $image_id = false;
-                        if ( $portfolio_image ) {
-                            if ( is_array( $portfolio_image ) && ! empty( $portfolio_image['ID'] ) ) {
-                                $image_id = $portfolio_image['ID'];
-                            } elseif ( is_numeric( $portfolio_image ) ) {
-                                $image_id = $portfolio_image;
-                            }
-                        }
-                        
-                        if ( ! $image_id ) continue;
-                        
-                        $image_url = wp_get_attachment_image_url( $image_id, 'portfolio-large' );
-                        if ( ! $image_url ) continue;
-                        // Принудительно используем HTTPS
-                        $image_url = set_url_scheme( $image_url, 'https' );
-                    ?>
-                        <div class="portfolio-item">
-                            <?php if ( ! empty( $link ) ) : ?>
-                                <a href="<?php echo esc_url( $link ); ?>" target="_blank" rel="noopener noreferrer" class="portfolio-link">
-                                    <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                                    <div class="portfolio-overlay">
-                                        <p><?php echo esc_html( $category ); ?></p>
-                                    </div>
-                                </a>
-                            <?php else : ?>
-                                <img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category ); ?>" loading="lazy" decoding="async" />
-                                <div class="portfolio-overlay">
-                                    <p><?php echo esc_html( $category ); ?></p>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endfor; ?>
+                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ], $portfolio_items );
+                    endfor; ?>
                 </div>
             <?php endif; ?>
         <?php endif; ?>
