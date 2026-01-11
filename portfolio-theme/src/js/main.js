@@ -630,7 +630,7 @@ import '../css/main.css';
         
         updateCounter: function() {
             const currentEl = document.getElementById('portfolio-gallery-current');
-            const totalEl = document.getElementById('portfolio-gallery-total');
+            const totalEl = document.getElementById('portfolio-gallery-viewer-total');
             
             if (currentEl) {
                 currentEl.textContent = this.currentIndex + 1;
