@@ -1983,6 +1983,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 24px 32px;
+            padding-right: 80px; /* Отступ справа для кнопки закрытия (32px + 40px кнопка + 8px отступ) */
             border-bottom: 1px solid rgba(248, 246, 243, 0.1);
         }
         
@@ -2184,6 +2185,7 @@
             height: 100%;
             min-height: 0; /* Важно для flex-контейнера */
             overflow: hidden;
+            position: relative; /* Для правильной работы скролла */
         }
         
         .portfolio-gallery-grid-view .portfolio-gallery-header {
@@ -2193,7 +2195,7 @@
         .portfolio-gallery-grid {
             flex: 1 1 auto;
             min-height: 0; /* Важно для правильной работы overflow в flex-контейнере */
-            overflow-y: auto;
+            overflow-y: auto !important; /* Явно разрешаем скролл */
             overflow-x: hidden;
             padding: 24px 32px;
             display: grid;
@@ -2203,6 +2205,8 @@
             /* Улучшаем скролл на мобильных устройствах */
             -webkit-overflow-scrolling: touch;
             overscroll-behavior-y: contain;
+            position: relative; /* Для правильной работы скролла */
+            z-index: 1; /* Гарантируем, что скролл работает */
         }
         
         .portfolio-gallery-grid::-webkit-scrollbar {
@@ -2295,6 +2299,7 @@
             
             .portfolio-gallery-header {
                 padding: 16px 20px;
+                padding-right: 64px; /* Отступ справа для кнопки закрытия на мобильных (20px + 32px кнопка + 12px отступ) */
                 flex-shrink: 0;
             }
             
@@ -2316,6 +2321,7 @@
             .portfolio-gallery-viewer-view .portfolio-gallery-header {
                 flex-shrink: 0;
                 padding: 16px 20px;
+                padding-right: 64px; /* Отступ справа для кнопки закрытия на мобильных */
             }
             
             .portfolio-gallery-viewer-view .portfolio-gallery-main {
