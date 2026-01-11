@@ -163,6 +163,17 @@ if ( $about_media_type === 'video' && $about_video ) {
             $video_id = $matches[1];
             $video_embed_code = 'https://player.vimeo.com/video/' . esc_attr( $video_id );
         }
+        // VK (vk.com/video..., vk.com/clip...)
+        elseif ( preg_match( '/vk\.com\/(?:video|clip)(-?\d+)_(\d+)/', $about_video_url, $matches ) ) {
+            $owner_id = $matches[1];
+            $video_id = $matches[2];
+            // Для клипов (clip) owner_id должен быть отрицательным, для обычных видео - как есть
+            if ( strpos( $about_video_url, '/clip' ) !== false && $owner_id > 0 ) {
+                $owner_id = '-' . $owner_id;
+            }
+            // VK использует формат video_ext.php для embed
+            $video_embed_code = 'https://vk.com/video_ext.php?oid=' . esc_attr( $owner_id ) . '&id=' . esc_attr( $video_id ) . '&hash=';
+        }
         // Прямая ссылка на видеофайл (.mp4, .webm, .ogv и т.д.)
         elseif ( preg_match( '/\.(mp4|webm|ogv|mov)(\?.*)?$/i', $about_video_url ) ) {
             $video_embed_code = esc_url( $about_video_url ); // Прямая ссылка, используем как есть
@@ -206,8 +217,10 @@ if ( $about_media_type === 'video' && $about_video ) {
             <div class="about-media about-video">
                 <?php
                 // Проверяем тип видео для правильной обработки
-                if ( strpos( $video_embed_code, 'youtube.com/embed' ) !== false || strpos( $video_embed_code, 'player.vimeo.com' ) !== false ) {
-                    // YouTube или Vimeo - используем iframe
+                if ( strpos( $video_embed_code, 'youtube.com/embed' ) !== false || 
+                     strpos( $video_embed_code, 'player.vimeo.com' ) !== false ||
+                     strpos( $video_embed_code, 'vk.com/video_ext.php' ) !== false ) {
+                    // YouTube, Vimeo или VK - используем iframe
                 ?>
                     <iframe 
                         src="<?php echo esc_url( $video_embed_code ); ?>" 
