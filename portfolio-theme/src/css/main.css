@@ -2178,17 +2178,27 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            min-height: 0; /* Важно для flex-контейнера */
             overflow: hidden;
         }
         
+        .portfolio-gallery-grid-view .portfolio-gallery-header {
+            flex-shrink: 0; /* Header не сжимается */
+        }
+        
         .portfolio-gallery-grid {
-            flex: 1;
+            flex: 1 1 auto;
+            min-height: 0; /* Важно для правильной работы overflow в flex-контейнере */
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 24px 32px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
             align-content: start;
+            /* Улучшаем скролл на мобильных устройствах */
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
         }
         
         .portfolio-gallery-grid::-webkit-scrollbar {
@@ -2355,10 +2365,23 @@
         }
         
         @media (max-width: 480px) {
+            .portfolio-gallery-grid-view {
+                height: 100%;
+                min-height: 0;
+            }
+            
+            .portfolio-gallery-grid-view .portfolio-gallery-header {
+                flex-shrink: 0;
+            }
+            
             .portfolio-gallery-grid {
+                flex: 1 1 auto;
+                min-height: 0;
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
                 gap: 10px;
                 padding: 12px 16px;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
             
             .portfolio-gallery-viewer-view .portfolio-gallery-slide img {
