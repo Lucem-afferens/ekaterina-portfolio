@@ -140,6 +140,8 @@ if ( $about_image && $about_media_type === 'photo' ) {
 // Обрабатываем URL видео
 $about_video_url = '';
 $video_embed_code = '';
+$is_vk_video = false;
+$vk_video_id = '';
 // Проверяем тип медиа явно, чтобы не обрабатывать видео, если выбран тип photo
 if ( $about_media_type === 'video' && $about_video ) {
     // Нормализуем значение - может быть строка, массив или значение с пробелами
@@ -165,14 +167,11 @@ if ( $about_media_type === 'video' && $about_video ) {
         }
         // VK (vk.com/video..., vk.com/clip...)
         elseif ( preg_match( '/vk\.com\/(?:video|clip)(-?\d+)_(\d+)/', $about_video_url, $matches ) ) {
-            $owner_id = $matches[1];
-            $video_id = $matches[2];
-            // Для клипов (clip) owner_id должен быть отрицательным, для обычных видео - как есть
-            if ( strpos( $about_video_url, '/clip' ) !== false && $owner_id > 0 ) {
-                $owner_id = '-' . $owner_id;
-            }
-            // VK использует формат video_ext.php для embed
-            $video_embed_code = 'https://vk.com/video_ext.php?oid=' . esc_attr( $owner_id ) . '&id=' . esc_attr( $video_id ) . '&hash=';
+            // VK требует использования Widget API для встраивания
+            // Сохраняем оригинальную ссылку и ID для виджета
+            $is_vk_video = true;
+            $vk_video_id = esc_attr( $matches[1] . '_' . $matches[2] );
+            $video_embed_code = esc_url( $about_video_url ); // Сохраняем для ссылки
         }
         // Прямая ссылка на видеофайл (.mp4, .webm, .ogv и т.д.)
         elseif ( preg_match( '/\.(mp4|webm|ogv|mov)(\?.*)?$/i', $about_video_url ) ) {
@@ -216,11 +215,27 @@ if ( $about_media_type === 'video' && $about_video ) {
         ?>
             <div class="about-media about-video">
                 <?php
+                // Специальная обработка для VK видео
+                if ( $is_vk_video && ! empty( $vk_video_id ) ) {
+                    // VK блокирует встраивание через iframe из-за политики безопасности (X-Frame-Options)
+                    // Показываем превью с кнопкой перехода на VK
+                ?>
+                    <div class="vk-video-fallback" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 40px; text-align: center; background-color: #1a1a1a;">
+                        <div style="margin-bottom: 24px;">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #9d7e5f;">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <p style="margin-bottom: 20px; color: #f8f6f3; font-size: 18px;">Видео из ВКонтакте</p>
+                        <p style="margin-bottom: 24px; color: rgba(248, 246, 243, 0.7); font-size: 14px;">Для просмотра видео откройте его в ВКонтакте</p>
+                        <a href="<?php echo esc_url( $video_embed_code ); ?>" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 14px 32px; background-color: #9d7e5f; color: #f8f6f3; text-decoration: none; border-radius: 4px; transition: background-color 0.3s; font-weight: 500;">Открыть в ВКонтакте</a>
+                    </div>
+                <?php
+                }
                 // Проверяем тип видео для правильной обработки
-                if ( strpos( $video_embed_code, 'youtube.com/embed' ) !== false || 
-                     strpos( $video_embed_code, 'player.vimeo.com' ) !== false ||
-                     strpos( $video_embed_code, 'vk.com/video_ext.php' ) !== false ) {
-                    // YouTube, Vimeo или VK - используем iframe
+                elseif ( strpos( $video_embed_code, 'youtube.com/embed' ) !== false || 
+                         strpos( $video_embed_code, 'player.vimeo.com' ) !== false ) {
+                    // YouTube или Vimeo - используем iframe
                 ?>
                     <iframe 
                         src="<?php echo esc_url( $video_embed_code ); ?>" 
