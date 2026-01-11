@@ -255,7 +255,7 @@ UX/UI Дизайнер
 
 ---
 
-### Поле 2: intro_description (Тип: WYSIWYG)
+### Поле 3: intro_description (Тип: WYSIWYG)
 
 **Инструкция по созданию:**
 1. **Тип поля**: **WYSIWYG Editor** (Визуальный редактор) или **Textarea** (если WYSIWYG недоступен)
@@ -296,7 +296,7 @@ UX/UI Дизайнер
 
 ---
 
-### Поле 3: intro_image (Тип: Image)
+### Поле 4: intro_image (Тип: Image)
 
 **Инструкция по созданию:**
 1. **Тип поля**: **Image** (Изображение)
@@ -448,7 +448,7 @@ UX/UI Дизайнер
 
 ---
 
-### Поле 2: philosophy_quote (Тип: Textarea)
+### Поле 3: philosophy_quote (Тип: Textarea)
 
 **Инструкция по созданию:**
 1. **Тип поля**: **Textarea** (Многострочный текст)
@@ -466,7 +466,7 @@ UX/UI Дизайнер
 
 ---
 
-### Поле 3: philosophy_principles (Тип: Repeater)
+### Поле 4: philosophy_principles (Тип: Repeater)
 
 **Инструкция по созданию:**
 1. **Тип поля**: **Repeater** (Повторитель)
@@ -546,7 +546,7 @@ UX/UI Дизайнер
 
 ---
 
-### Поле 2: about_timeline (Тип: Repeater)
+### Поле 3: about_timeline (Тип: Repeater)
 
 **Инструкция:**
 1. **Тип поля**: **Repeater**
@@ -761,7 +761,7 @@ https://example.com/path/to/video.mp4
 
 ---
 
-### Поле 2: portfolio_description (Тип: Textarea)
+### Поле 3: portfolio_description (Тип: Textarea)
 
 **Инструкция:**
 1. **Тип поля**: **Textarea**
@@ -776,7 +776,7 @@ https://example.com/path/to/video.mp4
 
 ---
 
-### Поле 3: portfolio_items (Тип: Repeater)
+### Поле 4: portfolio_items (Тип: Repeater)
 
 **Инструкция:**
 1. **Тип поля**: **Repeater**
@@ -956,7 +956,7 @@ https://example.com/path/to/video.mp4
 
 ---
 
-### Поле 2: expertise_items (Тип: Repeater)
+### Поле 3: expertise_items (Тип: Repeater)
 
 **Инструкция:**
 1. **Тип поля**: **Repeater**
@@ -1045,35 +1045,41 @@ https://example.com/path/to/video.mp4
 
 ---
 
-### Поле 2: services_subtitle (Тип: Textarea)
+### Поле 2: services_description (Тип: Textarea)
 
 **Инструкция:**
 1. **Тип поля**: **Textarea** (или **Text**)
-2. **Название поля**: `services_subtitle`
-3. **Метка поля**: "Подзаголовок"
+2. **Название поля**: `services_description`
+3. **Метка поля**: "Описание"
+4. **Инструкция**: "Введите описание секции услуг."
 
 **Что вводить:**
 ```
 Комплексный подход к организации вашего события
 ```
 
+**Примечание:** Код поддерживает также поле `services_subtitle` для обратной совместимости, но рекомендуется использовать `services_description`.
+
 ---
 
-### Поле 3: services_items (Тип: Repeater)
+### Поле 3: services_list (Тип: Repeater)
+
+**ВАЖНО:** Код использует поле `services_list`, но также поддерживает `services_items` для обратной совместимости. Рекомендуется использовать `services_list`.
 
 **Инструкция:**
 1. **Тип поля**: **Repeater**
-2. **Название поля**: `services_items`
+2. **Название поля**: `services_list` (рекомендуется) или `services_items` (для обратной совместимости)
 3. **Метка поля**: "Услуги"
 
-**Внутри Repeater создайте четыре подполя:**
+**Внутри Repeater создайте три подполя:**
 
-#### Подполе 1: service_name (внутри services_items)
+#### Подполе 1: service_title (внутри services_list)
 
 **Инструкция:**
 1. **Тип поля**: **Text**
-2. **Название поля**: `service_name`
+2. **Название поля**: `service_title` (рекомендуется) или `service_name` (для обратной совместимости)
 3. **Метка поля**: "Название услуги"
+4. **Примечание:** Код поддерживает оба варианта, но рекомендуется использовать `service_title`.
 
 #### Подполе 2: service_description (внутри services_items)
 
@@ -1083,22 +1089,24 @@ https://example.com/path/to/video.mp4
 3. **Метка поля**: "Описание услуги"
 4. **Количество строк**: 2-3
 
-#### Подполе 3: service_features (Тип: Repeater внутри services_items - вложенный Repeater)
+#### Подполе 3: service_points (Тип: Repeater внутри services_list - вложенный Repeater) или Textarea
+
+**ВАЖНО:** Код использует поле `service_points`, но также поддерживает `service_features` для обратной совместимости. Рекомендуется использовать `service_points`.
 
 **ВАЖНО:** Если SCF не поддерживает вложенные Repeater, используйте **Textarea** с разделителем (каждая строка - отдельный пункт).
 
 **Инструкция (вариант 1 - вложенный Repeater, если поддерживается):**
 1. **Тип поля**: **Repeater**
-2. **Название поля**: `service_features`
-3. **Метка поля**: "Особенности услуги"
+2. **Название поля**: `service_points` (рекомендуется) или `service_features` (для обратной совместимости)
+3. **Метка поля**: "Особенности услуги" или "Пункты услуги"
 4. Внутри этого Repeater создайте одно подполе:
    - **Тип**: **Text**
-   - **Название**: `feature_text`
+   - **Название**: `point_text` (рекомендуется) или `feature_text` (для обратной совместимости)
    - **Метка**: "Пункт"
 
 **Инструкция (вариант 2 - Textarea, если вложенный Repeater не поддерживается):**
 1. **Тип поля**: **Textarea**
-2. **Название поля**: `service_features`
+2. **Название поля**: `service_points` (рекомендуется) или `service_features` (для обратной совместимости)
 3. **Метка поля**: "Особенности услуги (каждый пункт с новой строки)"
 4. **Инструкция**: "Введите список особенностей, каждый пункт с новой строки. Начинайте с тире или без него."
 5. **Количество строк**: 5-6
@@ -1108,21 +1116,21 @@ https://example.com/path/to/video.mp4
 Добавьте 5 строк:
 
 **Строка 1:**
-- **service_name**: `Основная услуга`
+- **service_title** (или service_name): `Основная услуга`
 - **service_description**: `Краткое описание вашей основной услуги с учётом всех особенностей и преимуществ`
-- **service_features** (если Textarea):
+- **service_points** (или service_features, если Textarea):
 ```
 Особенность 1
 Особенность 2
 Особенность 3
 Особенность 4
 ```
-- **service_features** (если вложенный Repeater): Добавьте строки с особенностями вашей услуги
+- **service_points** (если вложенный Repeater): Добавьте строки с особенностями вашей услуги
 
 **Строка 2:**
-- **service_name**: `Консультация`
+- **service_title** (или service_name): `Консультация`
 - **service_description**: `Экспертная помощь в планировании и реализации проекта`
-- **service_features** (Textarea):
+- **service_points** (или service_features, если Textarea):
 ```
 Концепция проекта
 Структура работы
@@ -1131,9 +1139,9 @@ https://example.com/path/to/video.mp4
 ```
 
 **Строка 3:**
-- **service_name**: `Индивидуальный подход`
+- **service_title** (или service_name): `Индивидуальный подход`
 - **service_description**: `Создание уникального решения с учётом всех требований и особенностей проекта`
-- **service_features** (Textarea):
+- **service_points** (или service_features, если Textarea):
 ```
 Персональный подход
 Авторские решения
@@ -1142,9 +1150,9 @@ https://example.com/path/to/video.mp4
 ```
 
 **Строка 4:**
-- **service_name**: `Дополнительная услуга`
+- **service_title** (или service_name): `Дополнительная услуга`
 - **service_description**: `Описание дополнительной услуги или опции`
-- **service_features** (Textarea):
+- **service_points** (или service_features, если Textarea):
 ```
 Особенность 1
 Особенность 2
@@ -1153,9 +1161,9 @@ https://example.com/path/to/video.mp4
 ```
 
 **Строка 5:**
-- **service_name**: `Удаленная работа`
+- **service_title** (или service_name): `Удаленная работа`
 - **service_description**: `Возможность работы удаленно с клиентами из разных регионов`
-- **service_features** (Textarea):
+- **service_points** (или service_features, если Textarea):
 ```
 Работа в любом регионе
 Онлайн-консультации
@@ -1200,17 +1208,20 @@ https://example.com/path/to/video.mp4
 
 ---
 
-### Поле 2: process_subtitle (Тип: Textarea)
+### Поле 2: process_description (Тип: Textarea)
 
 **Инструкция:**
 1. **Тип поля**: **Textarea** (или **Text**)
-2. **Название поля**: `process_subtitle`
-3. **Метка поля**: "Подзаголовок"
+2. **Название поля**: `process_description`
+3. **Метка поля**: "Описание"
+4. **Инструкция**: "Введите описание секции процесса работы."
 
 **Что вводить:**
 ```
 От первой встречи до завершения проекта
 ```
+
+**Примечание:** Код поддерживает также поле `process_subtitle` для обратной совместимости, но рекомендуется использовать `process_description`.
 
 ---
 
@@ -1317,30 +1328,35 @@ https://example.com/path/to/video.mp4
 
 ---
 
-### Поле 2: testimonials_subtitle (Тип: Textarea)
+### Поле 2: testimonials_description (Тип: Textarea)
 
 **Инструкция:**
 1. **Тип поля**: **Textarea** (или **Text**)
-2. **Название поля**: `testimonials_subtitle`
-3. **Метка поля**: "Подзаголовок"
+2. **Название поля**: `testimonials_description` (рекомендуется) или `testimonials_subtitle` (для обратной совместимости)
+3. **Метка поля**: "Описание"
+4. **Инструкция**: "Введите описание секции отзывов."
 
 **Что вводить:**
 ```
 Мнения тех, с кем я работала
 ```
 
+**Примечание:** Код поддерживает оба варианта, но рекомендуется использовать `testimonials_description`.
+
 ---
 
-### Поле 3: testimonials_items (Тип: Repeater)
+### Поле 3: testimonials_list (Тип: Repeater)
+
+**ВАЖНО:** Код использует поле `testimonials_list`, но также поддерживает `testimonials_items` для обратной совместимости. Рекомендуется использовать `testimonials_list`.
 
 **Инструкция:**
 1. **Тип поля**: **Repeater**
-2. **Название поля**: `testimonials_items`
+2. **Название поля**: `testimonials_list` (рекомендуется) или `testimonials_items` (для обратной совместимости)
 3. **Метка поля**: "Отзывы клиентов"
 
 **Внутри Repeater создайте три подполя:**
 
-#### Подполе 1: testimonial_quote (внутри testimonials_items)
+#### Подполе 1: testimonial_quote (внутри testimonials_list)
 
 **Инструкция:**
 1. **Тип поля**: **Textarea**
@@ -1349,19 +1365,21 @@ https://example.com/path/to/video.mp4
 4. **Инструкция**: "Введите текст отзыва. Можно включать кавычки или нет - они могут добавляться автоматически на сайте."
 5. **Количество строк**: 4-6
 
-#### Подполе 2: testimonial_author_name (внутри testimonials_items)
+#### Подполе 2: testimonial_author (внутри testimonials_list)
 
 **Инструкция:**
 1. **Тип поля**: **Text**
-2. **Название поля**: ` `
+2. **Название поля**: `testimonial_author` (рекомендуется) или `testimonial_author_name` (для обратной совместимости)
 3. **Метка поля**: "Имя автора"
+4. **Примечание:** Код поддерживает оба варианта, но рекомендуется использовать `testimonial_author`.
 
-#### Подполе 3: testimonial_author_title (внутри testimonials_items)
+#### Подполе 3: testimonial_title (внутри testimonials_list)
 
 **Инструкция:**
 1. **Тип поля**: **Text**
-2. **Название поля**: `testimonial_author_title`
+2. **Название поля**: `testimonial_title` (рекомендуется) или `testimonial_author_title` (для обратной совместимости)
 3. **Метка поля**: "Должность / Компания"
+4. **Примечание:** Код поддерживает оба варианта, но рекомендуется использовать `testimonial_title`.
 
 **Как заполнять Repeater:**
 
@@ -1369,33 +1387,33 @@ https://example.com/path/to/video.mp4
 
 **Строка 1:**
 - **testimonial_quote**: `"Отличная работа! Профессионализм на высочайшем уровне. Каждая деталь была продумана, сроки соблюдены идеально. Рекомендую как надежного специалиста."`
-- **testimonial_author_name**: `Имя Фамилия`
-- **testimonial_author_title**: `Должность, Компания`
+- **testimonial_author** (или testimonial_author_name): `Имя Фамилия`
+- **testimonial_title** (или testimonial_author_title): `Должность, Компания`
 
 **Строка 2:**
 - **testimonial_quote**: `"Проект получился именно таким, каким мы его представляли. Подход к работе профессиональный, все пожелания учтены, результат превзошел ожидания. Благодарны за качественную работу."`
-- **testimonial_author_name**: `Имя Фамилия`
-- **testimonial_author_title**: `Должность, Компания`
+- **testimonial_author** (или testimonial_author_name): `Имя Фамилия`
+- **testimonial_title** (или testimonial_author_title): `Должность, Компания`
 
 **Строка 3:**
 - **testimonial_quote**: `"Работа была выполнена безупречно. Способность найти подход к любой задаче и внимание к деталям впечатляют. Рекомендую как специалиста премиум-класса."`
-- **testimonial_author_name**: `Имя Фамилия`
-- **testimonial_author_title**: `Должность, Компания`
+- **testimonial_author** (или testimonial_author_name): `Имя Фамилия`
+- **testimonial_title** (или testimonial_author_title): `Должность, Компания`
 
 **Строка 4:**
 - **testimonial_quote**: `"Профессиональный подход, глубокое понимание задачи и умение находить нестандартные решения. Все участники проекта остались довольны результатом. Будем рады сотрудничать снова."`
-- **testimonial_author_name**: `Имя Фамилия`
-- **testimonial_author_title**: `Должность, Компания`
+- **testimonial_author** (или testimonial_author_name): `Имя Фамилия`
+- **testimonial_title** (или testimonial_author_title): `Должность, Компания`
 
 **Строка 5:**
 - **testimonial_quote**: `"Сотрудничаем уже несколько лет. Это редкое сочетание профессионализма, креативности и надежности. Всегда можно положиться на качественное выполнение работы в срок. Надёжный партнёр."`
-- **testimonial_author_name**: `Имя Фамилия`
-- **testimonial_author_title**: `Должность, Компания`
+- **testimonial_author** (или testimonial_author_name): `Имя Фамилия`
+- **testimonial_title** (или testimonial_author_title): `Должность, Компания`
 
 **Строка 6:**
 - **testimonial_quote**: `"Способность понять задачу и представить результат в лучшем свете помогла нам достичь именно тех целей, на которые мы рассчитывали. Профессионал своего дела, рекомендую."`
-- **testimonial_author_name**: `Имя Фамилия`
-- **testimonial_author_title**: `Должность, Компания`
+- **testimonial_author** (или testimonial_author_name): `Имя Фамилия`
+- **testimonial_title** (или testimonial_author_title): `Должность, Компания`
 
 ---
 
@@ -1958,12 +1976,13 @@ https://vk.com/your-page
 
 ---
 
-### Поле 2: contact_channels_label (Тип: Text)
+### Поле 2: channels_label (Тип: Text)
 
 **Инструкция:**
 1. **Тип поля**: **Text**
-2. **Название поля**: `contact_channels_label`
+2. **Название поля**: `channels_label` (рекомендуется) или `contact_channels_label` (для обратной совместимости)
 3. **Метка поля**: "Текст перед ссылками"
+4. **Примечание:** Код поддерживает оба варианта, но рекомендуется использовать `channels_label`.
 
 **Что вводить:**
 ```
@@ -1972,7 +1991,7 @@ https://vk.com/your-page
 
 ---
 
-### Поле 2: channels_social_networks (Тип: Repeater) - НОВЫЙ СПОСОБ
+### Поле 3: channels_social_networks (Тип: Repeater) - НОВЫЙ СПОСОБ
 
 **Инструкция:**
 1. **Тип поля**: **Repeater**
