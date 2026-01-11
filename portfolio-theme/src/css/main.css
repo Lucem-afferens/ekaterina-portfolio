@@ -1972,6 +1972,8 @@
             display: flex;
             flex-direction: column;
             background-color: #1a1a1a;
+            overflow: hidden; /* Предотвращаем скролл самого modal-content */
+            min-height: 0; /* Важно для flex-контейнера */
         }
         
         .portfolio-gallery-header {
