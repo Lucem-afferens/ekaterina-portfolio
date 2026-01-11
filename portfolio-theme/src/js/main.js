@@ -311,9 +311,15 @@ import '../css/main.css';
     
     // Закрытие модальных окон по кнопке закрытия
     document.querySelectorAll('.modal-close').forEach(closeBtn => {
-        closeBtn.addEventListener('click', function() {
+        closeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
             const modal = this.closest('.modal');
             if (modal) {
+                // Для галереи портфолио используем специальную логику закрытия
+                if (modal.id === 'portfolio-gallery-modal') {
+                    // Логика закрытия галереи обрабатывается в portfolioGallery.handleClose()
+                    return;
+                }
                 closeModal(modal.id);
             }
         });
@@ -321,9 +327,14 @@ import '../css/main.css';
     
     // Закрытие модальных окон по клику на overlay
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', function() {
+        overlay.addEventListener('click', function(e) {
             const modal = this.closest('.modal');
             if (modal) {
+                // Для галереи портфолио используем специальную логику закрытия
+                if (modal.id === 'portfolio-gallery-modal') {
+                    // Логика закрытия галереи обрабатывается в portfolioGallery.handleClose()
+                    return;
+                }
                 closeModal(modal.id);
             }
         });
@@ -332,7 +343,13 @@ import '../css/main.css';
     // Закрытие модальных окон по клавише Escape
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            document.querySelectorAll('.modal.active').forEach(modal => {
+            // Проверяем, не является ли активная модалка галереей портфолио
+            const activeModals = document.querySelectorAll('.modal.active');
+            activeModals.forEach(modal => {
+                if (modal.id === 'portfolio-gallery-modal') {
+                    // Логика закрытия галереи обрабатывается в portfolioGallery.handleClose()
+                    return;
+                }
                 closeModal(modal.id);
             });
         }
