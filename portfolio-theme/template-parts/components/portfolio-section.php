@@ -60,8 +60,7 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
 function ekaterina_render_portfolio_item( $item ) {
     // Получаем данные из repeater элемента
     $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
-    $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
-    $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
+    $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : '';
     $link = isset( $item['portfolio_link'] ) ? trim( $item['portfolio_link'] ) : '';
     $gallery_images_field = isset( $item['portfolio_gallery_images'] ) ? $item['portfolio_gallery_images'] : false;
     

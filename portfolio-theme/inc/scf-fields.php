@@ -96,8 +96,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - portfolio_description (Textarea) - Описание
  * - portfolio_items (Repeater) - Элементы портфолио
  *   - portfolio_image (Image) - Изображение
- *   - portfolio_title (Text) - Название
- *   - portfolio_category (Text) - Категория
+ *   - portfolio_category (Text) - Категория (отображается поверх изображения)
  *   - portfolio_link (URL) - Ссылка (опционально, приоритет 1: если заполнена, открывается ссылка)
  *   - portfolio_gallery_images (Gallery) - Изображения для галереи (опционально, приоритет 2: если заполнены, открывается галерея)
  */
