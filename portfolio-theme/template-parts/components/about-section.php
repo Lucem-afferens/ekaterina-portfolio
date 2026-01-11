@@ -38,8 +38,13 @@ $about_timeline = function_exists( 'get_field' ) ? get_field( 'about_timeline', 
 
 // Получаем тип медиа (photo или video)
 $about_media_type = function_exists( 'get_field' ) ? get_field( 'about_media_type', $current_page_id ) : 'photo';
-if ( empty( $about_media_type ) ) {
-    $about_media_type = 'photo'; // По умолчанию фото
+// Нормализуем значение - SCF/ACF может вернуть массив или значение с пробелами
+if ( is_array( $about_media_type ) ) {
+    $about_media_type = isset( $about_media_type['value'] ) ? $about_media_type['value'] : ( isset( $about_media_type[0] ) ? $about_media_type[0] : 'photo' );
+}
+$about_media_type = trim( strtolower( (string) $about_media_type ) );
+if ( empty( $about_media_type ) || $about_media_type !== 'video' ) {
+    $about_media_type = 'photo'; // По умолчанию фото, если не video
 }
 
 // Получаем фото или видео в зависимости от типа медиа
@@ -48,6 +53,8 @@ $about_video = false;
 
 if ( $about_media_type === 'video' ) {
     $about_video = function_exists( 'get_field' ) ? get_field( 'about_video', $current_page_id ) : false;
+    // Также получаем фото, если оно было заполнено (для обратной совместимости)
+    // Но оно не будет использоваться, если выбран тип video
 } else {
     $about_image = function_exists( 'get_field' ) ? get_field( 'about_image', $current_page_id ) : false;
 }
@@ -98,8 +105,14 @@ if ( $about_image && $about_media_type === 'photo' ) {
 // Обрабатываем URL видео
 $about_video_url = '';
 $video_embed_code = '';
-if ( $about_video && $about_media_type === 'video' ) {
-    $about_video_url = esc_url( trim( $about_video ) );
+// Проверяем тип медиа явно, чтобы не обрабатывать видео, если выбран тип photo
+if ( $about_media_type === 'video' && $about_video ) {
+    // Нормализуем значение - может быть строка, массив или значение с пробелами
+    $video_raw = $about_video;
+    if ( is_array( $video_raw ) ) {
+        $video_raw = isset( $video_raw['url'] ) ? $video_raw['url'] : ( isset( $video_raw['value'] ) ? $video_raw['value'] : ( isset( $video_raw[0] ) ? $video_raw[0] : '' ) );
+    }
+    $about_video_url = trim( (string) $video_raw );
     
     // Определяем тип видео и формируем embed код
     if ( ! empty( $about_video_url ) ) {
@@ -117,7 +130,11 @@ if ( $about_video && $about_media_type === 'video' ) {
         }
         // Прямая ссылка на видеофайл (.mp4, .webm, .ogv и т.д.)
         elseif ( preg_match( '/\.(mp4|webm|ogv|mov)(\?.*)?$/i', $about_video_url ) ) {
-            $video_embed_code = $about_video_url; // Прямая ссылка, используем как есть
+            $video_embed_code = esc_url( $about_video_url ); // Прямая ссылка, используем как есть
+        } else {
+            // Если не распознали формат, но есть URL, попробуем использовать как есть (для нестандартных форматов)
+            // Это может быть YouTube или Vimeo с нестандартным форматом URL
+            $video_embed_code = esc_url( $about_video_url );
         }
     }
 }
@@ -145,7 +162,12 @@ if ( $about_video && $about_media_type === 'video' ) {
                 </div>
             <?php endforeach; ?>
         </div>
-        <?php if ( $about_media_type === 'video' && ! empty( $video_embed_code ) ) : ?>
+        <?php 
+        // Показываем видео, если тип медиа = video И есть видео (или embed код)
+        if ( $about_media_type === 'video' ) : 
+            // Если есть embed код, показываем его
+            if ( ! empty( $video_embed_code ) ) :
+        ?>
             <div class="about-media about-video">
                 <?php
                 // Проверяем тип видео для правильной обработки
@@ -181,7 +203,13 @@ if ( $about_video && $about_media_type === 'video' ) {
                 }
                 ?>
             </div>
-        <?php elseif ( $about_media_type === 'photo' && $about_image_url ) : ?>
+        <?php 
+            // Если тип видео, но embed код не сформирован (например, неправильная ссылка), показываем сообщение или ничего
+            // Можно добавить сообщение об ошибке, если нужно
+            endif;
+        // Показываем фото ТОЛЬКО если тип медиа = photo (не video!)
+        elseif ( $about_media_type === 'photo' && ! empty( $about_image_url ) ) : 
+        ?>
             <div class="about-media about-image">
                 <img src="<?php echo esc_url( $about_image_url ); ?>" alt="<?php echo esc_attr( $about_title ); ?>" loading="lazy" decoding="async" />
             </div>
