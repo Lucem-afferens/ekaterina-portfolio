@@ -464,7 +464,7 @@ import '../css/main.css';
             const viewerView = document.getElementById('portfolio-gallery-viewer-view');
             
             if (gridView) {
-                gridView.style.display = 'block';
+                gridView.style.display = 'flex';
             }
             if (viewerView) {
                 viewerView.style.display = 'none';
@@ -501,7 +501,7 @@ import '../css/main.css';
                 gridView.style.display = 'none';
             }
             if (viewerView) {
-                viewerView.style.display = 'block';
+                viewerView.style.display = 'flex';
             }
             
             // Устанавливаем заголовок
