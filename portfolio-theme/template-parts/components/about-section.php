@@ -37,14 +37,49 @@ $about_title = $about_title ?: 'Профессиональный путь';
 $about_timeline = function_exists( 'get_field' ) ? get_field( 'about_timeline', $current_page_id ) : false;
 
 // Получаем тип медиа (photo или video)
-$about_media_type = function_exists( 'get_field' ) ? get_field( 'about_media_type', $current_page_id ) : 'photo';
-// Нормализуем значение - SCF/ACF может вернуть массив или значение с пробелами
-if ( is_array( $about_media_type ) ) {
-    $about_media_type = isset( $about_media_type['value'] ) ? $about_media_type['value'] : ( isset( $about_media_type[0] ) ? $about_media_type[0] : 'photo' );
-}
-$about_media_type = trim( strtolower( (string) $about_media_type ) );
-if ( empty( $about_media_type ) || $about_media_type !== 'video' ) {
-    $about_media_type = 'photo'; // По умолчанию фото, если не video
+$about_media_type_raw = function_exists( 'get_field' ) ? get_field( 'about_media_type', $current_page_id ) : 'photo';
+// ВРЕМЕННАЯ ОТЛАДКА (удалите после проверки):
+// Раскомментируйте следующую строку, чтобы увидеть, что возвращает SCF:
+// error_log( 'DEBUG about_media_type_raw: ' . print_r( $about_media_type_raw, true ) );
+// Нормализуем значение - SCF/ACF может вернуть массив, объект или значение с пробелами
+$about_media_type = 'photo'; // По умолчанию фото
+
+if ( ! empty( $about_media_type_raw ) ) {
+    // Если это массив, извлекаем значение
+    if ( is_array( $about_media_type_raw ) ) {
+        // Проверяем различные возможные ключи
+        if ( isset( $about_media_type_raw['value'] ) ) {
+            $about_media_type = $about_media_type_raw['value'];
+        } elseif ( isset( $about_media_type_raw['label'] ) ) {
+            $about_media_type = $about_media_type_raw['label'];
+        } elseif ( isset( $about_media_type_raw[0] ) ) {
+            $about_media_type = $about_media_type_raw[0];
+        }
+    } 
+    // Если это объект
+    elseif ( is_object( $about_media_type_raw ) ) {
+        if ( isset( $about_media_type_raw->value ) ) {
+            $about_media_type = $about_media_type_raw->value;
+        } elseif ( isset( $about_media_type_raw->label ) ) {
+            $about_media_type = $about_media_type_raw->label;
+        }
+    }
+    // Если это строка
+    else {
+        $about_media_type = $about_media_type_raw;
+    }
+    
+    // Нормализуем: убираем пробелы, приводим к нижнему регистру
+    $about_media_type = trim( strtolower( (string) $about_media_type ) );
+    
+    // Проверяем различные варианты написания "video"
+    // Может быть: "video", "видео", "Video", "Видео" и т.д.
+    if ( $about_media_type === 'video' || $about_media_type === 'видео' ) {
+        $about_media_type = 'video';
+    } else {
+        // Если не video, то photo
+        $about_media_type = 'photo';
+    }
 }
 
 // Получаем фото или видео в зависимости от типа медиа
