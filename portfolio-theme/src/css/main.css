@@ -2253,10 +2253,10 @@
         
         /* Просмотр изображения (второй уровень) */
         .portfolio-gallery-viewer-view {
-            display: flex !important;
+            display: flex;
             flex-direction: column;
-            height: 100%;
-            min-height: 0; /* Важно для flex-контейнера */
+            flex: 1 1 auto;
+            min-height: 0;
             overflow: hidden;
         }
         
