@@ -1969,16 +1969,18 @@
            ======================================== */
         
         .portfolio-gallery-modal .modal-content {
-            max-width: 95vw;
-            width: 100%;
-            max-height: 95vh;
-            height: 95vh;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            background-color: #1a1a1a;
-            overflow: hidden; /* Предотвращаем скролл самого modal-content */
-            min-height: 0; /* Важно для flex-контейнера */
+            max-width: 95vw !important;
+            width: 100% !important;
+            max-height: 95vh !important;
+            height: 95vh !important;
+            padding: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            background-color: #1a1a1a !important;
+            overflow: hidden !important; /* Переопределяем overflow-y: auto из общих стилей */
+            overflow-y: hidden !important; /* Явно отключаем вертикальный скролл */
+            overflow-x: hidden !important; /* Явно отключаем горизонтальный скролл */
+            min-height: 0 !important; /* Важно для flex-контейнера */
         }
         
         .portfolio-gallery-header {
