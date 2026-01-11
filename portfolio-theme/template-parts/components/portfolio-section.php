@@ -55,21 +55,15 @@ if ( empty( $portfolio_items ) || ! is_array( $portfolio_items ) ) {
  * Функция для вывода элемента портфолио
  * 
  * @param array $item Элемент из repeater
- * @param array $all_items Все элементы портфолио (для фильтрации по категории)
  * @return void
  */
-function ekaterina_render_portfolio_item( $item, $all_items = array() ) {
+function ekaterina_render_portfolio_item( $item ) {
     // Получаем данные из repeater элемента
     $portfolio_image = isset( $item['portfolio_image'] ) ? $item['portfolio_image'] : false;
     $title = isset( $item['portfolio_title'] ) ? $item['portfolio_title'] : '';
     $category = isset( $item['portfolio_category'] ) ? $item['portfolio_category'] : $title;
-    $action_type = isset( $item['portfolio_action_type'] ) ? trim( strtolower( (string) $item['portfolio_action_type'] ) ) : 'link';
-    $link = isset( $item['portfolio_link'] ) ? esc_url( $item['portfolio_link'] ) : '';
-    
-    // Нормализуем action_type
-    if ( empty( $action_type ) || ( $action_type !== 'gallery' && $action_type !== 'link' ) ) {
-        $action_type = 'link';
-    }
+    $link = isset( $item['portfolio_link'] ) ? trim( $item['portfolio_link'] ) : '';
+    $gallery_images_field = isset( $item['portfolio_gallery_images'] ) ? $item['portfolio_gallery_images'] : false;
     
     // Получаем ID изображения
     $image_id = false;
@@ -92,48 +86,54 @@ function ekaterina_render_portfolio_item( $item, $all_items = array() ) {
     // Принудительно используем HTTPS
     $image_url = set_url_scheme( $image_url, 'https' );
     
-    // Получаем полный URL изображения для галереи
-    $image_url_full = wp_get_attachment_image_url( $image_id, 'full' );
-    if ( $image_url_full ) {
-        $image_url_full = set_url_scheme( $image_url_full, 'https' );
-    }
+    // Определяем тип действия по приоритетам:
+    // 1. Если заполнена ссылка → открывается ссылка
+    // 2. Если загружены фото для галереи → открывается галерея
+    // 3. Если ничего не заполнено → просто изображение без реакции
     
-    // Если action_type = 'gallery', собираем все изображения из той же категории
+    $action_type = 'none'; // По умолчанию нет действия
     $gallery_images = array();
-    if ( $action_type === 'gallery' && ! empty( $all_items ) && ! empty( $category ) ) {
-        foreach ( $all_items as $gallery_item ) {
-            $gallery_category = isset( $gallery_item['portfolio_category'] ) ? $gallery_item['portfolio_category'] : ( isset( $gallery_item['portfolio_title'] ) ? $gallery_item['portfolio_title'] : '' );
-            if ( $gallery_category === $category ) {
-                $gallery_image = isset( $gallery_item['portfolio_image'] ) ? $gallery_item['portfolio_image'] : false;
-                if ( $gallery_image ) {
-                    $gallery_image_id = false;
-                    if ( is_array( $gallery_image ) && ! empty( $gallery_image['ID'] ) ) {
-                        $gallery_image_id = $gallery_image['ID'];
-                    } elseif ( is_numeric( $gallery_image ) ) {
-                        $gallery_image_id = $gallery_image;
-                    }
-                    if ( $gallery_image_id ) {
-                        $gallery_image_url = wp_get_attachment_image_url( $gallery_image_id, 'full' );
-                        if ( $gallery_image_url ) {
-                            $gallery_images[] = array(
-                                'id' => $gallery_image_id,
-                                'url' => set_url_scheme( $gallery_image_url, 'https' ),
-                                'alt' => $gallery_category
-                            );
-                        }
+    
+    // Приоритет 1: Проверяем ссылку
+    if ( ! empty( $link ) ) {
+        $action_type = 'link';
+        $link = esc_url( $link );
+    }
+    // Приоритет 2: Проверяем галерею изображений
+    elseif ( ! empty( $gallery_images_field ) ) {
+        $action_type = 'gallery';
+        
+        // Обрабатываем поле галереи (может быть массив ID или массив объектов)
+        $gallery_ids = array();
+        
+        if ( is_array( $gallery_images_field ) ) {
+            foreach ( $gallery_images_field as $gallery_item ) {
+                $gallery_image_id = false;
+                
+                // Если это массив с ID
+                if ( is_array( $gallery_item ) && ! empty( $gallery_item['ID'] ) ) {
+                    $gallery_image_id = $gallery_item['ID'];
+                } elseif ( is_numeric( $gallery_item ) ) {
+                    $gallery_image_id = $gallery_item;
+                }
+                
+                if ( $gallery_image_id ) {
+                    $gallery_image_url = wp_get_attachment_image_url( $gallery_image_id, 'full' );
+                    if ( $gallery_image_url ) {
+                        $gallery_images[] = array(
+                            'id' => $gallery_image_id,
+                            'url' => set_url_scheme( $gallery_image_url, 'https' ),
+                            'alt' => $category
+                        );
                     }
                 }
             }
         }
-    }
-    
-    // Если для галереи нет изображений, используем текущее
-    if ( $action_type === 'gallery' && empty( $gallery_images ) && $image_url_full ) {
-        $gallery_images[] = array(
-            'id' => $image_id,
-            'url' => $image_url_full,
-            'alt' => $category
-        );
+        
+        // Если галерея пустая, убираем тип действия
+        if ( empty( $gallery_images ) ) {
+            $action_type = 'none';
+        }
     }
     ?>
     <div class="portfolio-item" 
@@ -186,7 +186,7 @@ function ekaterina_render_portfolio_item( $item, $all_items = array() ) {
             <?php if ( $current_index < $items_count ) : ?>
                 <div class="portfolio-grid-1">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
-                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ], $portfolio_items );
+                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ] );
                     endfor; ?>
                 </div>
             <?php endif; ?>
@@ -194,7 +194,7 @@ function ekaterina_render_portfolio_item( $item, $all_items = array() ) {
             <?php if ( $current_index < $items_count ) : ?>
                 <div class="portfolio-grid-2">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
-                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ], $portfolio_items );
+                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ] );
                     endfor; ?>
                 </div>
             <?php endif; ?>
@@ -202,7 +202,7 @@ function ekaterina_render_portfolio_item( $item, $all_items = array() ) {
             <?php if ( $current_index < $items_count ) : ?>
                 <div class="portfolio-grid-3">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
-                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ], $portfolio_items );
+                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ] );
                     endfor; ?>
                 </div>
             <?php endif; ?>
@@ -210,7 +210,7 @@ function ekaterina_render_portfolio_item( $item, $all_items = array() ) {
             <?php if ( $current_index < $items_count ) : ?>
                 <div class="portfolio-grid-4">
                     <?php for ( $i = 0; $i < 2 && $current_index < $items_count; $i++, $current_index++ ) : 
-                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ], $portfolio_items );
+                        ekaterina_render_portfolio_item( $portfolio_items[ $current_index ] );
                     endfor; ?>
                 </div>
             <?php endif; ?>

@@ -98,8 +98,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   - portfolio_image (Image) - Изображение
  *   - portfolio_title (Text) - Название
  *   - portfolio_category (Text) - Категория
- *   - portfolio_action_type (Select) - Тип действия при клике: 'link' (ссылка) или 'gallery' (галерея)
- *   - portfolio_link (URL) - Ссылка (показывается, если portfolio_action_type = 'link')
+ *   - portfolio_link (URL) - Ссылка (опционально, приоритет 1: если заполнена, открывается ссылка)
+ *   - portfolio_gallery_images (Gallery) - Изображения для галереи (опционально, приоритет 2: если заполнены, открывается галерея)
  */
 
 /**
