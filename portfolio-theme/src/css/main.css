@@ -1964,18 +1964,16 @@
            ======================================== */
         
         .portfolio-gallery-modal .modal-content {
-            max-width: 95vw !important;
-            width: 100% !important;
-            max-height: 95vh !important;
-            height: 95vh !important;
-            padding: 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            background-color: #1a1a1a !important;
-            overflow: hidden !important; /* Переопределяем overflow-y: auto из общих стилей */
-            overflow-y: hidden !important; /* Явно отключаем вертикальный скролл */
-            overflow-x: hidden !important; /* Явно отключаем горизонтальный скролл */
-            min-height: 0 !important; /* Важно для flex-контейнера */
+            max-width: 95vw;
+            width: 100%;
+            max-height: 95vh;
+            height: 95vh;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: #1a1a1a;
+            overflow: hidden;
+            min-height: 0;
         }
         
         .portfolio-gallery-header {
@@ -2182,47 +2180,39 @@
         .portfolio-gallery-grid-view {
             display: flex;
             flex-direction: column;
-            flex: 1 1 auto; /* Занимает всё доступное пространство в flex-контейнере */
-            min-height: 0; /* Важно для flex-контейнера */
-            overflow: hidden;
-            position: relative; /* Для правильной работы скролла */
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
         
         .portfolio-gallery-grid-view .portfolio-gallery-header {
-            flex-shrink: 0; /* Header не сжимается */
+            flex-shrink: 0;
         }
         
         .portfolio-gallery-grid {
-            flex: 1 1 auto;
-            min-height: 0; /* Важно для правильной работы overflow в flex-контейнере */
-            overflow-y: auto !important; /* Явно разрешаем скролл */
-            overflow-x: hidden;
             padding: 24px 32px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 20px;
             align-content: start;
-            /* Улучшаем скролл на мобильных устройствах */
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior-y: contain;
-            position: relative; /* Для правильной работы скролла */
-            z-index: 1; /* Гарантируем, что скролл работает */
         }
         
-        .portfolio-gallery-grid::-webkit-scrollbar {
+        .portfolio-gallery-grid-view::-webkit-scrollbar {
             width: 8px;
         }
         
-        .portfolio-gallery-grid::-webkit-scrollbar-track {
+        .portfolio-gallery-grid-view::-webkit-scrollbar-track {
             background: rgba(248, 246, 243, 0.1);
         }
         
-        .portfolio-gallery-grid::-webkit-scrollbar-thumb {
+        .portfolio-gallery-grid-view::-webkit-scrollbar-thumb {
             background: rgba(157, 126, 95, 0.5);
             border-radius: 4px;
         }
         
-        .portfolio-gallery-grid::-webkit-scrollbar-thumb:hover {
+        .portfolio-gallery-grid-view::-webkit-scrollbar-thumb:hover {
             background: rgba(157, 126, 95, 0.7);
         }
         
@@ -2308,13 +2298,9 @@
             }
             
             .portfolio-gallery-grid {
-                flex: 1 1 auto; /* Сохраняем flex для правильной работы скролла */
-                min-height: 0; /* Важно для flex-контейнера */
-                overflow-y: auto !important; /* Явно разрешаем скролл */
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 12px;
                 padding: 16px 20px;
-                -webkit-overflow-scrolling: touch; /* Улучшаем скролл на мобильных */
             }
             
             .portfolio-gallery-viewer-view {
@@ -2379,23 +2365,10 @@
         }
         
         @media (max-width: 480px) {
-            .portfolio-gallery-grid-view {
-                flex: 1 1 auto; /* Занимает всё доступное пространство в flex-контейнере */
-                min-height: 0;
-            }
-            
-            .portfolio-gallery-grid-view .portfolio-gallery-header {
-                flex-shrink: 0;
-            }
-            
             .portfolio-gallery-grid {
-                flex: 1 1 auto;
-                min-height: 0;
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
                 gap: 10px;
                 padding: 12px 16px;
-                overflow-y: auto !important; /* Явно разрешаем скролл */
-                -webkit-overflow-scrolling: touch;
             }
             
             .portfolio-gallery-viewer-view .portfolio-gallery-slide img {
