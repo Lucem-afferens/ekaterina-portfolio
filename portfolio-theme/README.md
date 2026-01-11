@@ -19,36 +19,55 @@
 2. Активируйте тему в админ-панели WordPress: **Внешний вид → Темы**
 3. Установите и активируйте плагин Secure Custom Fields (SCF)
 4. Создайте главную страницу и выберите шаблон "Homepage"
-5. Заполните SCF поля согласно `MIGRATION_GUIDE.md`
+5. Заполните SCF поля согласно `../SCF_FIELDS_DETAILED_GUIDE.md` или `../MIGRATION_GUIDE.md`
 
 ## Структура темы
 
 ```
 portfolio-theme/
-├── style.css                 # Заголовок темы
-├── functions.php             # Основные функции темы
-├── header.php                # Шапка сайта
-├── footer.php                # Подвал сайта
-├── index.php                 # Fallback шаблон
-├── page.php                  # Шаблон страницы
-├── 404.php                   # Страница 404
-├── template-homepage.php     # Шаблон главной страницы
-├── template-parts/
-│   └── components/           # Компоненты секций
-├── templates/                # Кастомные шаблоны
-├── assets/                   # Компилированные ресурсы
-│   ├── css/                  # Стили
-│   ├── js/                   # Скрипты
-│   └── images/               # Изображения
-├── src/                      # Исходные файлы
-│   ├── css/                  # Исходные стили
-│   └── js/                   # Исходные скрипты
-└── inc/                      # Вспомогательные PHP файлы
-    ├── theme-setup.php       # Настройка темы
-    ├── enqueue-assets.php    # Подключение ресурсов
-    ├── scf-fields.php        # Документация SCF полей
-    ├── theme-functions.php   # Кастомные функции
-    └── security.php          # Функции безопасности
+├── style.css                    # Заголовок темы
+├── functions.php                # Основные функции темы
+├── header.php                   # Шапка сайта
+├── footer.php                   # Подвал сайта
+├── index.php                    # Fallback шаблон
+├── page.php                     # Шаблон страницы
+├── 404.php                      # Страница 404
+├── template-parts/              # Компоненты секций
+│   └── components/              # Компоненты секций
+│       ├── hero-section.php
+│       ├── introduction-section.php
+│       ├── stats-banner.php
+│       ├── philosophy-section.php
+│       ├── about-section.php
+│       ├── portfolio-section.php
+│       ├── expertise-section.php
+│       ├── services-section.php
+│       ├── process-section.php
+│       ├── testimonials-section.php
+│       ├── recognition-section.php
+│       ├── contact-section.php
+│       ├── contact-channels-section.php
+│       ├── request-modal.php
+│       ├── testimonial-modal.php
+│       └── portfolio-gallery-modal.php
+├── templates/                   # Кастомные шаблоны
+│   ├── template-homepage.php    # Шаблон главной страницы
+│   └── template-privacy-policy.php # Шаблон политики конфиденциальности
+├── assets/                      # Компилированные ресурсы
+│   ├── css/                     # Стили
+│   ├── js/                      # Скрипты
+│   ├── favicon/                 # Иконки сайта
+│   └── images/                  # Изображения
+├── src/                         # Исходные файлы
+│   ├── css/                     # Исходные стили
+│   └── js/                      # Исходные скрипты
+│       └── modules/             # Модули JavaScript
+└── inc/                         # Вспомогательные PHP файлы
+    ├── theme-setup.php          # Настройка темы
+    ├── enqueue-assets.php       # Подключение ресурсов
+    ├── scf-fields.php           # Документация SCF полей
+    ├── theme-functions.php      # Кастомные функции
+    └── security.php             # Функции безопасности
 ```
 
 ## Разработка
@@ -105,9 +124,11 @@ npm run build:theme
 
 ## Документация
 
-- `MIGRATION_GUIDE.md` - Руководство по миграции контента
-- `DEPLOYMENT.md` - Инструкция по деплою
-- `DEPLOY_BEGET.md` - Инструкция по деплою на Beget
+- `../SCF_FIELDS_DETAILED_GUIDE.md` - Детальное руководство по созданию SCF полей
+- `../MIGRATION_GUIDE.md` - Руководство по миграции контента
+- `../DEPLOYMENT.md` - Инструкция по деплою
+- `../DEPLOY_BEGET.md` - Инструкция по деплою на Beget
+- `../RESPONSIVE_DESIGN_GUIDE.md` - Руководство по адаптивному дизайну
 - `inc/scf-fields.php` - Документация SCF полей
 
 ## Поддержка

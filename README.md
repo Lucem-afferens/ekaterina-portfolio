@@ -59,23 +59,56 @@ portfolio-theme/
 ├── footer.php                   # Подвал сайта
 ├── index.php                    # Fallback шаблон
 ├── page.php                     # Шаблон страницы
+├── 404.php                      # Страница 404
 ├── template-parts/              # Компоненты секций
 │   └── components/              # Компоненты (hero, portfolio, services и т.д.)
+│       ├── hero-section.php
+│       ├── introduction-section.php
+│       ├── stats-banner.php
+│       ├── philosophy-section.php
+│       ├── about-section.php
+│       ├── portfolio-section.php
+│       ├── expertise-section.php
+│       ├── services-section.php
+│       ├── process-section.php
+│       ├── testimonials-section.php
+│       ├── recognition-section.php
+│       ├── contact-section.php
+│       ├── contact-channels-section.php
+│       ├── request-modal.php
+│       ├── testimonial-modal.php
+│       └── portfolio-gallery-modal.php
 ├── templates/                   # Кастомные шаблоны
 │   ├── template-homepage.php    # Главная страница
 │   └── template-privacy-policy.php # Политика конфиденциальности
 ├── assets/                      # Скомпилированные ресурсы
 │   ├── css/                     # Стили
-│   └── js/                      # Скрипты
+│   ├── js/                      # Скрипты
+│   ├── favicon/                 # Иконки сайта
+│   └── images/                  # Изображения
 ├── src/                         # Исходные файлы для сборки
 │   ├── css/                     # Исходные стили
 │   └── js/                      # Исходные скрипты
+│       └── modules/             # Модули JavaScript
 └── inc/                         # Вспомогательные PHP файлы
     ├── theme-setup.php          # Настройка темы
     ├── enqueue-assets.php       # Подключение ресурсов
     ├── scf-fields.php           # Документация SCF полей
     ├── theme-functions.php      # Кастомные функции
     └── security.php             # Функции безопасности
+```
+
+Корневая структура проекта:
+```
+./
+├── portfolio-theme/             # Папка темы WordPress
+├── .github/                     # GitHub Actions workflows
+│   ├── workflows/
+│   │   └── deploy.yml           # Workflow для автоматического деплоя
+│   └── GITHUB_SECRETS.md        # Инструкция по настройке секретов
+├── vite.config.js               # Конфигурация Vite
+├── package.json                 # Зависимости Node.js
+└── [документация].md            # Файлы документации
 ```
 
 ## Особенности
@@ -108,6 +141,7 @@ portfolio-theme/
 10. **Testimonials** - Отзывы
 11. **Recognition** - Признание/Сотрудничество
 12. **Contact** - Контакты
+13. **Contact Channels** - Каналы связи
 
 ## Документация
 
@@ -117,6 +151,7 @@ portfolio-theme/
 - `DEPLOY_BEGET.md` - Инструкция по деплою на Beget
 - `RESPONSIVE_DESIGN_GUIDE.md` - Руководство по адаптивному дизайну
 - `portfolio-theme/README.md` - Документация темы
+- `.github/GITHUB_SECRETS.md` - Инструкция по настройке секретов для GitHub Actions
 
 ## Разработка
 

@@ -7,12 +7,9 @@
 ### Быстрый старт
 
 1. **Добавьте секреты в GitHub** (см. `.github/GITHUB_SECRETS.md`):
-   - `FTP_HOST` - FTP хост
-   - `FTP_PORT` - FTP порт (обычно 21)
-   - `FTP_USER` - FTP логин
-   - `FTP_PASS` - FTP пароль
-   - `FTP_PATH` - путь на сервере (например, `/public_html/wp-content/themes/`)
-   - `FTP_PROTOCOL` - `ftp` или `sftp` (опционально, по умолчанию `ftp`)
+   - `BEGET_FTP_HOST` - FTP хост сервера Beget
+   - `BEGET_FTP_USER` - FTP логин (для Beget обычно начинается с `u`)
+   - `BEGET_FTP_PASSWORD` - FTP пароль
 
 2. **Сделайте push в ветку `main`**:
    ```bash
@@ -64,15 +61,42 @@ portfolio-theme/
 ├── index.php
 ├── page.php
 ├── 404.php
-├── template-homepage.php
-├── template-parts/
 ├── templates/
+│   ├── template-homepage.php
+│   └── template-privacy-policy.php
+├── template-parts/
+│   └── components/
+│       ├── hero-section.php
+│       ├── introduction-section.php
+│       ├── stats-banner.php
+│       ├── philosophy-section.php
+│       ├── about-section.php
+│       ├── portfolio-section.php
+│       ├── expertise-section.php
+│       ├── services-section.php
+│       ├── process-section.php
+│       ├── testimonials-section.php
+│       ├── recognition-section.php
+│       ├── contact-section.php
+│       ├── contact-channels-section.php
+│       ├── request-modal.php
+│       ├── testimonial-modal.php
+│       └── portfolio-gallery-modal.php
 ├── assets/
 │   ├── css/
 │   ├── js/
+│   ├── favicon/
 │   └── images/
 ├── src/
+│   ├── css/
+│   └── js/
+│       └── modules/
 └── inc/
+    ├── theme-setup.php
+    ├── enqueue-assets.php
+    ├── scf-fields.php
+    ├── theme-functions.php
+    └── security.php
 ```
 
 ## Загрузка темы на сервер
