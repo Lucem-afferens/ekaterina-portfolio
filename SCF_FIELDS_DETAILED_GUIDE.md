@@ -858,14 +858,16 @@ https://example.com/path/to/video.mp4
 **Строка 1:**
 - **portfolio_image**: Загрузите/выберите изображение свадебной церемонии
 - **portfolio_title**: `Свадебная церемония`
-- **portfolio_category**: (можно оставить пустым или указать "Свадьбы")
-- **portfolio_link**: (опционально) `https://example.com/wedding-gallery` или оставьте пустым
+- **portfolio_category**: `Свадьбы` (важно указать для работы галереи)
+- **portfolio_action_type**: `gallery` (чтобы открывалась галерея всех изображений категории "Свадьбы")
+- **portfolio_link**: (не используется, если action_type = "gallery")
 
 **Строка 2:**
 - **portfolio_image**: Загрузите/выберите изображение корпоративного вечера
 - **portfolio_title**: `Корпоративный вечер`
-- **portfolio_category**: (можно оставить пустым или указать "Корпоративы")
-- **portfolio_link**: (опционально) Ссылка на страницу с галереей или оставьте пустым
+- **portfolio_category**: `Корпоративы` (важно указать для работы галереи)
+- **portfolio_action_type**: `link` (чтобы открывалась ссылка)
+- **portfolio_link**: `https://example.com/corporate-gallery` (ссылка на страницу с галереей)
 
 **Строка 3:**
 - **portfolio_image**: Загрузите/выберите изображение частного приёма
