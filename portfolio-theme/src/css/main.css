@@ -2304,6 +2304,7 @@
             }
             
             .portfolio-gallery-viewer-view {
+                display: flex;
                 height: 100%;
                 min-height: 0;
             }
