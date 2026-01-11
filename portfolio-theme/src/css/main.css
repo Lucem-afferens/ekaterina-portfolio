@@ -2045,11 +2045,13 @@
         }
         
         .portfolio-gallery-slide img {
-            max-width: 100%;
-            max-height: 100%;
+            max-width: 85%;
+            max-height: calc(100vh - 250px); /* Адаптивная высота с учетом header и thumbnails */
             width: auto;
             height: auto;
             object-fit: contain;
+            display: block;
+            margin: 0 auto;
         }
         
         .portfolio-gallery-nav {
@@ -2311,6 +2313,11 @@
                 justify-content: center;
             }
             
+            .portfolio-gallery-viewer-view .portfolio-gallery-slide img {
+                max-width: 95%;
+                max-height: 60vh;
+            }
+            
             .portfolio-gallery-viewer-view .portfolio-gallery-thumbnails {
                 flex-shrink: 0;
                 padding: 12px 16px;
@@ -2352,6 +2359,11 @@
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
                 gap: 10px;
                 padding: 12px 16px;
+            }
+            
+            .portfolio-gallery-viewer-view .portfolio-gallery-slide img {
+                max-width: 95%;
+                max-height: 50vh;
             }
         }
 
