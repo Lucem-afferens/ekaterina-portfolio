@@ -2182,7 +2182,7 @@
         .portfolio-gallery-grid-view {
             display: flex;
             flex-direction: column;
-            height: 100%;
+            flex: 1 1 auto; /* Занимает всё доступное пространство в flex-контейнере */
             min-height: 0; /* Важно для flex-контейнера */
             overflow: hidden;
             position: relative; /* Для правильной работы скролла */
@@ -2308,9 +2308,13 @@
             }
             
             .portfolio-gallery-grid {
+                flex: 1 1 auto; /* Сохраняем flex для правильной работы скролла */
+                min-height: 0; /* Важно для flex-контейнера */
+                overflow-y: auto !important; /* Явно разрешаем скролл */
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 gap: 12px;
                 padding: 16px 20px;
+                -webkit-overflow-scrolling: touch; /* Улучшаем скролл на мобильных */
             }
             
             .portfolio-gallery-viewer-view {
@@ -2376,7 +2380,7 @@
         
         @media (max-width: 480px) {
             .portfolio-gallery-grid-view {
-                height: 100%;
+                flex: 1 1 auto; /* Занимает всё доступное пространство в flex-контейнере */
                 min-height: 0;
             }
             
@@ -2390,7 +2394,7 @@
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
                 gap: 10px;
                 padding: 12px 16px;
-                overflow-y: auto;
+                overflow-y: auto !important; /* Явно разрешаем скролл */
                 -webkit-overflow-scrolling: touch;
             }
             
