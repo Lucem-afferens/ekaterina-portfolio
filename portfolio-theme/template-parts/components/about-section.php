@@ -35,7 +35,22 @@ $about_title = function_exists( 'get_field' ) ? get_field( 'about_title', $curre
 $about_title = $about_title ?: 'Профессиональный путь';
 
 $about_timeline = function_exists( 'get_field' ) ? get_field( 'about_timeline', $current_page_id ) : false;
-$about_image = function_exists( 'get_field' ) ? get_field( 'about_image', $current_page_id ) : false;
+
+// Получаем тип медиа (photo или video)
+$about_media_type = function_exists( 'get_field' ) ? get_field( 'about_media_type', $current_page_id ) : 'photo';
+if ( empty( $about_media_type ) ) {
+    $about_media_type = 'photo'; // По умолчанию фото
+}
+
+// Получаем фото или видео в зависимости от типа медиа
+$about_image = false;
+$about_video = false;
+
+if ( $about_media_type === 'video' ) {
+    $about_video = function_exists( 'get_field' ) ? get_field( 'about_video', $current_page_id ) : false;
+} else {
+    $about_image = function_exists( 'get_field' ) ? get_field( 'about_image', $current_page_id ) : false;
+}
 
 // Если timeline не заполнен, используем дефолтные значения
 if ( empty( $about_timeline ) ) {
@@ -63,20 +78,47 @@ if ( empty( $about_timeline ) ) {
     );
 }
 
-// Получаем URL изображения
+// Получаем URL изображения (если тип медиа - фото)
 // get_field() для Image field возвращает массив ['ID', 'url', 'alt'] или ID
 $about_image_url = '';
-if ( $about_image ) {
+if ( $about_image && $about_media_type === 'photo' ) {
     if ( is_array( $about_image ) && ! empty( $about_image['url'] ) ) {
         // Если вернулся массив, используем URL из него
         $about_image_url = $about_image['url'];
     } elseif ( is_numeric( $about_image ) ) {
         // Если вернулся ID, получаем URL
-    $about_image_url = wp_get_attachment_image_url( $about_image, 'full' );
+        $about_image_url = wp_get_attachment_image_url( $about_image, 'full' );
     }
     // Принудительно используем HTTPS
     if ( $about_image_url ) {
         $about_image_url = set_url_scheme( $about_image_url, 'https' );
+    }
+}
+
+// Обрабатываем URL видео
+$about_video_url = '';
+$video_embed_code = '';
+if ( $about_video && $about_media_type === 'video' ) {
+    $about_video_url = esc_url( trim( $about_video ) );
+    
+    // Определяем тип видео и формируем embed код
+    if ( ! empty( $about_video_url ) ) {
+        // YouTube (youtube.com/watch?v=..., youtu.be/..., youtube.com/embed/...)
+        if ( preg_match( '/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/', $about_video_url, $matches ) ||
+             preg_match( '/youtu\.be\/([a-zA-Z0-9_-]+)/', $about_video_url, $matches ) ||
+             preg_match( '/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/', $about_video_url, $matches ) ) {
+            $video_id = $matches[1];
+            $video_embed_code = 'https://www.youtube.com/embed/' . esc_attr( $video_id ) . '?rel=0&modestbranding=1';
+        }
+        // Vimeo (vimeo.com/...)
+        elseif ( preg_match( '/vimeo\.com\/(\d+)/', $about_video_url, $matches ) ) {
+            $video_id = $matches[1];
+            $video_embed_code = 'https://player.vimeo.com/video/' . esc_attr( $video_id );
+        }
+        // Прямая ссылка на видеофайл (.mp4, .webm, .ogv и т.д.)
+        elseif ( preg_match( '/\.(mp4|webm|ogv|mov)(\?.*)?$/i', $about_video_url ) ) {
+            $video_embed_code = $about_video_url; // Прямая ссылка, используем как есть
+        }
     }
 }
 ?>
@@ -103,8 +145,44 @@ if ( $about_image ) {
                 </div>
             <?php endforeach; ?>
         </div>
-        <?php if ( $about_image_url ) : ?>
-            <div class="about-image">
+        <?php if ( $about_media_type === 'video' && ! empty( $video_embed_code ) ) : ?>
+            <div class="about-media about-video">
+                <?php
+                // Проверяем тип видео для правильной обработки
+                if ( strpos( $video_embed_code, 'youtube.com/embed' ) !== false || strpos( $video_embed_code, 'player.vimeo.com' ) !== false ) {
+                    // YouTube или Vimeo - используем iframe
+                ?>
+                    <iframe 
+                        src="<?php echo esc_url( $video_embed_code ); ?>" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        loading="lazy"
+                        title="<?php echo esc_attr( $about_title ); ?>"
+                    ></iframe>
+                <?php
+                } else {
+                    // Прямая ссылка на видеофайл - используем video тег
+                    // Определяем MIME тип по расширению файла
+                    $mime_type = 'video/mp4'; // По умолчанию
+                    if ( preg_match( '/\.webm$/i', $about_video_url ) ) {
+                        $mime_type = 'video/webm';
+                    } elseif ( preg_match( '/\.ogv$/i', $about_video_url ) ) {
+                        $mime_type = 'video/ogg';
+                    } elseif ( preg_match( '/\.mov$/i', $about_video_url ) ) {
+                        $mime_type = 'video/quicktime';
+                    }
+                ?>
+                    <video controls loading="lazy" preload="metadata" playsinline>
+                        <source src="<?php echo esc_url( $video_embed_code ); ?>" type="<?php echo esc_attr( $mime_type ); ?>">
+                        Ваш браузер не поддерживает воспроизведение видео.
+                    </video>
+                <?php
+                }
+                ?>
+            </div>
+        <?php elseif ( $about_media_type === 'photo' && $about_image_url ) : ?>
+            <div class="about-media about-image">
                 <img src="<?php echo esc_url( $about_image_url ); ?>" alt="<?php echo esc_attr( $about_title ); ?>" loading="lazy" decoding="async" />
             </div>
         <?php endif; ?>

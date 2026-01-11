@@ -660,6 +660,12 @@
             color: rgba(248, 246, 243, 0.7);
         }
         
+        .about-media {
+            height: 700px;
+            overflow: hidden;
+            background-color: #1a1a1a;
+        }
+        
         .about-image {
             height: 700px;
             overflow: hidden;
@@ -669,6 +675,27 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
+        }
+        
+        .about-video {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .about-video iframe,
+        .about-video video {
+            width: 100%;
+            height: 100%;
+            border: none;
+            object-fit: contain;
+        }
+        
+        /* Обеспечиваем правильное соотношение сторон для YouTube/Vimeo */
+        .about-video iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
         }
         
         /* Portfolio Section */
@@ -2232,9 +2259,15 @@
                 margin-bottom: 32px;
             }
             
+            .about-media,
             .about-image {
                 height: 300px;
                 order: 1;
+            }
+            
+            .about-video iframe,
+            .about-video video {
+                height: 100%;
             }
             
             .about-timeline {
@@ -2812,9 +2845,15 @@
                 margin-bottom: 32px;
             }
             
+            .about-media,
             .about-image {
                 height: 400px;
                 order: 1;
+            }
+            
+            .about-video iframe,
+            .about-video video {
+                height: 100%;
             }
             
             .about-timeline {
@@ -3654,8 +3693,14 @@
                 font-size: clamp(40px, 5vw, 44px);
             }
             
+            .about-media,
             .about-image {
                 height: 450px;
+            }
+            
+            .about-video iframe,
+            .about-video video {
+                height: 100%;
             }
             
             /* Portfolio Section */

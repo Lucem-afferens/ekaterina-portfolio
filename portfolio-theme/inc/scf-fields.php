@@ -79,7 +79,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  *   - timeline_year (Text) - Год
  *   - timeline_title (Text) - Заголовок события
  *   - timeline_description (Textarea) - Описание события
- * - about_image (Image) - Изображение
+ * - about_media_type (Select) - Тип медиа (photo/video)
+ *   - photo - Фото
+ *   - video - Видео
+ * - about_image (Image) - Изображение (показывается, если about_media_type = photo)
+ * - about_video (URL/Text) - URL видео (показывается, если about_media_type = video)
+ *   Поддерживаются YouTube, Vimeo и прямые ссылки на видеофайлы
  */
 
 /**
