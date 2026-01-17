@@ -384,29 +384,11 @@
             visibility: visible;
         }
         
-        /* Fallback анимация через CSS для подзаголовка (на случай, если JavaScript не работает) */
-        @keyframes heroSubtitleShow {
-            from {
-                opacity: 0;
-                transform: translateY(32px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Показываем подзаголовок через CSS анимацию, если JavaScript еще не добавил класс visible */
-        .hero-subtitle:not(.visible) {
-            animation: heroSubtitleShow 0.8s ease 1.3s forwards;
-        }
-        
-        /* Показываем подзаголовок, если JavaScript добавил класс visible */
+        /* Показываем подзаголовок, если JavaScript добавил класс visible или JavaScript отключен */
         .hero-subtitle.visible,
         .no-js .hero-subtitle {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-            animation: none !important;
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .hero-cta {
@@ -5085,10 +5067,6 @@
                 opacity: 1 !important;
                 transform: none !important;
                 transition: none !important;
-            }
-            
-            .hero-subtitle {
-                animation: none !important;
             }
             
             /* Отключаем анимацию scroll индикатора */
