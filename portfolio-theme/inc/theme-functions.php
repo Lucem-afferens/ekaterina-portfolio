@@ -232,7 +232,7 @@ function ekaterina_handle_request_form() {
     $recipient_email = ! empty( $form_email ) ? $form_email : $site_email;
 
     $telegram_bot_token = ekaterina_get_scf_option( 'form_telegram_bot_token', 'form_settings', '' );
-    $telegram_chat_id = ekaterina_get_scf_option( 'form_telegram_chat_id', 'form_settings', '' );
+    $telegram_chat_id_raw = ekaterina_get_scf_option( 'form_telegram_chat_id', 'form_settings', '' );
 
     // Флаги успешной отправки
     $email_sent = false;
@@ -248,12 +248,36 @@ function ekaterina_handle_request_form() {
     }
 
     // Отправка в Telegram (если указаны bot token и chat id)
-    if ( ! empty( $telegram_bot_token ) && ! empty( $telegram_chat_id ) ) {
-        $telegram_result = ekaterina_send_telegram_message( $telegram_bot_token, $telegram_chat_id, $telegram_message );
-        if ( ! is_wp_error( $telegram_result ) ) {
-            $telegram_sent = true;
-        } else {
-            $errors[] = 'Ошибка отправки в Telegram: ' . $telegram_result->get_error_message();
+    // Поддержка нескольких Chat ID (через запятую или перенос строки)
+    if ( ! empty( $telegram_bot_token ) && ! empty( $telegram_chat_id_raw ) ) {
+        // Парсим Chat ID - разделяем по запятым, переносам строк или точкам с запятой
+        $chat_ids = preg_split( '/[,\n\r;]+/', $telegram_chat_id_raw, -1, PREG_SPLIT_NO_EMPTY );
+        $chat_ids = array_map( 'trim', $chat_ids );
+        $chat_ids = array_filter( $chat_ids ); // Убираем пустые значения
+        
+        $telegram_success_count = 0;
+        $telegram_error_messages = array();
+        
+        // Отправляем сообщение каждому Chat ID
+        foreach ( $chat_ids as $chat_id ) {
+            if ( ! empty( $chat_id ) ) {
+                $telegram_result = ekaterina_send_telegram_message( $telegram_bot_token, $chat_id, $telegram_message );
+                if ( ! is_wp_error( $telegram_result ) ) {
+                    $telegram_success_count++;
+                    $telegram_sent = true;
+                } else {
+                    $telegram_error_messages[] = sprintf( 'Chat ID %s: %s', $chat_id, $telegram_result->get_error_message() );
+                }
+            }
+        }
+        
+        // Если были ошибки, добавляем их в общий список (но не блокируем успех, если хотя бы одно сообщение отправилось)
+        if ( ! empty( $telegram_error_messages ) && ! $telegram_sent ) {
+            // Если ни одно сообщение не отправилось, добавляем ошибки
+            $errors[] = 'Ошибка отправки в Telegram: ' . implode( '; ', $telegram_error_messages );
+        } elseif ( ! empty( $telegram_error_messages ) && $telegram_sent ) {
+            // Если хотя бы одно отправилось, но были ошибки - логируем, но не показываем как критическую ошибку
+            error_log( 'Telegram: частичная ошибка отправки. Успешно: ' . $telegram_success_count . ' из ' . count( $chat_ids ) . '. Ошибки: ' . implode( '; ', $telegram_error_messages ) );
         }
     }
 

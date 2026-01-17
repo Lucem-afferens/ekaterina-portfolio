@@ -243,7 +243,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - form_telegram_bot_token (Text) - Токен Telegram бота для отправки уведомлений (опционально)
  *   Получить можно у @BotFather в Telegram
  * - form_telegram_chat_id (Text) - ID чата в Telegram для получения уведомлений (опционально)
- *   Можно получить у @userinfobot или @getidsbot в Telegram
+ *   Можно указать один или несколько Chat ID (через запятую, точку с запятой или перенос строки)
+ *   Получить Chat ID можно у @userinfobot или @getidsbot в Telegram
  * 
  * ПРИМЕЧАНИЕ: Формы отправляют данные в Email (если указан form_email или site_email)
  * и/или в Telegram (если указаны form_telegram_bot_token и form_telegram_chat_id).
