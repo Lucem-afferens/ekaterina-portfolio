@@ -182,7 +182,7 @@ $contact_vk_link = $contact_vk_link ?: 'https://vk.com/your-page';
                             // Получаем данные из repeater элемента напрямую
                             $info_label = isset( $item['contact_info_label'] ) ? trim( $item['contact_info_label'] ) : '';
                             $info_value = isset( $item['contact_info_value'] ) ? trim( $item['contact_info_value'] ) : '';
-                            $info_type = isset( $item['contact_info_type'] ) ? $item['contact_info_type'] : 'text';
+                            $info_type = isset( $item['contact_info_type'] ) ? trim( strtolower( $item['contact_info_type'] ) ) : 'text';
                             
                             // Получаем опциональную ссылку на карту для типа "map"
                             $info_map_link = '';
@@ -190,7 +190,14 @@ $contact_vk_link = $contact_vk_link ?: 'https://vk.com/your-page';
                                 $info_map_link = trim( $item['contact_info_map_link'] );
                             }
                             
-                            // Автоматически определяем тип по содержимому, если не указан
+                            // Получаем опциональную ссылку на телеграм для типа "telegram"
+                            $info_telegram_link = '';
+                            if ( $info_type === 'telegram' && isset( $item['contact_info_telegram_link'] ) ) {
+                                $info_telegram_link = trim( $item['contact_info_telegram_link'] );
+                            }
+                            
+                            // Автоматически определяем тип по содержимому, если не указан или равен "text"
+                            // НО НЕ переопределяем явно указанные типы (map, telegram и т.д.)
                             if ( $info_type === 'text' || empty( $info_type ) ) {
                                 if ( filter_var( $info_value, FILTER_VALIDATE_EMAIL ) ) {
                                     $info_type = 'email';
@@ -198,6 +205,8 @@ $contact_vk_link = $contact_vk_link ?: 'https://vk.com/your-page';
                                     $info_type = 'phone';
                                 } elseif ( filter_var( $info_value, FILTER_VALIDATE_URL ) || preg_match( '/^(https?:\/\/|www\.)/i', $info_value ) ) {
                                     $info_type = 'url';
+                                } else {
+                                    $info_type = 'text';
                                 }
                             }
                             
@@ -225,6 +234,28 @@ $contact_vk_link = $contact_vk_link ?: 'https://vk.com/your-page';
                                     $value_output = '<a href="' . esc_url( $map_url ) . '" target="_blank" rel="noopener">' . esc_html( $info_value ) . '</a>';
                                 } else {
                                     // Если ссылка на карту не указана, показываем просто текст
+                                    $value_output = esc_html( $info_value );
+                                }
+                            } elseif ( $info_type === 'telegram' ) {
+                                // Для типа "telegram" показываем имя пользователя как ссылку, если указана ссылка на телеграм
+                                if ( ! empty( $info_telegram_link ) ) {
+                                    // Обрабатываем ссылку на телеграм (может быть с протоколом или без, или в формате @username)
+                                    $telegram_url = trim( $info_telegram_link );
+                                    // Если ссылка начинается с @, преобразуем в t.me/username
+                                    if ( strpos( $telegram_url, '@' ) === 0 ) {
+                                        $telegram_url = 'https://t.me/' . substr( $telegram_url, 1 );
+                                    } elseif ( strpos( $telegram_url, 't.me/' ) !== false || strpos( $telegram_url, 'telegram.me/' ) !== false ) {
+                                        // Если ссылка содержит t.me/ или telegram.me/, добавляем https:// если нет протокола
+                                        if ( ! preg_match( '/^https?:\/\//', $telegram_url ) ) {
+                                            $telegram_url = 'https://' . $telegram_url;
+                                        }
+                                    } elseif ( ! preg_match( '/^https?:\/\//', $telegram_url ) ) {
+                                        // Для других случаев добавляем https://
+                                        $telegram_url = 'https://' . $telegram_url;
+                                    }
+                                    $value_output = '<a href="' . esc_url( $telegram_url ) . '" target="_blank" rel="noopener">' . esc_html( $info_value ) . '</a>';
+                                } else {
+                                    // Если ссылка на телеграм не указана, показываем просто текст
                                     $value_output = esc_html( $info_value );
                                 }
                             } else {

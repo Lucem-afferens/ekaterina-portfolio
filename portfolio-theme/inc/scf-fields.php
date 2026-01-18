@@ -183,8 +183,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - contact_info_items (Repeater) - Пункты контактной информации
  *   - contact_info_label (Text) - Заголовок пункта (Телефон, Email и т.д.)
  *   - contact_info_value (Text) - Значение пункта
- *   - contact_info_type (Select/Text) - Тип пункта (phone, email, url, text, map)
+ *   - contact_info_type (Select/Text) - Тип пункта (phone, email, url, text, map, telegram)
  *   - contact_info_map_link (URL/Text) - Ссылка на карту (опционально, только для типа "map")
+ *   - contact_info_telegram_link (URL/Text) - Ссылка на телеграм (опционально, только для типа "telegram")
  * - contact_work_hours_title (Text) - Заголовок блока "Время работы"
  * - contact_work_hours (Repeater) - Время работы
  *   - hours_label (Text) - Заголовок пункта (Консультации, Мероприятия и т.д.)
